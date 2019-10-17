@@ -318,9 +318,6 @@ let g:vim_json_syntax_conceal = 0
 let g:sneak#s_next = 1
 let g:sneak#use_ic_scs = 1
 
-" tracelog
-let g:tracelog_default_dir = $HOME . "/script/trace-wad/"
-
 " vimdiff output to html ignore the same line
 let g:html_ignore_folding = 1
 let g:html_use_css = 0
