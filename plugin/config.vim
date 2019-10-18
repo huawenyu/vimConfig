@@ -7,6 +7,12 @@ else
 endif
 
 
+let g:AutoPairsFlyMode = 1
+
+if exists("g:ctrl_user_command")
+  unlet g:ctrlp_user_command
+endif
+
 " vimfiler {{{2}}}
 let g:vimfiler_as_default_explorer = 1
 "let g:signify_vcs_list = [ 'git', 'svn' ]
