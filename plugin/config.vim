@@ -627,8 +627,6 @@ let g:yankring_clipboard_monitor=0
     "let g:editqf_saveqf_filename  = "vim.qf"
     "let g:editqf_saveloc_filename = "vim.qflocal"
 
-    nnoremap <leader>mw :R! ~/tools/dict <C-R>=expand('<cword>') <cr>
-
     " Please silent and don't make troubles
     "let g:qf_mapping_ack_style = 0       | " donnot set this variable, for exist() trigger the keymap
     let g:qf_window_bottom = 0
@@ -654,8 +652,6 @@ let g:yankring_clipboard_monitor=0
     nnoremap <leader>mh :ListLists<cr>
     "nnoremap <leader>mk :Keep
     nnoremap <leader>mF :Reject
-    nnoremap <leader>mf :call utilquickfix#QuickFixFilter() <CR>
-    nnoremap <leader>mc :call utilquickfix#QuickFixFunction() <CR>
 "}}}
 
 " vim-cpp-enhanced-highlight{{{1
