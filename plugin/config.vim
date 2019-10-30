@@ -673,6 +673,20 @@ let g:yankring_clipboard_monitor=0
     let g:grepper.jump = 0
 "}}}
 
+" vim-tmux-runner{{{1
+    let g:VtrClearBeforeSend = 0
+    "let g:vtr_filetype_runner_overrides = {
+    "      \ 'ruby': 'ruby -w {file}',
+    "      \ 'haskell': 'runhaskell {file}'
+    "      \ }
+
+    nnoremap <silent> <leader>tf :VtrSendFile<CR>
+    nnoremap <silent> <leader>tt :VtrSendCommandToRunner<CR>
+    nnoremap <silent> <leader>tl :VtrSendLinesToRunner<CR>
+    nnoremap <silent> <leader>tg :VtrFlushCommand<CR>
+    nnoremap <silent> <leader>tc :VtrClearRunner<CR>
+"}}}
+
 " new.vim: neovim expect window {{{1
     let g:new#eager_render = 1
 "}}}
