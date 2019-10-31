@@ -682,8 +682,10 @@ let g:yankring_clipboard_monitor=0
     "      \ }
 
     nnoremap <silent> <leader>tf :VtrSendFile<CR>
-    nnoremap <silent> <leader>tt :call VtrSendCommand('', 'n')<CR>
-    vnoremap <silent> <leader>tt :call VtrSendCommand('', 'v')<CR>
+    nnoremap <silent> <leader>tt :call VtrSendCommandEx('n')<CR>
+    vnoremap <silent> <leader>tt :call VtrSendCommandEx('v')<CR>
+    nnoremap <silent> <leader>tw :call VtrExecuteCommand('n')<CR>
+    vnoremap <silent> <leader>tw :call VtrExecuteCommand('v')<CR>
     nnoremap <silent> <leader>tl :VtrSendLinesToRunner<CR>
     nnoremap <silent> <leader>tg :VtrFlushCommand<CR>
     nnoremap <silent> <leader>tc :VtrClearRunner<CR>
