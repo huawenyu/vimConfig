@@ -674,6 +674,7 @@ let g:yankring_clipboard_monitor=0
 "}}}
 
 " vim-tmux-runner{{{1
+    let g:VtrUseVtrMaps = 0
     let g:VtrClearBeforeSend = 0
     "let g:vtr_filetype_runner_overrides = {
     "      \ 'ruby': 'ruby -w {file}',
@@ -681,7 +682,8 @@ let g:yankring_clipboard_monitor=0
     "      \ }
 
     nnoremap <silent> <leader>tf :VtrSendFile<CR>
-    nnoremap <silent> <leader>tt :VtrSendCommandToRunner<CR>
+    nnoremap <silent> <leader>tt :call VtrSendCommand('', 'n')<CR>
+    vnoremap <silent> <leader>tt :call VtrSendCommand('', 'v')<CR>
     nnoremap <silent> <leader>tl :VtrSendLinesToRunner<CR>
     nnoremap <silent> <leader>tg :VtrFlushCommand<CR>
     nnoremap <silent> <leader>tc :VtrClearRunner<CR>
