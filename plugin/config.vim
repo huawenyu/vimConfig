@@ -680,12 +680,15 @@ let g:yankring_clipboard_monitor=0
     "      \ 'ruby': 'ruby -w {file}',
     "      \ 'haskell': 'runhaskell {file}'
     "      \ }
+    let g:VtrUseMarkStart = 'u'
+    let g:VtrUseMarkEnd = 'n'
 
     nnoremap <silent> <leader>tf :VtrSendFile<CR>
     nnoremap <silent> <leader>tt :call VtrSendCommandEx('n')<CR>
     vnoremap <silent> <leader>tt :call VtrSendCommandEx('v')<CR>
     nnoremap <silent> <leader>tw :call VtrExecuteCommand('n')<CR>
     vnoremap <silent> <leader>tw :call VtrExecuteCommand('v')<CR>
+    nnoremap <silent> <leader>tj :VtrBufferPasteHere<CR>
     nnoremap <silent> <leader>tl :VtrSendLinesToRunner<CR>
     nnoremap <silent> <leader>tg :VtrFlushCommand<CR>
     nnoremap <silent> <leader>tc :VtrClearRunner<CR>
