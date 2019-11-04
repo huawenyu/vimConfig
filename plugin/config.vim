@@ -682,6 +682,8 @@ let g:yankring_clipboard_monitor=0
     "      \ }
     let g:VtrUseMarkStart = 'u'
     let g:VtrUseMarkEnd = 'n'
+    let g:VtrFindWindowByName = 0
+    let g:VtrFindPaneByName = 0
 
     nnoremap <silent> <leader>tf :exec "VtrLoad" \| exec "VtrSendFile"<CR>
     nnoremap <silent> <leader>tl :exec "VtrLoad" \| exec "VtrSendLinesToRunner"<CR>
