@@ -151,6 +151,10 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 "}}}
 
 " NerdTree/NerdComment {{{2
+    " Conflicts with NERDTree menu ('m' key): And the only reason to create and remove maps is because of the conflicting m map in NERDTree.
+    " https://github.com/kshenoy/vim-signature/issues/3
+    let NERDTreeMapMenu='M'
+
     let NERDTreeMouseMode = 3
     let NERDTreeAutoDeleteBuffer = 1
     let NERDTreeMinimalUI = 1
@@ -159,7 +163,8 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
     let NERDTreeRespectWildIgnore = 1
     "let NERDTreeShowBookmarks = 1
     let NERDTreeWinSize = 25
-    let g:NERDTreeIgnore = ['^build$', 'rusty-tags.vi', '^target$', 'tags']
+    let NERDTreeIgnore = ['^build$', 'rusty-tags.vi', '^target$', 'tags', 'obj', '\.obj$', '\.o$', '\.lib$', '\.a$', '\.dll$', '\.pyc$']
+    let NERDTreeSortOrder = ['\.c$']
 
     " Add spaces after comment delimiters by default
     let g:NERDSpaceDelims = 1
@@ -242,26 +247,34 @@ let g:ctrlsf_mapping = { "next": "n", "prev": "N", }
     let g:session_autosave_silent = 1
 "}}}
 
-" Deoplete {{{2}}}
-let g:deoplete#enable_at_startup = 1
-let g:neosnippet#enable_snipmate_compatibility = 1
-let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
+" Deoplete {{{2
+    let g:deoplete#enable_at_startup = 1
+    let g:neosnippet#enable_snipmate_compatibility = 1
+    let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+"}}}
 
-" w3m {{{2}}}
-let g:w3m#command = '/usr/bin/w3m'
-let g:w3m#lang = 'en_US'
+" w3m {{{2
+    let g:w3m#command = '/usr/bin/w3m'
+    let g:w3m#lang = 'en_US'
+"}}}
+
+" vim-autoformat {{{2
+    noremap <F3> :Autoformat<CR>
+"}}}
 
 " plasticboy/vim-markdown {{{2
   " ge: jump follow link
   " gx: open link in browser
-  "
+
   "set conceallevel=0
   "let g:vim_markdown_conceal = 1
   "let g:vim_markdown_toc_autofit = 1
-  "
+
+  "let g:vim_markdown_auto_extension_ext = 'wiki'
+
   let g:vim_markdown_folding_disabled = 1
   let g:vim_markdown_override_foldtext = 0
   let g:vim_markdown_folding_level = 6
@@ -270,13 +283,14 @@ let g:w3m#lang = 'en_US'
   let g:vim_markdown_emphasis_multiline = 0
   let g:vim_markdown_new_list_item_indent = 2
   "let g:vim_markdown_no_default_key_mappings = 1
+  let g:vim_markdown_frontmatter = 1
   let g:vim_markdown_json_frontmatter = 1
   let g:vim_markdown_fenced_languages = ['C=c', 'c=c', 'Shell=sh', 'Java=java'
         \ , 'Csharp=cs', 'c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini']
   let g:vim_markdown_autowrite = 1       | " automatically save before jump
   let g:vim_markdown_follow_anchor = 1   | " `ge` command to follow anchors: file#anchor or #anchor
   let g:vim_markdown_strikethrough = 1   | " ~~Scratch this.~~
-  "let g:vim_markdown_no_extensions_in_markdown = 1      | "`ge`: [link text](link-url), the (link-url) part donnot need .md extention
+  let g:vim_markdown_no_extensions_in_markdown = 1      | "`ge`: [link text](link-url), the (link-url) part donnot need .md extention, 'gx' open in browser
 "}}}
 
 let g:AutoComplPop_CompleteoptPreview = 1
