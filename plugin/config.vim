@@ -687,6 +687,10 @@ let g:yankring_clipboard_monitor=0
     let g:grepper.jump = 0
 "}}}
 
+" vim-motion {{{1
+    let g:vim_motion_maps = 1
+"}}}
+
 " vim-tmux-runner{{{1
     let g:VtrUseVtrMaps = 0
     let g:VtrClearBeforeSend = 0
