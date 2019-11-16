@@ -794,6 +794,15 @@ if CheckPlug('new.vim', 0)
 endif
 
 
+if CheckPlug('vim-notes', 0)
+    " The 1st is our routine notes dir, the 2nd is our plugin's help notes.
+    let g:notes_directories = ['~/wiki/Notes', GetPlugDir('vim-myself.before'). 'docs']
+    let g:notes_suffix = '.note'
+
+    vnoremap <F1> :SplitNoteFromSelectedText<Cr>
+endif
+
+
 if CheckPlug('vim-plugin-AnsiEsc', 0)
     let g:no_cecutil_maps = 1
 endif
