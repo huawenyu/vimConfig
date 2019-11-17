@@ -862,16 +862,29 @@ endif
 
 
 if CheckPlug('vim-notes', 0)
+    let g:notes_dir_order_type = {'wiki': 0, 'vim': 1}
     " The 1st is our routine notes dir, the 2nd is our plugin's help notes.
-    let g:notes_directories = ['~/wiki/Notes', GetPlugDir('vim-myself.before'). 'docs']
+    let g:notes_directories = ['~/wiki/Notes', GetPlugDir('vim.before'). 'docs']
+    let g:notes_dir_order = g:notes_dir_order_type.wiki
     let g:notes_suffix = '.note'
 
     vnoremap <F1> :SplitNoteFromSelectedText<Cr>
 endif
 
 
+if CheckPlug('accelerated-jk', 0)
+    "let g:accelerated_jk_acceleration_table = [1,2,3,2,1]
+    "let g:accelerated_jk_enable_deceleration = 1
+endif
+
+
 if CheckPlug('vim-plugin-AnsiEsc', 0)
     let g:no_cecutil_maps = 1
+endif
+
+
+if CheckPlug('vim-ctrlspace', 0)
+    let g:CtrlSpaceDefaultMappingKey = "<C-space> "
 endif
 
 
@@ -899,4 +912,5 @@ if CheckPlug('vim-repl', 0)
 
     noremap <leader>rr :Repl<Cr>
 endif
+
 
