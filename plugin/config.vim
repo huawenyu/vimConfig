@@ -6,6 +6,73 @@ else
   let g:loaded_myself_before = 'yes'
 endif
 
+
+if g:vim_confi_option.auto_install_plugs
+    autocmd VimEnter *
+        \   if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+        \ |     PlugInstall --sync | q
+        \ | endif
+endif
+
+
+" http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
+" Restore cursor to file position in previous editing session
+if g:vim_confi_option.auto_restore_cursor
+    function! ResCur()
+        if line("'\"") <= line("$")
+            silent! normal! g`"
+            return 1
+        endif
+    endfunction
+
+    augroup resCur
+        autocmd!
+        autocmd BufWinEnter * call ResCur()
+    augroup END
+endif
+
+
+if g:vim_confi_option.auto_qf_height
+    function! AdjustWindowHeight(minheight, maxheight)
+        let l = 1
+        let n_lines = 0
+        let w_width = winwidth(0)
+        while l <= line('$')
+            " number to float for division
+            let l_len = strlen(getline(l)) + 0.0
+            let line_width = l_len/w_width
+            let n_lines += float2nr(ceil(line_width))
+            let l += 1
+        endw
+        let exp_height = max([min([n_lines, a:maxheight]), a:minheight])
+        if (abs(winheight(0) - exp_height)) > 2
+            exe max([min([n_lines, a:maxheight]), a:minheight]) . "wincmd _"
+        endif
+    endfunction
+
+    augroup adjustView
+        autocmd!
+        autocmd filetype qf call AdjustWindowHeight(2, 10)
+    augroup END
+endif
+
+
+if g:vim_confi_option.upper_keyfixes
+    if has("user_commands")
+        command! -bang -nargs=* -complete=file E e<bang> <args>
+        command! -bang -nargs=* -complete=file W w<bang> <args>
+        command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+        command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+        command! -bang Wa wa<bang>
+        command! -bang WA wa<bang>
+        command! -bang Q q<bang>
+        command! -bang QA qa<bang>
+        command! -bang Qa qa<bang>
+    endif
+
+    cmap Tabe tabe
+endif
+
 if CheckPlug('ctrlp.vim', 0)
     if exists("g:ctrl_user_command") | unlet g:ctrlp_user_command | endif
 endif
