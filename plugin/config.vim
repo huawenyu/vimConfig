@@ -369,10 +369,13 @@ if CheckPlug('vim-markdown', 0)
     " gx: open link in browser
 
     "set conceallevel=0
-    "let g:vim_markdown_conceal = 1
-    "let g:vim_markdown_toc_autofit = 1
+    let g:markdown_minlines = 200
+    let g:vim_markdown_conceal = 0
+    let g:markdown_syntax_conceal = g:vim_markdown_conceal
+    let g:vim_markdown_toc_autofit = 1
 
     "let g:vim_markdown_auto_extension_ext = 'wiki'
+    let g:vimwiki_global_ext = 0 | " only set the 'vimwiki' filetype of markdown files inside a wiki directory, rather than globally.
 
     let g:vim_markdown_folding_disabled = 1
     let g:vim_markdown_override_foldtext = 0
@@ -386,6 +389,7 @@ if CheckPlug('vim-markdown', 0)
     let g:vim_markdown_json_frontmatter = 1
     let g:vim_markdown_fenced_languages = ['C=c', 'c=c', 'Shell=sh', 'Java=java'
           \ , 'Csharp=cs', 'c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini']
+    let g:markdown_fenced_languages = g:vim_markdown_fenced_languages
     let g:vim_markdown_autowrite = 1       | " automatically save before jump
     let g:vim_markdown_follow_anchor = 1   | " `ge` command to follow anchors: file#anchor or #anchor
     let g:vim_markdown_strikethrough = 1   | " ~~Scratch this.~~
@@ -876,6 +880,8 @@ if CheckPlug('vim-notes', 0)
     let g:notes_conceal_italic = 0
     let g:notes_conceal_bold = 0
     let g:notes_conceal_url = 0
+    let g:notes_tab_indents = 0
+    let g:notes_alt_indents = 0
 endif
 
 
