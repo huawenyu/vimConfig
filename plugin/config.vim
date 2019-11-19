@@ -862,13 +862,20 @@ endif
 
 
 if CheckPlug('vim-notes', 0)
+    " :edit note:<name>
+    vnoremap <F1> :SplitNoteFromSelectedText<Cr>
+
     let g:notes_dir_order_type = {'wiki': 0, 'vim': 1}
     " The 1st is our routine notes dir, the 2nd is our plugin's help notes.
     let g:notes_directories = ['~/wiki/Notes', PlugGetDir('vim.before'). 'docs']
     let g:notes_dir_order = g:notes_dir_order_type.wiki
     let g:notes_suffix = '.md'
 
-    vnoremap <F1> :SplitNoteFromSelectedText<Cr>
+    let g:notes_smart_quotes = 0
+    let g:notes_conceal_code = 0
+    let g:notes_conceal_italic = 0
+    let g:notes_conceal_bold = 0
+    let g:notes_conceal_url = 0
 endif
 
 

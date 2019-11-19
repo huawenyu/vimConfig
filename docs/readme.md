@@ -1,15 +1,21 @@
 readme
 
-# Quickstart {{{1
-Hi, the <leader> is <space> and , :)
+# Quickstart
 
-    let mapleader = ","
-    nmap <space> <leader>
+0. Download this vimrc:
+      wget -O ~/.vimrc https://raw.githubusercontent.com/huawenyu/dotfiles/master/.vimrc
+1. Auto-Setup-IDE-with-Plugs:
+      nvim -u ~/.vimrc
+2. Hi, the <leader> is <space> and ',' :)
+      let mapleader = ","
+      nmap <space> <leader>
+3. Help: press 'K'
+   When focus a plug's name, for example, please move cursor to following line, then press 'K':
+      @note:readme
 
- Help: press 'K':  Note 'docs/readme'
+# Config
 
-# Config {{{1
-
+```vim
 @mode: ['all', 'basic', 'theme', 'local',
       \   'editor', 'admin', 'QA', 'coder',
       \
@@ -37,8 +43,9 @@ let g:vim_confi_option = {
      \
      \ 'keywordprg_filetype': 1,
      \}
+```
 
-# Doc {{{1
+# Install
 
    Install neovim {{{2
    -------------------
@@ -48,38 +55,39 @@ let g:vim_confi_option = {
    ------------------------
    [code](https://github.com/junegunn/vim-plug)
 
-   :help nvim-from-vim
-      $ mkdir ~/.vim
-      $ mkdir ~/.config
-      $ ln -s ~/.vim ~/.config/nvim
-      $ ln -s ~/.vimrc ~/.config/nvim/init.vim
+```sh
+    from vi -c 'help nvim-from-vim'
+    $ mkdir ~/.vim
+    $ mkdir ~/.config
+    $ ln -s ~/.vim ~/.config/nvim
+    $ ln -s ~/.vimrc ~/.config/nvim/init.vim
 
-      ### Make **neovim** work with plugs
-      $ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    ### Make **neovim** work with plugs
+    $ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-      ### Make **vim** work with plugs
-      $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    ### Make **vim** work with plugs
+    $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-      $ vi .vimrc
-        :PlugInstall
-        :checkhealth   ### check deplete's health
+    $ vi -c 'PlugInstall'
+    $ vi -c 'checkhealth'
 
-            ### After pip install neovim, keep health warning, maybe we're using brew's python.
-            ### Please remove brew's python first:
-            $ brew list python
-            $ brew unlink python@2
-            $ brew unlink python@3
-            $ sudo apt install python-pip
-            $ sudo apt install python3-pip
+    ### After pip install neovim, keep health warning, maybe we're using brew's python.
+    ### Please remove brew's python first:
+    $ brew list python
+    $ brew unlink python@2
+    $ brew unlink python@3
+    $ sudo apt install python-pip
+    $ sudo apt install python3-pip
 
-            $ sudo pip2 install neovim
-            $ sudo pip3 install neovim
-            $ sudo pip2 install --upgrade neovim
-            $ sudo pip3 install --upgrade neovim
+    $ sudo pip2 install neovim
+    $ sudo pip3 install neovim
+    $ sudo pip2 install --upgrade neovim
+    $ sudo pip3 install --upgrade neovim
+```
 
-   Documentation {{{2
+# Usage
    -------------------
    [vimscript-functions](https://devhints.io/vimscript-functions)
    [vim regex](http://vimregex.com/)
@@ -192,4 +200,48 @@ let g:vim_confi_option = {
        :bufdo e                ' reload all buffers at once
        :setfiletype ip<Tab>    ' Search the syntax begin with `ip`
 
+# Log
+
+## in .vimrc
+
+```vim
+    silent! call logger#init('ALL', ['/dev/stdout', '/tmp/vim.log'])
+```
+
+## At begin of every our vimscript file
+
+```vim
+    silent! let s:log = logger#getLogger(expand('<sfile>:t'))
+ !!!Or guard avoid multi-load
+    if !exists("s:init")
+        let s:init = 1
+        silent! let s:log = logger#getLogger(expand('<sfile>:t'))
+    endif
+```
+
+## Use it
+```vim
+    silent! call s:log.info('hello world')
+```
+
+## Support current function-name like C's __FUNCTION__
+```vim
+    function! ourfile#foobar()
+        let l:__func__ = substitute(expand('<sfile>'), '.*\(\.\.\|\s\)', '', '')
+        silent! call s:log.info(l:__func__, " args=", string(g:gdb.args))
+    endfunction
+```
+
+## Check log
+
+    $ tail -f /tmp/vim.log
+
+
+# Troubleshooting
+
+## enable log for a plug
+
+## start slow: enable starttime
+
+      $ vi --startuptime /tmp/log.1
 
