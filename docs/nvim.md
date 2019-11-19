@@ -1,4 +1,4 @@
-readme
+nvim
 
 # Quickstart
 
@@ -11,7 +11,7 @@ readme
       nmap <space> <leader>
 3. Help: press 'K'
    When focus a plug's name, for example, please move cursor to following line, then press 'K':
-      @note:readme
+      @note:nvim
 
 # Config
 
