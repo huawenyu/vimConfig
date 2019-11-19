@@ -707,32 +707,32 @@ endif
 
 
 if CheckPlug('ale.vim', 0)
-    "nmap <silent> <a-]> :ALEGoToDefinition<cr>
-    "nmap <silent> <a-\> :ALEFindReferences<cr>
-    "nmap <silent> <a-h> :ALESymbolSearch<cr>
-    "nmap <silent> <a-[> :ALEHover<cr>
-    "nmap <silent> <a-,> <Plug>(ale_previous_wrap)
-    "nmap <silent> <a-.> <Plug>(ale_next_wrap)
+    nmap <silent> <a-]> :ALEGoToDefinition<cr>
+    nmap <silent> <a-\> :ALEFindReferences<cr>
+    nmap <silent> <a-h> :ALESymbolSearch<cr>
+    nmap <silent> <a-[> :ALEHover<cr>
+    nmap <silent> <a-,> <Plug>(ale_previous_wrap)
+    nmap <silent> <a-.> <Plug>(ale_next_wrap)
 
-    "let g:ale_cpp_ccls_init_options = {
-    "  \   'cache': {
-    "  \       'directory': './ccls-cache',
-    "  \   },
-    "  \ }
-    ""let g:ale_completion_enabled = 1
-    "call deoplete#custom#option('sources', {
-    "  \ '_': ['ale'],
-    "  \})
+    let g:ale_cpp_ccls_init_options = {
+      \   'cache': {
+      \       'directory': './ccls-cache',
+      \   },
+      \ }
+    "let g:ale_completion_enabled = 1
+    call deoplete#custom#option('sources', {
+      \ '_': ['ale'],
+      \})
 
-    "let g:ale_lint_on_text_changed = 'never'
-    "let g:ale_lint_on_insert_leave = 0
-    "let g:ale_lint_on_enter = 0
-    ""let g:ale_lint_on_save = 0
-    ""let g:ale_list_window_size = 5
-    "let g:ale_open_list = 1
-    "let g:ale_set_loclist = 0
-    "let g:ale_set_quickfix = 1
-    "let g:ale_keep_list_window_open = 1
+    let g:ale_lint_on_text_changed = 'never'
+    let g:ale_lint_on_insert_leave = 0
+    let g:ale_lint_on_enter = 0
+    "let g:ale_lint_on_save = 0
+    "let g:ale_list_window_size = 5
+    let g:ale_open_list = 1
+    let g:ale_set_loclist = 0
+    let g:ale_set_quickfix = 1
+    let g:ale_keep_list_window_open = 1
 endif
 
 
