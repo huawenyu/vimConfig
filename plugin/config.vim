@@ -925,7 +925,7 @@ if CheckPlug('ctrlp.vim', 0)
     "            \ }
     "let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
     "let g:ctrlp_mruf_exclude = "\v\.git/(COMMIT_EDITMSG|index)"
-    nnoremap <leader>b :CtrlPBuffer<cr>
+    "nnoremap <leader>b :CtrlPBuffer<cr>
 endif
 
 
