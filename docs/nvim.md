@@ -1,4 +1,5 @@
 nvim
+===
 
 # Quickstart
 
@@ -244,5 +245,3 @@ let g:vim_confi_option = {
 ## start slow: enable starttime
 
       $ vi --startuptime /tmp/log.1
-
-hello
