@@ -70,7 +70,7 @@ if g:vim_confi_option.upper_keyfixes
         command! -bang Qa qa<bang>
     endif
 
-    cmap Tabe tabe
+    "cmap Tabe tabe
 endif
 
 if CheckPlug('ctrlp.vim', 0)
@@ -600,10 +600,10 @@ endif
 
 if CheckPlug('tabularize', 0)
     if exists(":Tabularize")
-        nnoremap <leader>a= :Tabularize /=<CR>
-        vmap <leader>a= :Tabularize /=<CR>
-        nnoremap <leader>a: :Tabularize /:\zs<CR>
-        vmap <leader>a: :Tabularize /:\zs<CR>
+        nnoremap <leader>t= :Tabularize /=<CR>
+        vnoremap <leader>t= :Tabularize /=<CR>
+        nnoremap <leader>t: :Tabularize /:\zs<CR>
+        vnoremap <leader>t: :Tabularize /:\zs<CR>
     endif
 endif
 
