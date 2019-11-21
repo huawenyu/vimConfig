@@ -369,7 +369,6 @@ if CheckPlug('vim-markdown', 0)
     " gx: open link in browser
 
     "set conceallevel=0
-    let g:markdown_minlines = 200
     let g:vim_markdown_conceal = 0
     let g:markdown_syntax_conceal = g:vim_markdown_conceal
     let g:vim_markdown_toc_autofit = 1
@@ -377,6 +376,7 @@ if CheckPlug('vim-markdown', 0)
     "let g:vim_markdown_auto_extension_ext = 'wiki'
     let g:vimwiki_global_ext = 0 | " only set the 'vimwiki' filetype of markdown files inside a wiki directory, rather than globally.
 
+    "let g:markdown_minlines = 200
     let g:vim_markdown_folding_disabled = 1
     let g:vim_markdown_override_foldtext = 0
     let g:vim_markdown_folding_level = 6
@@ -898,6 +898,34 @@ endif
 
 if CheckPlug('vim-ctrlspace', 0)
     let g:CtrlSpaceDefaultMappingKey = "<C-space> "
+endif
+
+
+if CheckPlug('ctrlp.vim', 0)
+    let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+    let g:ctrlp_working_path_mode='ra'
+    let g:ctrlp_cmd = 'CtrlPMixed'
+
+    if executable('rg')
+        let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+        let g:ctrlp_use_caching = 0
+    elseif executable('ag')
+        " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+        let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+        " ag is fast enough that CtrlP doesn't need to cache
+        let g:ctrlp_use_caching = 0
+    endif
+
+    "let g:ctrlp_user_command = {
+    "            \ 'types': {
+    "            \       1: ['.git', 'git ls-files'],
+    "            \       2: ['.hg', 'hg --cwd %s locate -I .'],
+    "            \   },
+    "            \ 'fallback': 'rg %s --files --color=never --glob ""',
+    "            \ }
+    "let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
+    "let g:ctrlp_mruf_exclude = "\v\.git/(COMMIT_EDITMSG|index)"
+    nnoremap <leader>b :CtrlPBuffer<cr>
 endif
 
 
