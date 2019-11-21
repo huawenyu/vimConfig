@@ -245,3 +245,4 @@ let g:vim_confi_option = {
 
       $ vi --startuptime /tmp/log.1
 
+hello
