@@ -928,6 +928,46 @@ if CheckPlug('ctrlp.vim', 0)
     "nnoremap <leader>b :CtrlPBuffer<cr>
 endif
 
+if CheckPlug('fzf.vim', 0)
+    " Customize fzf colors to match your color scheme
+    let g:fzf_colors =
+    \ { 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Function'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'border':  ['fg', 'Ignore'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'] }
+
+    " Enable per-command history.
+    " CTRL-N and CTRL-P will be automatically bound to next-history and
+    " previous-history instead of down and up. If you don't like the change,
+    " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+    let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+    command! -bang -nargs=? -complete=dir FilePrew
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+    command! -bang -nargs=* RgType
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case -t c '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
+
+    command! -bang -nargs=* FileCat
+      \ call fzf#vim#grep(
+      \   'cat cscope.files', 1,
+      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
+endif
 
 if CheckPlug('vim-repl', 0)
     noremap <leader>rr :REPLToggle<Cr>
