@@ -699,8 +699,8 @@ if CheckPlug('coc.nvim', 0)
     " using coc.vim/ale with ccls-cache which base on clang
     nmap <silent> <a-]> <Plug>(coc-definition)
     nmap <silent> <a-\> <Plug>(coc-references)
-    nmap <silent> <a-h> <Plug>(coc-type-definition)
-    nmap <silent> <a-j> <Plug>(coc-implementation)
+    "nmap <silent> <a-h> <Plug>(coc-type-definition)
+    "nmap <silent> <a-j> <Plug>(coc-implementation)
     nmap <silent> <a-[> call CocAction('doHover')
     nmap <silent> <a-r> <Plug>(coc-rename)
     nmap <silent> <a-,> <Plug>(coc-diagnostic-prev)
@@ -713,7 +713,7 @@ endif
 if CheckPlug('ale.vim', 0)
     nmap <silent> <a-]> :ALEGoToDefinition<cr>
     nmap <silent> <a-\> :ALEFindReferences<cr>
-    nmap <silent> <a-h> :ALESymbolSearch<cr>
+    "nmap <silent> <a-h> :ALESymbolSearch<cr>
     nmap <silent> <a-[> :ALEHover<cr>
     nmap <silent> <a-,> <Plug>(ale_previous_wrap)
     nmap <silent> <a-.> <Plug>(ale_next_wrap)
@@ -928,6 +928,7 @@ if CheckPlug('ctrlp.vim', 0)
     "nnoremap <leader>b :CtrlPBuffer<cr>
 endif
 
+
 if CheckPlug('fzf.vim', 0)
     " Customize fzf colors to match your color scheme
     let g:fzf_colors =
@@ -951,7 +952,7 @@ if CheckPlug('fzf.vim', 0)
     " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
     let g:fzf_history_dir = '~/.local/share/fzf-history'
 
-    command! -bang -nargs=? -complete=dir FilePrew
+    command! -bang -nargs=? -complete=dir FilePre
       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
     command! -bang -nargs=* RgType
@@ -961,13 +962,109 @@ if CheckPlug('fzf.vim', 0)
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
 
-    command! -bang -nargs=* FileCat
-      \ call fzf#vim#grep(
-      \   'cat cscope.files', 1,
-      \   <bang>0 ? fzf#vim#with_preview('up:60%')
-      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \   <bang>0)
+    function! s:FileCat(mode, args, bang)
+        if a:bang
+            Files
+            return
+        endif
+
+        let current_file =expand("%")
+        let cwd = fnamemodify(current_file, ':p:h')
+
+        let command = ""
+        if filereadable(expand(cwd. "/.cscope.files"))
+            let command = 'cat ./.cscope.files'
+        elseif executable('rg')
+            let command = 'rg --column --line-number --no-heading --files --color=never --smart-case -t c --fixed-strings '. cwd
+        elseif executable('ag')
+            let command = "ag -l --silent --nocolor -g '' "
+        endif
+
+        if empty(command)
+            Files
+            return
+        endif
+
+        call fzf#run({
+                    \ 'source': command,
+                    \ 'sink':   'e',
+                    \ 'options': '-m -x +s',
+                    \ 'window':  'enew' })
+    endfunction
+
+
+    function! s:TagCat(mode, args, bang, type)
+        let tagfile = ''
+        if !exists('g:fuzzy_file_tag')
+            let g:fuzzy_file_tag = ["tagx", ".tagx"]
+        endif
+        for i in g:fuzzy_file_tag
+            if filereadable(i)
+                let tagfile = i
+                break
+            endif
+        endfor
+
+        if empty(tagfile)
+            echomsg "tagx file not exist!"
+            return
+        endif
+
+        " <bang>1 symbol, <bang>0 function
+        if a:bang
+            let command = "awk '($2 != \"function\" && $1~/". a:args. "/) {$1=$2=\"\"; print $4\":\"$3\":\"$5}' ". tagfile
+        else
+            let command = "awk '($2 == \"function\" && $1~/". a:args. "/) {$1=$2=\"\"; print $4\":\"$3\":\"$5}' ". tagfile
+        endif
+
+        if !empty(command)
+            call fzf#vim#grep(
+                        \   command, 0,
+                        \   a:type ? fzf#vim#with_preview('up:60%')
+                        \          : fzf#vim#with_preview('right:50%:hidden', '?'),
+                        \   a:type)
+            "call fzf#run({
+            "            \ 'source': command,
+            "            \ 'sink':   'e',
+            "            \ 'options': '-m -x +s',
+            "            \ 'window':  'enew' })
+        endif
+    endfunction
+
+    command! -bang -nargs=* FileCatN call <sid>FileCat(0, <q-args>, <bang>0)
+    command! -bang -nargs=* FileCatV call <sid>FileCat(1, <q-args>, <bang>0)
+
+    command! -bang -nargs=* TagCatN call <sid>TagCat(0, <q-args>, <bang>0, 0)
+    command! -bang -nargs=* TagCatV call <sid>TagCat(1, <q-args>, <bang>0, 0)
+
+    command! -bang -nargs=* TagCatPreN call <sid>TagCat(0, <q-args>, <bang>0, 1)
+    command! -bang -nargs=* TagCatPreV call <sid>TagCat(1, <q-args>, <bang>0, 1)
+
+    nnoremap <leader>i  :TagCatN 
+    vnoremap <leader>i  :TagCatV 
+
+    nnoremap <leader>I  :TagCatPreN 
+    vnoremap <leader>I  :TagCatPreV 
+
+    "nnoremap <silent> <a-g> :RgType <C-R>=printf("%s", expand('<cword>'))<cr><cr>
+    "nnoremap <silent> <a-q> :BLines<cr>
+
+    nnoremap <silent> <leader>o  :FileCatN<cr>
+    vnoremap <silent> <leader>o  :FileCatV<cr>
+
+    nnoremap <silent> <leader>O  :FileCatN!<cr>
+    vnoremap <silent> <leader>O  :FileCatV!<cr>
+
+    "vnoremap          <leader>o  :<c-u>call <SID>JumpO(1)<cr>
+    "nnoremap <silent> <leader>h  :<c-u>call <SID>JumpH(0)<cr>
+    "vnoremap          <leader>h  :<c-u>call <SID>JumpH(1)<cr>
+    "nnoremap <silent> <leader>j  :<c-u>call <SID>JumpJ(0)<cr>
+    "vnoremap          <leader>j  :<c-u>call <SID>JumpJ(1)<cr>
+    "nnoremap          <leader>f  :ls<cr>:b<Space>
+    nnoremap <silent> <leader>;  :<c-u>call <SID>JumpComma(0)<cr>
+    vnoremap          <leader>;  :<c-u>call <SID>JumpComma(1)<cr>
 endif
+
 
 if CheckPlug('vim-repl', 0)
     noremap <leader>rr :REPLToggle<Cr>

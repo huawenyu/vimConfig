@@ -59,6 +59,17 @@ Append this to our bashrc/zshrc:
 export FZF_DEFAULT_OPTS='--bind=ctrl-p:up,ctrl-n:down'
 ```
 
+So with color together, should like:
+
+
+```bash
+export FZF_DEFAULT_OPTS='
+--bind=ctrl-p:up,ctrl-n:down
+--color fg:-1,bg:-1,hl:178,fg+:3,bg+:233,hl+:220
+--color info:150,prompt:110,spinner:150,pointer:167,marker:174
+'
+```
+
 # Commands
 
 :Files      is for finding files by name. I used to use Ctrl-P for this, but FZF is so much better and quicker that I ditched Ctrl-P almost immediately (though you can map :Files to it if you want to use the same key).

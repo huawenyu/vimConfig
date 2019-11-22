@@ -240,8 +240,23 @@ let g:vim_confi_option = {
 
 # Troubleshooting
 
+## How to identify plugin raising errors
+
+```vim
+Error detected while processing function <SNR>59_clear:
+line    2:
+E803: ID not found: 4
+```
+
+Command `:scriptnames`, and look to the line prefixed with 59:
+  it will give you the actual script which is referred by <SNR>59_*
+
 ## enable log for a plug
 
 ## start slow: enable starttime
 
       $ vi --startuptime /tmp/log.1
+
+# Developer
+
+	[Anti-pattern of vimrc](http://rbtnn.hateblo.jp/entry/2014/12/28/010913)
