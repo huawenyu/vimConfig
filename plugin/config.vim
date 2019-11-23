@@ -962,15 +962,6 @@ if CheckPlug('fzf.vim', 0)
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
 
-    command! -bang -nargs=* File2
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --files --color=never --smart-case -t c'.
-      \         "| awk '($1~/". <q-args> . "/) {print $0\":\t\t0:0:0\"}' ",
-      \   1,
-      \   <bang>0 ? fzf#vim#with_preview('up:60%')
-      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \   <bang>0)
-
     function! s:FileCat(mode, args, bang, preview)
         if a:bang
             Files
@@ -984,7 +975,7 @@ if CheckPlug('fzf.vim', 0)
         if filereadable(expand(cwd. "/.cscope.files"))
             let command = 'cat ./.cscope.files'. "| awk '($1~/". a:args . "/) {print $0\":\t\t0:0:0\"}' "
         elseif executable('rg')
-            let command = 'rg --column --line-number --no-heading --files --color=never --smart-case -t c --fixed-strings '. "| awk '($1~/". <q-args> . "/) {print $0\":\t\t0:0:0\"}' "
+            let command = 'rg --no-heading --files --color=never --fixed-strings'. "| awk '($1~/". a:args . "/){print $0\":\t\t0:0:0\"}' "
         elseif executable('ag')
             let command = "ag -l --silent --nocolor -g '' ". "| awk '($1~/". a:args . "/) {print $0\":\t\t0:0:0\"}' "
         endif
