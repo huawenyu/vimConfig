@@ -962,7 +962,16 @@ if CheckPlug('fzf.vim', 0)
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
 
-    function! s:FileCat(mode, args, bang)
+    command! -bang -nargs=* File2
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --files --color=never --smart-case -t c'.
+      \         "| awk '($1~/". <q-args> . "/) {print $0\":\t\t0:0:0\"}' ",
+      \   1,
+      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
+
+    function! s:FileCat(mode, args, bang, preview)
         if a:bang
             Files
             return
@@ -973,11 +982,11 @@ if CheckPlug('fzf.vim', 0)
 
         let command = ""
         if filereadable(expand(cwd. "/.cscope.files"))
-            let command = 'cat ./.cscope.files'
+            let command = 'cat ./.cscope.files'. "| awk '($1~/". a:args . "/) {print $0\":\t\t0:0:0\"}' "
         elseif executable('rg')
-            let command = 'rg --column --line-number --no-heading --files --color=never --smart-case -t c --fixed-strings '. cwd
+            let command = 'rg --column --line-number --no-heading --files --color=never --smart-case -t c --fixed-strings '. "| awk '($1~/". <q-args> . "/) {print $0\":\t\t0:0:0\"}' "
         elseif executable('ag')
-            let command = "ag -l --silent --nocolor -g '' "
+            let command = "ag -l --silent --nocolor -g '' ". "| awk '($1~/". a:args . "/) {print $0\":\t\t0:0:0\"}' "
         endif
 
         if empty(command)
@@ -985,15 +994,15 @@ if CheckPlug('fzf.vim', 0)
             return
         endif
 
-        call fzf#run({
-                    \ 'source': command,
-                    \ 'sink':   'e',
-                    \ 'options': '-m -x +s',
-                    \ 'window':  'enew' })
+        call fzf#vim#grep(
+                    \   command, 1,
+                    \   a:preview ? fzf#vim#with_preview('up:60%')
+                    \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+                    \   a:preview)
     endfunction
 
 
-    function! s:TagCat(mode, args, bang, type)
+    function! s:TagCat(mode, args, bang, preview)
         let tagfile = ''
         if !exists('g:fuzzy_file_tag')
             let g:fuzzy_file_tag = ["tagx", ".tagx"]
@@ -1020,9 +1029,10 @@ if CheckPlug('fzf.vim', 0)
         if !empty(command)
             call fzf#vim#grep(
                         \   command, 0,
-                        \   a:type ? fzf#vim#with_preview('up:60%')
+                        \   a:preview ? fzf#vim#with_preview('up:60%')
                         \          : fzf#vim#with_preview('right:50%:hidden', '?'),
-                        \   a:type)
+                        \   a:preview)
+
             "call fzf#run({
             "            \ 'source': command,
             "            \ 'sink':   'e',
@@ -1031,14 +1041,17 @@ if CheckPlug('fzf.vim', 0)
         endif
     endfunction
 
-    command! -bang -nargs=* FileCatN call <sid>FileCat(0, <q-args>, <bang>0)
-    command! -bang -nargs=* FileCatV call <sid>FileCat(1, <q-args>, <bang>0)
+    command! -bang -nargs=* FileCatN    call <sid>FileCat(0, <q-args>, <bang>0, 0)
+    command! -bang -nargs=* FileCatV    call <sid>FileCat(1, <q-args>, <bang>0, 0)
 
-    command! -bang -nargs=* TagCatN call <sid>TagCat(0, <q-args>, <bang>0, 0)
-    command! -bang -nargs=* TagCatV call <sid>TagCat(1, <q-args>, <bang>0, 0)
+    command! -bang -nargs=* FileCatPreN call <sid>FileCat(0, <q-args>, <bang>0, 1)
+    command! -bang -nargs=* FileCatPreV call <sid>FileCat(1, <q-args>, <bang>0, 1)
 
-    command! -bang -nargs=* TagCatPreN call <sid>TagCat(0, <q-args>, <bang>0, 1)
-    command! -bang -nargs=* TagCatPreV call <sid>TagCat(1, <q-args>, <bang>0, 1)
+    command! -bang -nargs=* TagCatN     call <sid>TagCat(0,  <q-args>, <bang>0, 0)
+    command! -bang -nargs=* TagCatV     call <sid>TagCat(1,  <q-args>, <bang>0, 0)
+
+    command! -bang -nargs=* TagCatPreN  call <sid>TagCat(0,  <q-args>, <bang>0, 1)
+    command! -bang -nargs=* TagCatPreV  call <sid>TagCat(1,  <q-args>, <bang>0, 1)
 
     nnoremap <leader>i  :TagCatN 
     vnoremap <leader>i  :TagCatV 
@@ -1052,8 +1065,8 @@ if CheckPlug('fzf.vim', 0)
     nnoremap <silent> <leader>o  :FileCatN<cr>
     vnoremap <silent> <leader>o  :FileCatV<cr>
 
-    nnoremap <silent> <leader>O  :FileCatN!<cr>
-    vnoremap <silent> <leader>O  :FileCatV!<cr>
+    nnoremap <silent> <leader>O  :FileCatPreN<cr>
+    vnoremap <silent> <leader>O  :FileCatPreV<cr>
 
     "vnoremap          <leader>o  :<c-u>call <SID>JumpO(1)<cr>
     "nnoremap <silent> <leader>h  :<c-u>call <SID>JumpH(0)<cr>
