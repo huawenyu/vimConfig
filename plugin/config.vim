@@ -14,6 +14,23 @@ if g:vim_confi_option.auto_install_plugs
         \ | endif
 endif
 
+"set dictionary-=/usr/share/dict/words dictionary+=/usr/share/dict/words
+
+" tags {{{2
+
+    " # Issue using tags:
+    "   olddir/tags
+    "   newdir/tags
+    "   cd newdir; vi ../olddir/file1 and 'ptag func'		# which will open the file in olddir
+    " # If using 'set cscopetag', this issue not exist.
+    " But if auto-update the tags with current file, we must using tags not 'set cscopetag'.
+    " And the follow one-line can fix the issue.
+    set notagrelative
+
+    " http://arjanvandergaag.nl/blog/combining-vim-and-ctags.html
+    set tags=./tags,tags,./.tags,.tags;$HOME
+"}}}
+
 
 " http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
 " Restore cursor to file position in previous editing session

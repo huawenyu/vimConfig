@@ -1,6 +1,12 @@
 nvim
 ===
 
+# Setup terminals to support ALT and Backspace correctly
+
+	https://github.com/skywind3000/vim-init/wiki/Setup-terminals-to-support-ALT-and-Backspace-correctly
+	# from terminal, the command can check current key's map
+	$ showkey -a
+
 # Quickstart
 
 0. Download this vimrc:
