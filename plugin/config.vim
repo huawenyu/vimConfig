@@ -1,9 +1,9 @@
 " Version:      1.0
 
-if exists('g:loaded_myself_before') || &compatible
+if exists('g:loaded_local_config') || &compatible
   finish
 else
-  let g:loaded_myself_before = 'yes'
+  let g:loaded_local_config = 'yes'
 endif
 
 
@@ -14,81 +14,11 @@ if g:vim_confi_option.auto_install_plugs
         \ | endif
 endif
 
-"set dictionary-=/usr/share/dict/words dictionary+=/usr/share/dict/words
 
-" tags {{{2
-
-    " # Issue using tags:
-    "   olddir/tags
-    "   newdir/tags
-    "   cd newdir; vi ../olddir/file1 and 'ptag func'		# which will open the file in olddir
-    " # If using 'set cscopetag', this issue not exist.
-    " But if auto-update the tags with current file, we must using tags not 'set cscopetag'.
-    " And the follow one-line can fix the issue.
-    set notagrelative
-
-    " http://arjanvandergaag.nl/blog/combining-vim-and-ctags.html
-    set tags=./tags,tags,./.tags,.tags;$HOME
-"}}}
-
-
-" http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
-" Restore cursor to file position in previous editing session
-if g:vim_confi_option.auto_restore_cursor
-    function! ResCur()
-        if line("'\"") <= line("$")
-            silent! normal! g`"
-            return 1
-        endif
-    endfunction
-
-    augroup resCur
-        autocmd!
-        autocmd BufWinEnter * call ResCur()
-    augroup END
+if CheckPlug('syntastic', 0)
+    let g:syntastic_vim_checkers = ['vint']
 endif
 
-
-if g:vim_confi_option.auto_qf_height
-    function! AdjustWindowHeight(minheight, maxheight)
-        let l = 1
-        let n_lines = 0
-        let w_width = winwidth(0)
-        while l <= line('$')
-            " number to float for division
-            let l_len = strlen(getline(l)) + 0.0
-            let line_width = l_len/w_width
-            let n_lines += float2nr(ceil(line_width))
-            let l += 1
-        endw
-        let exp_height = max([min([n_lines, a:maxheight]), a:minheight])
-        if (abs(winheight(0) - exp_height)) > 2
-            exe max([min([n_lines, a:maxheight]), a:minheight]) . "wincmd _"
-        endif
-    endfunction
-
-    augroup adjustView
-        autocmd!
-        autocmd filetype qf call AdjustWindowHeight(2, 10)
-    augroup END
-endif
-
-
-if g:vim_confi_option.upper_keyfixes
-    if has("user_commands")
-        command! -bang -nargs=* -complete=file E e<bang> <args>
-        command! -bang -nargs=* -complete=file W w<bang> <args>
-        command! -bang -nargs=* -complete=file Wq wq<bang> <args>
-        command! -bang -nargs=* -complete=file WQ wq<bang> <args>
-        command! -bang Wa wa<bang>
-        command! -bang WA wa<bang>
-        command! -bang Q q<bang>
-        command! -bang QA qa<bang>
-        command! -bang Qa qa<bang>
-    endif
-
-    "cmap Tabe tabe
-endif
 
 if CheckPlug('ctrlp.vim', 0)
     if exists("g:ctrl_user_command") | unlet g:ctrlp_user_command | endif
@@ -220,20 +150,6 @@ endif
 if CheckPlug('vim-tmux-navigator', 0)
     "" Disable tmux navigator when zooming the Vim pane
     let g:tmux_navigator_disable_when_zoomed = 1
-    "let g:tmux_navigator_no_mappings = 1
-    "nnoremap <silent> <a-h> :TmuxNavigateLeft<cr>
-    "nnoremap <silent> <a-j> :TmuxNavigateDown<cr>
-    "nnoremap <silent> <a-k> :TmuxNavigateUp<cr>
-    "nnoremap <silent> <a-l> :TmuxNavigateRight<cr>
-    "nnoremap <silent> <a-\> :TmuxNavigatePrevious<cr>
-endif
-
-
-if CheckPlug('vim-easy-align', 0)
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
-    xmap ga <Plug>(EasyAlign)
-    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nnoremap ga <Plug>(EasyAlign)
 endif
 
 
@@ -317,6 +233,26 @@ endif
 if CheckPlug('c-utils.vim', 0)
     let g:cutils_cscope_map = 1
 
+    if g:vim_confi_option.auto_install_tools
+        if LINUX()
+            if UBUNTU()
+                if !executable('cscope')
+                    call system("sudo apt install cscope")
+                endif
+                if !executable('ctags')
+                    call system("sudo apt install ctags")
+                endif
+            elseif CENTOS() || FEDORA()
+                if !executable('cscope')
+                    call system("sudo yum install cscope")
+                endif
+                if !executable('ctags')
+                    call system("sudo yum install ctags")
+                endif
+            endif
+        endif
+    endif
+
     let g:tlTokenList = ["FIXME @wilson", "TODO @wilson", "XXX @wilson"]
     let g:ctrlsf_mapping = { "next": "n", "prev": "N", }
     let g:utilquickfix_file = $HOME."/.vim/vim.quickfix"
@@ -364,20 +300,12 @@ if CheckPlug('deoplete.nvim', 0)
     let g:deoplete#enable_at_startup = 1
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-k>     <Plug>(neosnippet_expand_target)
 endif
 
 
 if CheckPlug('w3m.vim', 0)
     let g:w3m#command = '/usr/bin/w3m'
     let g:w3m#lang = 'en_US'
-endif
-
-
-if CheckPlug('vim-autoformat', 0)
-    noremap <F3> :Autoformat<CR>
 endif
 
 
@@ -572,15 +500,6 @@ if CheckPlug('vim-go', 0)
     let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
     let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
     let g:go_list_type = "quickfix"
-
-    au FileType go nmap <leader>gr <Plug>(go-run)
-    au FileType go nmap <leader>gb <Plug>(go-build)
-    au FileType go nmap <leader>gt <Plug>(go-test)
-    au FileType go nmap <leader>gc <Plug>(go-coverage)
-    au FileType go nmap <leader>gd <Plug>(go-doc)<Paste>
-    au FileType go nmap <leader>gi <Plug>(go-info)
-    au FileType go nmap <leader>ge <Plug>(go-rename)
-    au FileType go nmap <leader>gg <Plug>(go-def-vertical)
 endif
 
 
@@ -615,16 +534,6 @@ if CheckPlug('haskellmode-vim', 0)
 endif
 
 
-if CheckPlug('tabularize', 0)
-    if exists(":Tabularize")
-        nnoremap <leader>t= :Tabularize /=<CR>
-        vnoremap <leader>t= :Tabularize /=<CR>
-        nnoremap <leader>t: :Tabularize /:\zs<CR>
-        vnoremap <leader>t: :Tabularize /:\zs<CR>
-    endif
-endif
-
-
 if CheckPlug('vim-yoink', 0)
     " yank/paste
     " Disable warning: Clipboard error : Target STRING not available when running
@@ -635,19 +544,6 @@ if CheckPlug('vim-yoink', 0)
     let g:yoinkMoveCursorToEndOfPaste=1
     let g:yoinkIncludeNamedRegisters=1
     let g:yoinkSyncNumberedRegisters=1
-    "nmap <c-n> <plug>(YoinkPostPasteSwapBack)
-    "nmap <c-p> <plug>(YoinkPostPasteSwapForward)
-
-    nmap qy :Yanks<cr>
-
-    nmap p <plug>(YoinkPaste_p)
-    nmap P <plug>(YoinkPaste_P)
-    nmap [y <plug>(YoinkRotateBack)
-    nmap ]y <plug>(YoinkRotateForward)
-
-    nmap y <plug>(YoinkYankPreserveCursorPosition)
-    vmap y <plug>(YoinkYankPreserveCursorPosition)
-    xmap y <plug>(YoinkYankPreserveCursorPosition)
 endif
 
 
@@ -684,57 +580,11 @@ if CheckPlug('vim-gutentags', 0)
 
         " Force universal ctags to generate old ctags format
         let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
-
-        " gutentags_plus
-        let g:cutils_cscope_map = 0
-        let g:gutentags_plus_nomap = 1
-        noremap <silent> <leader>fs :GscopeFind s <C-R><C-W><cr>
-        noremap <silent> <leader>fg :GscopeFind g <C-R><C-W><cr>
-        noremap <silent> <leader>fc :GscopeFind c <C-R><C-W><cr>
-        noremap <silent> <leader>ft :GscopeFind t <C-R><C-W><cr>
-        noremap <silent> <leader>fe :GscopeFind e <C-R><C-W><cr>
-        noremap <silent> <leader>ff :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
-        noremap <silent> <leader>fi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
-        noremap <silent> <leader>fd :GscopeFind d <C-R><C-W><cr>
-        noremap <silent> <leader>fa :GscopeFind a <C-R><C-W><cr>
-
-        "let g:gutentags_plus_nomap = 1
-        "noremap <silent> <leader>fs :cs find s <C-R><C-W><cr>
-        "noremap <silent> <leader>fg :cs find g <C-R><C-W><cr>
-        "noremap <silent> <leader>fc :cs find c <C-R><C-W><cr>
-        "noremap <silent> <leader>ft :cs find t <C-R><C-W><cr>
-        "noremap <silent> <leader>fe :cs find e <C-R><C-W><cr>
-        "noremap <silent> <leader>ff :cs find f <C-R>=expand("<cfile>")<cr><cr>
-        "noremap <silent> <leader>fi :cs find i <C-R>=expand("<cfile>")<cr><cr>
-        "noremap <silent> <leader>fd :cs find d <C-R><C-W><cr>
-        "noremap <silent> <leader>fa :cs find a <C-R><C-W><cr>
     endif
 endif
 
 
-if CheckPlug('coc.nvim', 0)
-    " using coc.vim/ale with ccls-cache which base on clang
-    nmap <silent> <a-]> <Plug>(coc-definition)
-    nmap <silent> <a-\> <Plug>(coc-references)
-    "nmap <silent> <a-h> <Plug>(coc-type-definition)
-    "nmap <silent> <a-j> <Plug>(coc-implementation)
-    nmap <silent> <a-[> call CocAction('doHover')
-    nmap <silent> <a-r> <Plug>(coc-rename)
-    nmap <silent> <a-,> <Plug>(coc-diagnostic-prev)
-    nmap <silent> <a-.> <Plug>(coc-diagnostic-next)
-
-    "autocmd CursorHold * silent call CocActionAsync('highlight')
-endif
-
-
 if CheckPlug('ale.vim', 0)
-    nmap <silent> <a-]> :ALEGoToDefinition<cr>
-    nmap <silent> <a-\> :ALEFindReferences<cr>
-    "nmap <silent> <a-h> :ALESymbolSearch<cr>
-    nmap <silent> <a-[> :ALEHover<cr>
-    nmap <silent> <a-,> <Plug>(ale_previous_wrap)
-    nmap <silent> <a-.> <Plug>(ale_next_wrap)
-
     let g:ale_cpp_ccls_init_options = {
       \   'cache': {
       \       'directory': './ccls-cache',
@@ -758,8 +608,6 @@ endif
 
 
 if CheckPlug('vim-prettier', 0)
-    nmap <Leader>fm <Plug>(Prettier)
-
     let g:prettier#autoformat = 0
     let g:prettier#quickfix_enabled = 0
     let g:prettier#quickfix_auto_focus = 0
@@ -807,21 +655,6 @@ if CheckPlug('vim-qf', 0)
     let g:qf_auto_quit = 0
     let g:qf_save_win_view = 0
     let g:qf_max_height = 4
-
-    "nnoremap <leader>mn :QFAddNote note:
-    nnoremap <leader>ms :SaveList
-    nnoremap <leader>mS :SaveListAdd
-    nnoremap <leader>ml :LoadList
-    nnoremap <leader>mL :LoadListAdd
-    nnoremap <leader>mo :copen<cr>
-    nnoremap <leader>mn :cnewer<cr>
-    nnoremap <leader>mp :colder<cr>
-
-    nnoremap <leader>md :Doline
-    nnoremap <leader>mx :RemoveList
-    nnoremap <leader>mh :ListLists<cr>
-    "nnoremap <leader>mk :Keep
-    nnoremap <leader>mF :Reject
 endif
 
 
@@ -863,16 +696,6 @@ if CheckPlug('vim-tmux-runner', 0)
     let g:VtrUseMarkEnd = 'n'
     let g:VtrFindWindowByName = 0
     let g:VtrFindPaneByName = 0
-
-    nnoremap <silent> <leader>tf :exec "VtrLoad" \| exec "VtrSendFile"<CR>
-    nnoremap <silent> <leader>tl :exec "VtrLoad" \| exec "VtrSendLinesToRunner"<CR>
-    nnoremap <silent> <leader>tt :exec "VtrLoad" \| exec "call vtr#SendCommandEx('n')"<CR>
-    vnoremap <silent> <leader>tt :exec "VtrLoad" \| exec "call vtr#SendCommandEx('v')"<CR>
-    nnoremap <silent> <leader>tw :exec "VtrLoad" \| exec "call vtr#ExecuteCommand('n')"<CR>
-    vnoremap <silent> <leader>tw :exec "VtrLoad" \| exec "call vtr#ExecuteCommand('v')"<CR>
-    nnoremap <silent> <leader>tj :exec "VtrLoad" \| exec "VtrBufferPasteHere"<CR>
-    nnoremap <silent> <leader>tg :exec "VtrLoad" \| exec "VtrFlushCommand"<CR>
-    nnoremap <silent> <leader>tc :exec "VtrLoad" \| exec "VtrClearRunner"<CR>
 endif
 
 
@@ -883,9 +706,6 @@ endif
 
 
 if CheckPlug('vim-notes', 0)
-    " :edit note:<name>
-    vnoremap <F1> :SplitNoteFromSelectedText<Cr>
-
     let g:notes_dir_order_type = {'wiki': 0, 'vim': 1}
     " The 1st is our routine notes dir, the 2nd is our plugin's help notes.
     let g:notes_directories = ['~/wiki/Notes', PlugGetDir('vim.before'). 'docs']
@@ -942,7 +762,6 @@ if CheckPlug('ctrlp.vim', 0)
     "            \ }
     "let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
     "let g:ctrlp_mruf_exclude = "\v\.git/(COMMIT_EDITMSG|index)"
-    "nnoremap <leader>b :CtrlPBuffer<cr>
 endif
 
 
@@ -979,116 +798,10 @@ if CheckPlug('fzf.vim', 0)
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
 
-    function! s:FileCat(mode, args, bang, preview)
-        if a:bang
-            Files
-            return
-        endif
-
-        let current_file =expand("%")
-        let cwd = fnamemodify(current_file, ':p:h')
-
-        let command = ""
-        if filereadable(expand(cwd. "/.cscope.files"))
-            let command = 'cat ./.cscope.files'. "| awk '($1~/". a:args . "/) {print $0\":\t\t0:0:0\"}' "
-        elseif executable('rg')
-            let command = 'rg --no-heading --files --color=never --fixed-strings'. "| awk '($1~/". a:args . "/){print $0\":\t\t0:0:0\"}' "
-        elseif executable('ag')
-            let command = "ag -l --silent --nocolor -g '' ". "| awk '($1~/". a:args . "/) {print $0\":\t\t0:0:0\"}' "
-        endif
-
-        if empty(command)
-            Files
-            return
-        endif
-
-        call fzf#vim#grep(
-                    \   command, 1,
-                    \   a:preview ? fzf#vim#with_preview('up:60%')
-                    \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-                    \   a:preview)
-    endfunction
-
-
-    function! s:TagCat(mode, args, bang, preview)
-        let tagfile = ''
-        if !exists('g:fuzzy_file_tag')
-            let g:fuzzy_file_tag = ["tagx", ".tagx"]
-        endif
-        for i in g:fuzzy_file_tag
-            if filereadable(i)
-                let tagfile = i
-                break
-            endif
-        endfor
-
-        if empty(tagfile)
-            echomsg "tagx file not exist!"
-            return
-        endif
-
-        " <bang>1 symbol, <bang>0 function
-        if a:bang
-            let command = "awk '($2 != \"function\" && $1~/". a:args. "/) {$1=$2=\"\"; print $4\":\"$3\":\"$5}' ". tagfile
-        else
-            let command = "awk '($2 == \"function\" && $1~/". a:args. "/) {$1=$2=\"\"; print $4\":\"$3\":\"$5}' ". tagfile
-        endif
-
-        if !empty(command)
-            call fzf#vim#grep(
-                        \   command, 0,
-                        \   a:preview ? fzf#vim#with_preview('up:60%')
-                        \          : fzf#vim#with_preview('right:50%:hidden', '?'),
-                        \   a:preview)
-
-            "call fzf#run({
-            "            \ 'source': command,
-            "            \ 'sink':   'e',
-            "            \ 'options': '-m -x +s',
-            "            \ 'window':  'enew' })
-        endif
-    endfunction
-
-    command! -bang -nargs=* FileCatN    call <sid>FileCat(0, <q-args>, <bang>0, 0)
-    command! -bang -nargs=* FileCatV    call <sid>FileCat(1, <q-args>, <bang>0, 0)
-
-    command! -bang -nargs=* FileCatPreN call <sid>FileCat(0, <q-args>, <bang>0, 1)
-    command! -bang -nargs=* FileCatPreV call <sid>FileCat(1, <q-args>, <bang>0, 1)
-
-    command! -bang -nargs=* TagCatN     call <sid>TagCat(0,  <q-args>, <bang>0, 0)
-    command! -bang -nargs=* TagCatV     call <sid>TagCat(1,  <q-args>, <bang>0, 0)
-
-    command! -bang -nargs=* TagCatPreN  call <sid>TagCat(0,  <q-args>, <bang>0, 1)
-    command! -bang -nargs=* TagCatPreV  call <sid>TagCat(1,  <q-args>, <bang>0, 1)
-
-    nnoremap <leader>i  :TagCatN 
-    vnoremap <leader>i  :TagCatV 
-
-    nnoremap <leader>I  :TagCatPreN 
-    vnoremap <leader>I  :TagCatPreV 
-
-    "nnoremap <silent> <a-g> :RgType <C-R>=printf("%s", expand('<cword>'))<cr><cr>
-    "nnoremap <silent> <a-q> :BLines<cr>
-
-    nnoremap <silent> <leader>o  :FileCatN<cr>
-    vnoremap <silent> <leader>o  :FileCatV<cr>
-
-    nnoremap <silent> <leader>O  :FileCatPreN<cr>
-    vnoremap <silent> <leader>O  :FileCatPreV<cr>
-
-    "vnoremap          <leader>o  :<c-u>call <SID>JumpO(1)<cr>
-    "nnoremap <silent> <leader>h  :<c-u>call <SID>JumpH(0)<cr>
-    "vnoremap          <leader>h  :<c-u>call <SID>JumpH(1)<cr>
-    "nnoremap <silent> <leader>j  :<c-u>call <SID>JumpJ(0)<cr>
-    "vnoremap          <leader>j  :<c-u>call <SID>JumpJ(1)<cr>
-    "nnoremap          <leader>f  :ls<cr>:b<Space>
-    nnoremap <silent> <leader>;  :<c-u>call <SID>JumpComma(0)<cr>
-    vnoremap          <leader>;  :<c-u>call <SID>JumpComma(1)<cr>
 endif
 
 
 if CheckPlug('vim-repl', 0)
-    noremap <leader>rr :REPLToggle<Cr>
     let g:repl_position = 3
     let g:repl_cursor_down = 1
 
@@ -1105,11 +818,5 @@ if CheckPlug('vim-repl', 0)
                 \   }
     let g:repl_python_automerge = 1
     let g:repl_ipython_version = '7'
-    autocmd Filetype python nnoremap <F12> <Esc>:REPLDebugStopAtCurrentLine<Cr>
-    autocmd Filetype python nnoremap <F10> <Esc>:REPLPDBN<Cr>
-    autocmd Filetype python nnoremap <F11> <Esc>:REPLPDBS<Cr>
-
-    noremap <leader>rr :Repl<Cr>
 endif
-
 
