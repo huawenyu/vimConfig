@@ -1,9 +1,10 @@
 " Version:      1.0
 
 if exists('g:loaded_local_config') || &compatible
-  finish
+    finish
 else
-  let g:loaded_local_config = 'yes'
+    let g:loaded_local_config = 'yes'
+    silent! let s:log = logger#getLogger(expand('<sfile>:t'))
 endif
 
 
@@ -15,24 +16,24 @@ if g:vim_confi_option.auto_install_plugs
 endif
 
 
-if CheckPlug('syntastic', 0)
+if CheckPlug('syntastic', 1)
     let g:syntastic_vim_checkers = ['vint']
 endif
 
 
-if CheckPlug('ctrlp.vim', 0)
+if CheckPlug('ctrlp.vim', 1)
     if exists("g:ctrl_user_command") | unlet g:ctrlp_user_command | endif
 endif
 
-if CheckPlug('vimfiler.vim', 0)
+if CheckPlug('vimfiler.vim', 1)
     let g:vimfiler_as_default_explorer = 1
 endif
 
-if CheckPlug('vcscommand.vim', 0)
+if CheckPlug('vcscommand.vim', 1)
     "let g:signify_vcs_list = [ 'git', 'svn' ]
 endif
 
-if CheckPlug('new-gdb.vim', 0)
+if CheckPlug('new-gdb.vim', 1)
     "let g:neogdb_window = ['backtrace', 'breakpoint']
     let g:gdb_require_enter_after_toggling_breakpoint = 0
 
@@ -44,14 +45,14 @@ if CheckPlug('new-gdb.vim', 0)
     endif
 endif
 
-if CheckPlug('tabman.vim', 0)
+if CheckPlug('tabman.vim', 1)
     " disable old config
     let g:tabman_toggle = '<leader>xt'
     let g:tabman_focus  = '<leader>xf'
 endif
 
 
-if CheckPlug('neocomplcache.vim', 0)
+if CheckPlug('neocomplcache.vim', 1)
     let g:acp_enableAtStartup = 0
     let g:neocomplcache_enable_at_startup = 1
     let g:neocomplcache_enable_smart_case = 1
@@ -60,18 +61,18 @@ if CheckPlug('neocomplcache.vim', 0)
 endif
 
 
-if CheckPlug('tcl.vim', 0)
+if CheckPlug('tcl.vim', 1)
     let tcl_extended_syntax = 1
 endif
 
 
-if CheckPlug('vim-rooter', 0)
+if CheckPlug('vim-rooter', 1)
     let g:rooter_manual_only = 1
     let g:rooter_patterns = ['Rakefile', '.git', '.git/', '.svn', '.svn/']
 endif
 
 
-if CheckPlug('neomake', 0)
+if CheckPlug('neomake', 1)
     " make & asynrun
     let g:neomake_open_list = 0
     let g:neomake_place_signs = 1
@@ -88,25 +89,25 @@ if CheckPlug('neomake', 0)
 endif
 
 
-if CheckPlug('neovim-fuzzy', 0)
+if CheckPlug('neovim-fuzzy', 1)
     " fuzzy
     "let g:fuzzy_file_list = ["cscope.files"]
     "let g:fuzzy_file_tag = ['tags.x', '.tags.x']
 endif
 
 
-if CheckPlug('supertab', 0)
+if CheckPlug('supertab', 1)
     let g:SuperTabDefaultCompletionType = "<c-n>"
 endif
 
 
-if CheckPlug('neoterm', 0)
+if CheckPlug('neoterm', 1)
     let g:neoterm_default_mod = 'vertical'
     let g:neoterm_autoinsert = 1
 endif
 
 
-if CheckPlug('vim-easymotion', 0)
+if CheckPlug('vim-easymotion', 1)
     let g:EasyMotion_do_mapping = 0 " Disable default mappings
 
     " Jump to anywhere you want with minimal keystrokes, with just one key binding.
@@ -120,7 +121,7 @@ if CheckPlug('vim-easymotion', 0)
 endif
 
 
-if CheckPlug('vim-autotag', 0)
+if CheckPlug('vim-autotag', 1)
     " log: /tmp/vim-autotag.log
     let g:autotagVerbosityLevel = 10
     let g:autotagmaxTagsFileSize = 50 * 1024 * 1024
@@ -131,13 +132,13 @@ if CheckPlug('vim-autotag', 0)
 endif
 
 
-if CheckPlug('asyncrun.vim', 0)
+if CheckPlug('asyncrun.vim', 1)
     let g:asyncrun_silent = 1
     let g:asyncrun_open = 8
 endif
 
 
-if CheckPlug('vim-bookmarks', 0)
+if CheckPlug('vim-bookmarks', 1)
     let g:bookmark_no_default_key_mappings = 1
     let g:bookmark_highlight_lines = 1
     let g:bookmark_save_per_working_dir = 1
@@ -147,13 +148,13 @@ if CheckPlug('vim-bookmarks', 0)
 endif
 
 
-if CheckPlug('vim-tmux-navigator', 0)
+if CheckPlug('vim-tmux-navigator', 1)
     "" Disable tmux navigator when zooming the Vim pane
     let g:tmux_navigator_disable_when_zoomed = 1
 endif
 
 
-if CheckPlug('netrw', 0)
+if CheckPlug('netrw', 1)
     "let g:netrw_banner = 0
     "let g:netrw_liststyle = 3
     "let g:netrw_browse_split = 4
@@ -163,7 +164,7 @@ if CheckPlug('netrw', 0)
 endif
 
 
-if CheckPlug('nerdtree', 0)
+if CheckPlug('nerdtree', 1)
     " Conflicts with NERDTree menu ('m' key): And the only reason to create and remove maps is because of the conflicting m map in NERDTree.
     " https://github.com/kshenoy/vim-signature/issues/3
     let NERDTreeMapMenu='M'
@@ -196,12 +197,12 @@ if CheckPlug('nerdtree', 0)
 endif
 
 
-if CheckPlug('defx.nvim', 0)
+if CheckPlug('defx.nvim', 1)
     let g:defx_icons_enable_syntax_highlight = 0
 endif
 
 
-if CheckPlug('vim-buffergator', 0)
+if CheckPlug('vim-buffergator', 1)
     let g:buffergator_suppress_keymaps = 1
     let g:buffergator_suppress_mru_switch_into_splits_keymaps = 1
     let g:buffergator_autoupdate = 1
@@ -217,20 +218,20 @@ if CheckPlug('vim-buffergator', 0)
 endif
 
 
-if CheckPlug('VOoM', 0)
+if CheckPlug('VOoM', 1)
     let g:voom_tree_width = 45
     let g:voom_tree_placement = 'right'
 endif
 
 
-if CheckPlug('gist-vim', 0)
+if CheckPlug('gist-vim', 1)
     let g:gist_show_privates = 1
     let g:gist_post_private = 1
     let g:gist_get_multiplefile = 1
 endif
 
 
-if CheckPlug('c-utils.vim', 0)
+if CheckPlug('c-utils.vim', 1)
     let g:cutils_cscope_map = 1
 
     if g:vim_confi_option.auto_install_tools
@@ -259,7 +260,7 @@ if CheckPlug('c-utils.vim', 0)
 endif
 
 
-if CheckPlug('vim-startify', 0)
+if CheckPlug('vim-startify', 1)
     let g:startify_list_order = ['sessions', 'bookmarks', 'files', 'dir', 'commands']
     let g:startify_relative_path = 1
     let g:startify_change_to_dir = 0
@@ -275,7 +276,7 @@ if CheckPlug('vim-startify', 0)
 endif
 
 
-if CheckPlug('vim-workspace', 0)
+if CheckPlug('vim-workspace', 1)
     let g:workspace_session_name = '.Session.vim'
     let g:workspace_autosave_always = 0
     let g:workspace_persist_undo_history = 0
@@ -285,7 +286,7 @@ if CheckPlug('vim-workspace', 0)
 endif
 
 
-if CheckPlug('vim-session', 0)
+if CheckPlug('vim-session', 1)
     let g:session_directory = getcwd()
     let g:session_default_name = ".Session"
     let g:session_default_overwrite = 1
@@ -296,20 +297,20 @@ if CheckPlug('vim-session', 0)
 endif
 
 
-if CheckPlug('deoplete.nvim', 0)
+if CheckPlug('deoplete.nvim', 1)
     let g:deoplete#enable_at_startup = 1
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 endif
 
 
-if CheckPlug('w3m.vim', 0)
+if CheckPlug('w3m.vim', 1)
     let g:w3m#command = '/usr/bin/w3m'
     let g:w3m#lang = 'en_US'
 endif
 
 
-if CheckPlug('vim-markdown', 0)
+if CheckPlug('vim-markdown', 1)
     " ge: jump follow link
     " gx: open link in browser
 
@@ -352,14 +353,14 @@ endif
 "
 
 
-if CheckPlug('command-t', 0)
+if CheckPlug('command-t', 1)
     let g:CommandTHighlightColor = 'Ptext'
     let g:CommandTNeverShowDotFiles = 1
     let g:CommandTScanDotDirectories = 0
 endif
 
 
-if CheckPlug('tagbar', 0)
+if CheckPlug('tagbar', 1)
     "let g:tagbar_autoclose = 1
     let g:tagbar_sort = 0
     let g:tagbar_width = 40
@@ -373,7 +374,7 @@ if CheckPlug('tagbar', 0)
 endif
 
 
-if CheckPlug('taglist.vim', 0)
+if CheckPlug('taglist.vim', 1)
     "let Tlist_GainFocus_On_ToggleOpen = 1
     let Tlist_Auto_Update = 0
     let Tlist_Show_Menu = 0
@@ -386,24 +387,24 @@ if CheckPlug('taglist.vim', 0)
 endif
 
 
-if CheckPlug('minibufexpl.vim', 0)
+if CheckPlug('minibufexpl.vim', 1)
     let g:miniBufExplSplitToEdge = 1
     let g:miniBufExplorerAutoStart = 1
 endif
 
 
-if CheckPlug('vim-json', 0)
+if CheckPlug('vim-json', 1)
     let g:vim_json_syntax_conceal = 0
 endif
 
 
-if CheckPlug('vim-sneak', 0)
+if CheckPlug('vim-sneak', 1)
     let g:sneak#s_next = 1
     let g:sneak#use_ic_scs = 1
 endif
 
 
-if CheckPlug('vimdiff', 0)
+if CheckPlug('vimdiff', 1)
     " output to html ignore the same line
     let g:html_ignore_folding = 1
     let g:html_use_css = 0
@@ -411,7 +412,7 @@ if CheckPlug('vimdiff', 0)
 endif
 
 
-if CheckPlug('vimwiki', 0)
+if CheckPlug('vimwiki', 1)
     " {'path': '$HOME/wiki', 'auto_toc': 1, 'syntax': 'markdown', 'ext': '.md', 'maxhi': 1, 'auto_tags': 1},
     let g:vimwiki_list = [
           \{'name': 'work', 'path': '$HOME/dotwiki', 'syntax': 'markdown', 'auto_toc': 1, 'maxhi': 1, 'auto_tags': 1},
@@ -424,7 +425,7 @@ if CheckPlug('vimwiki', 0)
 endif
 
 
-if CheckPlug('python-mode', 0)
+if CheckPlug('python-mode', 1)
     " Activate rope
     " Keys:
     " K             Show python docs
@@ -469,7 +470,7 @@ if CheckPlug('python-mode', 0)
 endif
 
 
-if CheckPlug('jedi-vim', 0)
+if CheckPlug('jedi-vim', 1)
   " leader+t:   doctest
   let g:jedi#completions_command = "<C-Space>"
   let g:jedi#goto_command = "<leader>gg"
@@ -481,12 +482,12 @@ if CheckPlug('jedi-vim', 0)
 endif
 
 
-if CheckPlug('SingleCompile', 0)
+if CheckPlug('SingleCompile', 1)
     let g:SingleCompile_usequickfix=1
 endif
 
 
-if CheckPlug('vim-go', 0)
+if CheckPlug('vim-go', 1)
     let g:go_version_warning = 0
     let g:go_highlight_functions = 1
     let g:go_highlight_methods = 1
@@ -503,7 +504,7 @@ if CheckPlug('vim-go', 0)
 endif
 
 
-if CheckPlug('haskellmode-vim', 0)
+if CheckPlug('haskellmode-vim', 1)
     let $PATH = $PATH . ':' . expand('~/.cabal/bin')
 
     " Configure browser for haskell_doc.vim
@@ -534,7 +535,7 @@ if CheckPlug('haskellmode-vim', 0)
 endif
 
 
-if CheckPlug('vim-yoink', 0)
+if CheckPlug('vim-yoink', 1)
     " yank/paste
     " Disable warning: Clipboard error : Target STRING not available when running
     let g:yankring_clipboard_monitor=0
@@ -547,8 +548,8 @@ if CheckPlug('vim-yoink', 0)
 endif
 
 
-if CheckPlug('vim-gutentags', 0)
-    if !CheckPlug('c-utils.vim', 0)
+if CheckPlug('vim-gutentags', 1)
+    if !CheckPlug('c-utils.vim', 1)
         " Disable auto-load gtags file
         let g:gutentags_auto_add_gtags_cscope = 1
 
@@ -584,7 +585,7 @@ if CheckPlug('vim-gutentags', 0)
 endif
 
 
-if CheckPlug('ale.vim', 0)
+if CheckPlug('ale.vim', 1)
     let g:ale_cpp_ccls_init_options = {
       \   'cache': {
       \       'directory': './ccls-cache',
@@ -607,14 +608,14 @@ if CheckPlug('ale.vim', 0)
 endif
 
 
-if CheckPlug('vim-prettier', 0)
+if CheckPlug('vim-prettier', 1)
     let g:prettier#autoformat = 0
     let g:prettier#quickfix_enabled = 0
     let g:prettier#quickfix_auto_focus = 0
 endif
 
 
-if CheckPlug('todo.vim', 0)
+if CheckPlug('todo.vim', 1)
     " :Todo
     " :Todo {filter}
     let g:todo_root = '~/tools/todo.txt-cli-ex/todo'
@@ -622,7 +623,7 @@ if CheckPlug('todo.vim', 0)
 endif
 
 
-if CheckPlug('taskwiki', 0)
+if CheckPlug('taskwiki', 1)
     let g:task_rc_override = 'rc.defaultwidth=0'
     let g:task_rc_override = 'rc.defaultheight=0'
     let g:task_report_name = 'long'
@@ -637,14 +638,14 @@ if CheckPlug('taskwiki', 0)
 endif
 
 
-if CheckPlug('vim-editqf', 0)
+if CheckPlug('vim-editqf', 1)
     "let g:editqf_no_mappings = 1
     "let g:editqf_saveqf_filename  = "vim.qf"
     "let g:editqf_saveloc_filename = "vim.qflocal"
 endif
 
 
-if CheckPlug('vim-qf', 0)
+if CheckPlug('vim-qf', 1)
     " Please silent and don't make troubles
     "let g:qf_mapping_ack_style = 0       | " donnot set this variable, for exist() trigger the keymap
     let g:qf_window_bottom = 0
@@ -658,7 +659,7 @@ if CheckPlug('vim-qf', 0)
 endif
 
 
-if CheckPlug('vim-cpp-enhanced-highlight', 0)
+if CheckPlug('vim-cpp-enhanced-highlight', 1)
     " improve performance
     let g:cpp_class_scope_highlight = 0
     let g:cpp_member_variable_highlight = 0
@@ -670,7 +671,7 @@ if CheckPlug('vim-cpp-enhanced-highlight', 0)
 endif
 
 
-if CheckPlug('vim-grepper', 0)
+if CheckPlug('vim-grepper', 1)
     let g:grepper = {}
     let g:grepper.highlight = 0
     let g:grepper.open = 1
@@ -680,12 +681,12 @@ if CheckPlug('vim-grepper', 0)
 endif
 
 
-if CheckPlug('vim-motion', 0)
+if CheckPlug('vim-motion', 1)
     let g:vim_motion_maps = 1
 endif
 
 
-if CheckPlug('vim-tmux-runner', 0)
+if CheckPlug('vim-tmux-runner', 1)
     let g:VtrUseVtrMaps = 0
     let g:VtrClearBeforeSend = 0
     "let g:vtr_filetype_runner_overrides = {
@@ -699,16 +700,16 @@ if CheckPlug('vim-tmux-runner', 0)
 endif
 
 
-if CheckPlug('new.vim', 0)
+if CheckPlug('new.vim', 1)
     " neovim expect window
     let g:new#eager_render = 1
 endif
 
 
-if CheckPlug('vim-notes', 0)
+if CheckPlug('vim-notes', 1)
     let g:notes_dir_order_type = {'wiki': 0, 'vim': 1}
     " The 1st is our routine notes dir, the 2nd is our plugin's help notes.
-    let g:notes_directories = ['~/wiki/Notes', PlugGetDir('vim.before'). 'docs']
+    let g:notes_directories = ['~/wiki/Notes', PlugGetDir(g:vim_confi_option.plug_note). 'docs']
     let g:notes_dir_order = g:notes_dir_order_type.wiki
     let g:notes_suffix = '.md'
 
@@ -722,23 +723,23 @@ if CheckPlug('vim-notes', 0)
 endif
 
 
-if CheckPlug('accelerated-jk', 0)
+if CheckPlug('accelerated-jk', 1)
     "let g:accelerated_jk_acceleration_table = [1,2,3,2,1]
     "let g:accelerated_jk_enable_deceleration = 1
 endif
 
 
-if CheckPlug('vim-plugin-AnsiEsc', 0)
+if CheckPlug('vim-plugin-AnsiEsc', 1)
     let g:no_cecutil_maps = 1
 endif
 
 
-if CheckPlug('vim-ctrlspace', 0)
+if CheckPlug('vim-ctrlspace', 1)
     let g:CtrlSpaceDefaultMappingKey = "<C-space> "
 endif
 
 
-if CheckPlug('ctrlp.vim', 0)
+if CheckPlug('ctrlp.vim', 1)
     let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
     let g:ctrlp_working_path_mode='ra'
     let g:ctrlp_cmd = 'CtrlPMixed'
@@ -765,7 +766,7 @@ if CheckPlug('ctrlp.vim', 0)
 endif
 
 
-if CheckPlug('fzf.vim', 0)
+if CheckPlug('fzf.vim', 1)
     " Customize fzf colors to match your color scheme
     let g:fzf_colors =
     \ { 'fg':      ['fg', 'Normal'],
@@ -801,7 +802,7 @@ if CheckPlug('fzf.vim', 0)
 endif
 
 
-if CheckPlug('vim-repl', 0)
+if CheckPlug('vim-repl', 1)
     let g:repl_position = 3
     let g:repl_cursor_down = 1
 
