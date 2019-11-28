@@ -138,6 +138,27 @@ if CheckPlug('asyncrun.vim', 1)
 endif
 
 
+if CheckPlug('tagbar', 1)
+    "let g:tagbar_vertical = 25
+    "let NERDTreeWinPos = 'left'
+endif
+
+
+if CheckPlug('vista.vim', 1)
+    let g:vista_icon_indent = ["▸ ", ""]
+    let g:vista_ctags_cmd = {
+      \ 'haskell': 'hasktags -x -o - -c',
+      \ }
+    let g:vista_fzf_preview = ['right:50%']
+    let g:vista#renderer#enable_icon = 0
+    let g:vista_sidebar_width = 25
+    let g:vista_echo_cursor = 0
+    let g:vista_blink = [0, 0]
+    let g:vista_top_level_blink = [0, 0]
+    "let g:vista_sidebar_position = 'vertical botright'
+endif
+
+
 if CheckPlug('vim-bookmarks', 1)
     let g:bookmark_no_default_key_mappings = 1
     let g:bookmark_highlight_lines = 1
