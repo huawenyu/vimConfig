@@ -252,8 +252,8 @@ if CheckPlug('gist-vim', 1)
 endif
 
 
-if CheckPlug('c-utils.vim', 1)
-    let g:cutils_cscope_map = 1
+if CheckPlug('fzf-cscope.vim', 1)
+    let g:fzf_cscope_map = 1
 
     if g:vim_confi_option.auto_install_tools
         if LINUX()
@@ -274,7 +274,10 @@ if CheckPlug('c-utils.vim', 1)
             endif
         endif
     endif
+endif
 
+
+if CheckPlug('c-utils.vim', 1)
     let g:tlTokenList = ["FIXME @wilson", "TODO @wilson", "XXX @wilson"]
     let g:ctrlsf_mapping = { "next": "n", "prev": "N", }
     let g:utilquickfix_file = $HOME."/.vim/vim.quickfix"
