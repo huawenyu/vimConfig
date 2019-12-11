@@ -223,6 +223,11 @@ if CheckPlug('defx.nvim', 1)
 endif
 
 
+if CheckPlug('rust.vim', 1)
+    let g:rustfmt_autosave = 1
+endif
+
+
 if CheckPlug('vim-buffergator', 1)
     let g:buffergator_suppress_keymaps = 1
     let g:buffergator_suppress_mru_switch_into_splits_keymaps = 1
