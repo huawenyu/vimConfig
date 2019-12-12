@@ -328,8 +328,14 @@ endif
 
 if CheckPlug('deoplete.nvim', 1)
     let g:deoplete#enable_at_startup = 1
+endif
+
+
+if CheckPlug('neosnippet.vim', 1)
     let g:neosnippet#enable_snipmate_compatibility = 1
-    let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+    "let g:neosnippet#enable_conceal_markers = 0
+    " The last dir will be taken as default working dir.
+    let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets, ~/.vim/bundle/vim-snippets.local/snippets, '
 endif
 
 
