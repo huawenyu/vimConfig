@@ -57,6 +57,10 @@ let g:vim_confi_option = {
    Install neovim {{{2
    -------------------
    [doc]("https://github.com/neovim/neovim/wiki/Installing-Neovim)
+   $ brew install neovim
+   $ nvim --version
+   $ sudo update-alternatives --display vi
+   $ sudo update-alternatives --config vi
 
    Using Plugin-Manage {{{2
    ------------------------
@@ -82,11 +86,28 @@ let g:vim_confi_option = {
 
     ### After pip install neovim, keep health warning, maybe we're using brew's python.
     ### Please remove brew's python first:
+    $ which python      <=== ensure the python cannot install by brew
+    $ which python3
+
     $ brew list python
     $ brew unlink python@2
     $ brew unlink python@3
+
+    $ sudo apt install python3.7
+
     $ sudo apt install python-pip
     $ sudo apt install python3-pip
+    ### if fail, try:
+    $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    $ python3.7 get-pip.py
+
+    ### set python3 as default:
+    $ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
+    $ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 2
+    ### Choose python3.7 as python3
+    $ sudo update-alternatives --config python
+    <or>
+    $ sudo update-alternatives  --set python /usr/bin/python3.7
 
     $ sudo pip2 install neovim
     $ sudo pip3 install neovim
