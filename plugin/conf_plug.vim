@@ -506,14 +506,27 @@ endif
 
 
 if CheckPlug('jedi-vim', 1)
-  " leader+t:   doctest
-  let g:jedi#completions_command = "<C-Space>"
-  let g:jedi#goto_command = "<leader>gg"
-  let g:jedi#goto_assignments_command = "<leader>gd"
-  let g:jedi#goto_definitions_command = "<C-]>"
-  let g:jedi#documentation_command = "<leader>k"
-  let g:jedi#usages_command = "<leader>u"
-  let g:jedi#rename_command = ""
+    " leader+t:   doctest
+    let g:jedi#completions_command = "<C-Space>"
+    let g:jedi#goto_command = "<leader>gg"
+    let g:jedi#goto_assignments_command = "<leader>gd"
+    let g:jedi#goto_definitions_command = "<C-]>"
+    let g:jedi#documentation_command = "<leader>k"
+    let g:jedi#usages_command = "<leader>u"
+    let g:jedi#rename_command = ""
+endif
+
+
+if CheckPlug('NrrwRgn', 1)
+    let g:nrrw_rgn_nomap_nr = 1
+    let g:nrrw_rgn_nomap_Nr = 1
+
+    let g:nrrw_topbot_leftright = 'botright'
+    let g:nrrw_rgn_resize_window = 'relative'
+    let g:nrrw_rgn_wdth = 50
+    "let g:nrrw_rgn_vert = 1
+    let g:nrrw_rgn_rel_min = 30
+    "let g:nrrw_rgn_rel_max = 80
 endif
 
 
@@ -771,6 +784,18 @@ endif
 
 if CheckPlug('vim-ctrlspace', 1)
     let g:CtrlSpaceDefaultMappingKey = "<C-space> "
+endif
+
+
+if CheckPlug('vim-fugitive', 1)
+    if executable('git')
+        " 'git mydiff' yields the expected behavior, typing :wq in vim cycles to the next file in the changeset.
+        "git config --global diff.tool vimdiff
+        "git config --global difftool.prompt false
+        "git config --global alias.mydiff difftool
+        "
+        call system('git config --global alias.vimdiff ''!f() { vim -p $(git diff --name-only) +"tabdo Gvdiff $@" +tabfirst; }; f''')
+    endif
 endif
 
 
