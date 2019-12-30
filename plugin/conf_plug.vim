@@ -18,6 +18,7 @@ endif
 
 if CheckPlug('syntastic', 1)
     let g:syntastic_vim_checkers = ['vint']
+    let g:syntastic_vim_vint_exe = 'LC_CTYPE=UTF-8 vint'
 endif
 
 
