@@ -863,6 +863,16 @@ if CheckPlug('fzf.vim', 1)
 endif
 
 
+if CheckPlug('vim-eval', 1)
+    let g:eval_viml_map_keys = 0
+endif
+
+
+if CheckPlug('vim-quickrun', 1)
+    let g:eval_viml_map_keys = 0
+endif
+
+
 if CheckPlug('vim-repl', 1)
     let g:repl_position = 3
     let g:repl_cursor_down = 1
