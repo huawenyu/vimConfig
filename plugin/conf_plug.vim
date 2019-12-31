@@ -356,7 +356,6 @@ if CheckPlug('vim-markdown', 1)
     let g:vim_markdown_toc_autofit = 1
 
     "let g:vim_markdown_auto_extension_ext = 'wiki'
-    let g:vimwiki_global_ext = 0 | " only set the 'vimwiki' filetype of markdown files inside a wiki directory, rather than globally.
 
     "let g:markdown_minlines = 200
     let g:vim_markdown_folding_disabled = 1
@@ -455,9 +454,14 @@ if CheckPlug('vimwiki', 1)
           \{'name': 'linux', 'path': '$HOME/wiki', 'syntax': 'markdown', 'auto_toc': 1, 'maxhi': 1, 'auto_tags': 1},
           \]
 
+    let g:vimwiki_global_ext = 0    | " only set the 'vimwiki' filetype of markdown files inside a wiki directory, rather than globally.
+    let g:vimwiki_ext2syntax = {'.md': 'markdown', '.mkd': 'markdown', '.wiki': 'media'}
+    "let g:vimwiki_ext2syntax = {'.md': 'markdown', '.mkd': 'markdown', '.wiki': 'markdown'}
+
     let g:vimwiki_menu = ""         | "Disable error msg: No menu 'Vimwiki'
     "let g:vimwiki_url_maxsave = 0
-    let g:vimwiki_conceallevel = 0 | "Default=2, -1 Disable conceal
+    let g:vimwiki_conceallevel = 0  | "Default=2, -1 Disable conceal
+
 endif
 
 

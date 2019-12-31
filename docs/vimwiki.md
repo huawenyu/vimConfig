@@ -47,10 +47,20 @@ vimwiki
 
   ==navigation==
   <Enter>                         follow/create wiki link
+  <S-Enter>                       split link
+  <C-Enter>                       v-split link
   <Backspace>                     go back to previous wiki page
   <C-S-CR>                        follow/create wiki link in new tab
   <Tab>                           go to next link on current page
   <S-Tab>                         go to previous link on current page
+
+  ==text objects==
+  ah                              section between 2 headings including empty trailing lines
+  ih                              section between 2 headings excluding empty trailing lines
+  a\                              table cell
+  i\                              inner table cell
+  ac                              table column
+  ic                              inner table column
 
   ==Anchor navigation== :help vimwiki-anchors
   Every header, tag, and bold text can be used as an anchor.
@@ -68,22 +78,13 @@ vimwiki
               - [ ] a *scary dog*
 
 
-  ==Table==
-  :VimwikiTable                   create table
-  gqq                             reformat t able
+   ==Table==Please use `easy-align` as substitute
+       :VimwikiTable                   create table
+       gqq                             reformat t able
 
-  <A-Left>                        move column left
-  <A-right>                       move column right
-  <CR>                            (insert mode) go down/create cell
-  <Tab>                           (insert mode) go next/create cell
-  gqq or gww                      reformat table
-
-  ==text objects==
-  ah                              section between 2 headings including empty trailing lines
-  ih                              section between 2 headings excluding empty trailing lines
-  a\                              table cell
-  i\                              inner table cell
-  ac                              table column
-  ic                              inner table column
-
+       <A-Left>                        move column left
+       <A-right>                       move column right
+       <CR>                            (insert mode) go down/create cell
+       <Tab>                           (insert mode) go next/create cell
+       gqq or gww                      reformat table
 

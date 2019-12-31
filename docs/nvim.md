@@ -287,3 +287,4 @@ Command `:scriptnames`, and look to the line prefixed with 59:
 # Developer
 
 	[Anti-pattern of vimrc](http://rbtnn.hateblo.jp/entry/2014/12/28/010913)
+	[Write vim plugin using python](https://davidlowryduda.com/tag/vimscript/)
