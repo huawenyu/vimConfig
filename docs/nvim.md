@@ -228,7 +228,32 @@ let g:vim_confi_option = {
        :bufdo e                ' reload all buffers at once
        :setfiletype ip<Tab>    ' Search the syntax begin with `ip`
 
-# Log
+# Create customer command support multi-comm in single line
+
+You need to tell vim using `command! -bar` that a command can be followed by another command
+with the pipe symbol `|`:
+
+    command! -bar FixWhitespace %s/\s\+$//e
+    command! FixCommas %s/,\S\@=/, /ge
+
+Now this is OK:
+
+    command! Fix FixWhitespace|FixCommas
+
+but this isn't:
+
+    command! Fix FixCommas|FixWhitespace
+
+See `:h command-bar` for more details.
+
+The error message `E488: Trailing characters: FixWhitespace|FixCommas` is vim's way of telling
+you that it didn't expect anything following the `FixWhitespace` command. See `:h E488`.
+
+----
+
+As an aside, your `FixWhitespace` command doesn't need the `g` flag since the pattern can match at most once on each line. I'd also set the `e` flag to suppress the annoying error message. See `:h s_flags`.
+
+# Log to file
 
 ## in .vimrc
 
