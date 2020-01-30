@@ -343,6 +343,8 @@ endif
 if CheckPlug('w3m.vim', 1)
     let g:w3m#command = '/usr/bin/w3m'
     let g:w3m#lang = 'en_US'
+    let g:w3m#disable_vimproc = 1
+    "let g:w3m#disable_default_keymap = 1
 endif
 
 
@@ -896,3 +898,6 @@ if CheckPlug('vim-repl', 1)
     let g:repl_ipython_version = '7'
 endif
 
+if CheckPlug('vim-sleuth', 1)
+    let g:sleuth_automatic = 1
+endif
