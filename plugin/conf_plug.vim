@@ -141,7 +141,10 @@ endif
 
 if CheckPlug('tagbar', 1)
     "let g:tagbar_vertical = 25
+    "let g:tagbar_show_linenumbers = 1
     "let NERDTreeWinPos = 'left'
+    let g:tagbar_autofocus = 0
+    let g:tagbar_sort = 0
 endif
 
 
@@ -308,7 +311,7 @@ endif
 
 if CheckPlug('vim-workspace', 1)
     let g:workspace_session_name = '.Session.vim'
-    let g:workspace_autosave_always = 0
+    let g:workspace_autosave_always = 1
     let g:workspace_persist_undo_history = 0
     " disable auto trim the trail-spaces
     let g:workspace_autosave_untrailspaces = 0
