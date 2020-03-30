@@ -821,8 +821,8 @@ endif
 
 
 if CheckPlug('accelerated-jk', 1)
-    "let g:accelerated_jk_acceleration_table = [1,2,3,2,1]
-    "let g:accelerated_jk_enable_deceleration = 1
+    let g:accelerated_jk_acceleration_table = [1,3,6,9,12,9,6,3,2,1]
+    let g:accelerated_jk_enable_deceleration = 1
 endif
 
 
