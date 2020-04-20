@@ -503,7 +503,7 @@ if CheckPlug('vimwiki', 1)
     "let g:vimwiki_ext2syntax = {'.md': 'markdown', '.mkd': 'markdown', '.wiki': 'markdown'}
 
     let g:vimwiki_menu = ""         | "Disable error msg: No menu 'Vimwiki'
-    "let g:vimwiki_url_maxsave = 0
+    let g:vimwiki_url_maxsave = 0   | "Turn off the link shortening
     let g:vimwiki_conceallevel = 0  | "Default=2, -1 Disable conceal
 
 endif
