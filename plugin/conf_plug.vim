@@ -910,6 +910,9 @@ if CheckPlug('fzf.vim', 1) | " {{{1
 
 endif
 
+if CheckPlug('coc.nvim', 1) | " {{{1
+    autocmd CmdwinEnter * let b:coc_suggest_disable = 1
+endif
 
 if CheckPlug('vim-eval', 1) | " {{{1
     let g:eval_viml_map_keys = 0
