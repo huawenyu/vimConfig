@@ -179,13 +179,13 @@ if CheckPlug('vim-tmux-navigator', 1) | " {{{1
 endif
 
 
-if CheckPlug('netrw', 1) | " {{{1
-    "let g:netrw_banner = 0
-    "let g:netrw_liststyle = 3
-    "let g:netrw_browse_split = 4
-    "let g:netrw_altv = 1
-    "let g:netrw_winsize = 16
-    "let g:netrw_list_hide='.*\.png$,.*\.pdf,.*\.mp4,.*\.tga,.*\.mp3,.*\.jpg,.*\.svg,/*\.stl,.*\.mtl,.*\.ply' 
+if CheckPlug('netrw', 1) | " {{{1, But not work like side-tree
+    let g:netrw_banner = 0
+    let g:netrw_liststyle = 3
+    let g:netrw_browse_split = 4
+    let g:netrw_altv = 1
+    let g:netrw_winsize = 16
+    let g:netrw_list_hide='.*\.png$,.*\.pdf,.*\.mp4,.*\.tga,.*\.mp3,.*\.jpg,.*\.svg,/*\.stl,.*\.mtl,.*\.ply'
 endif
 
 
@@ -195,10 +195,9 @@ if CheckPlug('nerdtree', 1)  | " {{{1
     let NERDTreeMapMenu='M'
 
     let NERDTreeMouseMode = 3
-    let NERDTreeAutoDeleteBuffer = 1
+    "let NERDTreeAutoDeleteBuffer = 1
     let NERDTreeMinimalUI = 1
     let NERDTreeDirArrows = 1
-    let NERDTreeAutoDeleteBuffer = 1
     let NERDTreeRespectWildIgnore = 1
     "let NERDTreeShowBookmarks = 1
     let NERDTreeWinSize = 25
@@ -218,7 +217,19 @@ if CheckPlug('nerdtree', 1)  | " {{{1
     " Allow commenting and inverting empty lines (useful when commenting a region)
     let g:NERDCommentEmptyLines = 1
     " Enable trimming of trailing whitespace when uncommenting
-    let g:NERDTrimTrailingWhitespace = 1
+    "let g:NERDTrimTrailingWhitespace = 1
+endif
+
+
+if CheckPlug('nnn.vim', 1) | " {{{1
+    " Opens the nnn window in a split
+    "let g:nnn#layout = 'new' " or vnew, tabnew etc.
+
+    " Or pass a dictionary with window size
+    "let g:nnn#layout = { 'left': '~20%' } " or right, up, down
+
+    " Floating window (neovim latest and vim with patch 8.2.191)
+    let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Debug' } }
 endif
 
 
