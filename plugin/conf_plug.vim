@@ -657,9 +657,14 @@ endif
 
 
 if CheckPlug('vim-gutentags', 1) | " {{{1
-    if !CheckPlug('c-utils.vim', 1)
+    if CheckPlug('c-utils.vim', 1)
+        let g:gutentags_enabled = 0
+    else
+        let g:gutentags_enabled = 1
+    endif
+
         " Disable auto-load gtags file
-        let g:gutentags_auto_add_gtags_cscope = 1
+        let g:gutentags_auto_add_gtags_cscope = 0
 
         " touch .root
         let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project', 'Makefile']
@@ -689,7 +694,6 @@ if CheckPlug('vim-gutentags', 1) | " {{{1
 
         " Force universal ctags to generate old ctags format
         let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
-    endif
 endif
 
 
@@ -921,6 +925,9 @@ if CheckPlug('fzf.vim', 1) | " {{{1
 
 endif
 
+if CheckPlug('coc.nvim', 1) | " {{{1
+    autocmd CmdwinEnter * let b:coc_suggest_disable = 1
+endif
 
 if CheckPlug('vim-eval', 1) | " {{{1
     let g:eval_viml_map_keys = 0
