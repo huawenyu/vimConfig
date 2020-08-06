@@ -652,6 +652,8 @@ if CheckPlug('vim-gutentags', 1) | " {{{1
         let g:gutentags_enabled = 1
     endif
 
+    "let g:gutentags_trace = 1
+
     " Disable auto-load gtags file
     let g:gutentags_auto_add_gtags_cscope = 0
 
