@@ -663,37 +663,37 @@ if CheckPlug('vim-gutentags', 1) | " {{{1
         let g:gutentags_enabled = 1
     endif
 
-        " Disable auto-load gtags file
-        let g:gutentags_auto_add_gtags_cscope = 0
+    " Disable auto-load gtags file
+    let g:gutentags_auto_add_gtags_cscope = 0
 
-        " touch .root
-        let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project', 'Makefile']
-        let g:gutentags_ctags_tagfile = '.tags'
+    " touch .root
+    let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project', 'Makefile']
+    let g:gutentags_ctags_tagfile = '.tags'
 
-        "let s:vim_tags = expand('./.ccls-cache')
-        "let g:gutentags_cache_dir = s:vim_tags
-        "if !isdirectory(s:vim_tags)
-        "    silent! call mkdir(s:vim_tags, 'p')
-        "endif
+    "let s:vim_tags = expand('./.ccls-cache')
+    "let g:gutentags_cache_dir = s:vim_tags
+    "if !isdirectory(s:vim_tags)
+    "    silent! call mkdir(s:vim_tags, 'p')
+    "endif
 
-        let g:gutentags_modules = []
-        "if executable('ctags')
-        "    let g:gutentags_modules += ['ctags']
-        "endif
-        if executable('gtags-cscope') && executable('gtags')
-            let g:gutentags_modules += ['gtags_cscope']
-        endif
+    let g:gutentags_modules = []
+    "if executable('ctags')
+    "    let g:gutentags_modules += ['ctags']
+    "endif
+    if executable('gtags-cscope') && executable('gtags')
+        let g:gutentags_modules += ['gtags_cscope']
+    endif
 
-        let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
-        let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
-        let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
-        let g:gutentags_ctags_extra_args += ['--exclude=.git', '--exclude=node_modules', '--exclude=.ccls-cache']
-        if filereadable("./cscope.files")
-            let g:gutentags_ctags_extra_args += ['-L cscope.files']
-        endif
+    let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+    let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+    let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+    let g:gutentags_ctags_extra_args += ['--exclude=.git', '--exclude=node_modules', '--exclude=.ccls-cache']
+    if filereadable("./cscope.files")
+        let g:gutentags_ctags_extra_args += ['-L cscope.files']
+    endif
 
-        " Force universal ctags to generate old ctags format
-        let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+    " Force universal ctags to generate old ctags format
+    let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
 endif
 
 
