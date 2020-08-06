@@ -677,12 +677,14 @@ if CheckPlug('vim-gutentags', 1) | " {{{1
     "endif
 
     let g:gutentags_modules = []
-    "if executable('ctags')
-    "    let g:gutentags_modules += ['ctags']
-    "endif
-    if executable('gtags-cscope') && executable('gtags')
-        let g:gutentags_modules += ['gtags_cscope']
+
+    if executable('ctags')
+        let g:gutentags_modules += ['ctags']
     endif
+
+    "if executable('gtags-cscope') && executable('gtags')
+    "    let g:gutentags_modules += ['gtags_cscope']
+    "endif
 
     let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
     let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
