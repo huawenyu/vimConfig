@@ -520,6 +520,14 @@ if CheckPlug('vimwiki', 1) | " {{{1
 endif
 
 
+if CheckPlug('vim-zettel', 1) | " {{{1
+    let g:zettel_default_mappings = 0
+    let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading --color=always "
+    let g:zettel_fzf_options = ['--exact', '--tiebreak=end']
+    let g:nv_search_paths = ['$HOME/wiki', '$HOME/dotwiki']
+endif
+
+
 if CheckPlug('python-mode', 1) | " {{{1
     " Activate rope
     " Keys:
@@ -964,4 +972,8 @@ endif
 
 if CheckPlug('vim-sleuth', 1) | " {{{1
     let g:sleuth_automatic = 1
+endif
+
+if CheckPlug('vim-zoom', 1) | " {{{1
+    nmap <a-w>    <Plug>(zoom-toggle)
 endif
