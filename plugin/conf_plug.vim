@@ -235,6 +235,7 @@ endif
 
 if CheckPlug('defx.nvim', 1) | " {{{1
     let g:defx_icons_enable_syntax_highlight = 0
+    let g:defx#_python_version_check = 1
 endif
 
 
