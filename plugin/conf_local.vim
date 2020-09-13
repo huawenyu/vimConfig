@@ -22,6 +22,8 @@ else
     set viminfo='30,\"30,:30,n~/.viminfo
 endif
 
+set wildmode=list:longest,list:full
+set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__,.idea,node_modules
 
 hi CursorLine guibg=Grey40
 "hi CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
