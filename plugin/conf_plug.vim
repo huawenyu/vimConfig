@@ -26,15 +26,18 @@ if CheckPlug('ctrlp.vim', 1) | " {{{1
     if exists("g:ctrl_user_command") | unlet g:ctrlp_user_command | endif
 endif
 
+
 if CheckPlug('vimfiler.vim', 1) | " {{{1
     let g:vimfiler_as_default_explorer = 1
 endif
+
 
 if CheckPlug('vcscommand.vim', 1) | " {{{1
     "let g:signify_vcs_list = [ 'git', 'svn' ]
 endif
 
-if CheckPlug('new-gdb.vim', 1) | " {{{1
+
+if CheckPlug('new-gdb.vim', 1) || CheckPlug('vimgdb', 1) " {{{1
     "let g:neogdb_window = ['backtrace', 'breakpoint']
     let g:gdb_require_enter_after_toggling_breakpoint = 0
 
@@ -42,9 +45,11 @@ if CheckPlug('new-gdb.vim', 1) | " {{{1
     if exists("$NBG_ATTACH_REMOTE_STR")
         let g:neogdb_attach_remote_str = $NBG_ATTACH_REMOTE_STR
     else
-        let g:neogdb_attach_remote_str = 'sysinit/init dut:444 -u admin -p "" -t "gdb:wad"'
+        "let g:neogdb_attach_remote_str = 'sysinit/init dut:444 -u admin -p "" -t "gdb:wad"'
+        let g:neogdb_attach_remote_str = 'sysinit/init'
     endif
 endif
+
 
 if CheckPlug('tabman.vim', 1) | " {{{1
     " disable old config
