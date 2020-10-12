@@ -674,20 +674,46 @@ endif
 
 
 if CheckPlug('vim-gutentags', 1) | " {{{1
+    " https://www.reddit.com/r/vim/comments/d77t6j/guide_how_to_setup_ctags_with_gutentags_properly/
+    " https://github.com/skywind3000/gutentags_plus
+    "
+    " Troubleshooting
+    "let g:gutentags_define_advanced_commands = 1
+    "let g:gutentags_trace = 1
+
+
     if CheckPlug('c-utils.vim', 1)
         let g:gutentags_enabled = 0
     else
         let g:gutentags_enabled = 1
     endif
 
-    "let g:gutentags_trace = 1
 
-    " Disable auto-load gtags file
-    let g:gutentags_auto_add_gtags_cscope = 0
+    " auto-load gtags file
+    let g:gutentags_auto_add_gtags_cscope = 1
+
+
+    command! Gtaggen    GutentagsGenerate
+    command! Gtagup     GutentagsUpdate
+    command! Gtagtrace  GutentagsToggleTrace
+    command! -nargs=0 Gtagclear call system('rm ' . g:gutentags_cache_dir . '/*')
+
+
+    " generate datebases in my cache directory, prevent gtags files polluting my project
+    let g:gutentags_cache_dir = '/tmp/gtags'
+
+    " disable all auto load, only keep manual alias command
+    let g:gutentags_generate_on_new = 0
+    let g:gutentags_generate_on_missing = 0
+    let g:gutentags_generate_on_write = 0
+    let g:gutentags_generate_on_empty_buffer = 0
+
+    " change focus to quickfix window after search (optional).
+    "let g:gutentags_plus_switch = 1
 
     " touch .root
-    let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project', 'Makefile']
-    let g:gutentags_ctags_tagfile = '.tags'
+    let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
+    "let g:gutentags_ctags_tagfile = '.tags'
 
     "let s:vim_tags = expand('./.ccls-cache')
     "let g:gutentags_cache_dir = s:vim_tags
@@ -701,20 +727,76 @@ if CheckPlug('vim-gutentags', 1) | " {{{1
         let g:gutentags_modules += ['ctags']
     endif
 
-    "if executable('gtags-cscope') && executable('gtags')
-    "    let g:gutentags_modules += ['gtags_cscope']
+    "if executable('cscope')
+    "    let g:gutentags_modules += ['cscope']
     "endif
+
+    "brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+    "(MacOS) $ brew install global
+    "(Ubuntu) $ sudo apt install global
+    if executable('gtags-cscope') && executable('gtags')
+        let g:gutentags_modules += ['gtags_cscope']
+    endif
 
     let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q']
     let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
     let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
     let g:gutentags_ctags_extra_args += ['--exclude=.git', '--exclude=node_modules', '--exclude=.ccls-cache']
+
     if filereadable("./cscope.files")
-        let g:gutentags_ctags_extra_args += ['-L cscope.files']
+        let g:gutentags_ctags_extra_args += ['-L '. expand("%:p:h"). '/cscope.files']
     endif
 
     " Force universal ctags to generate old ctags format
     let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+
+    let g:gutentags_ctags_exclude = [
+      \ '*.git', '*.svg', '*.hg',
+      \ '*/tests/*',
+      \ 'build',
+      \ 'dist',
+      \ '*sites/*/files/*',
+      \ 'bin',
+      \ 'node_modules',
+      \ 'bower_components',
+      \ 'cache',
+      \ 'compiled',
+      \ 'docs',
+      \ 'example',
+      \ 'bundle',
+      \ 'vendor',
+      \ '*.md',
+      \ '*-lock.json',
+      \ '*.lock',
+      \ '*bundle*.js',
+      \ '*build*.js',
+      \ '.*rc*',
+      \ '*.json',
+      \ '*.min.*',
+      \ '*.map',
+      \ '*.bak',
+      \ '*.zip',
+      \ '*.pyc',
+      \ '*.class',
+      \ '*.sln',
+      \ '*.Master',
+      \ '*.csproj',
+      \ '*.tmp',
+      \ '*.csproj.user',
+      \ '*.cache',
+      \ '*.pdb',
+      \ 'tags*',
+      \ 'cscope.*',
+      \ '*.css',
+      \ '*.less',
+      \ '*.scss',
+      \ '*.exe', '*.dll',
+      \ '*.mp3', '*.ogg', '*.flac',
+      \ '*.swp', '*.swo',
+      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
+      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+      \ ]
 endif
 
 
