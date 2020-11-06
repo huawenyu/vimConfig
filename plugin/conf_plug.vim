@@ -1068,3 +1068,64 @@ endif
 if CheckPlug('vim-zoom', 1) | " {{{1
     nmap <a-w>    <Plug>(zoom-toggle)
 endif
+
+
+if CheckPlug('vim-submode', 1) | " {{{1
+    " A message will appear in the message line when you're in a submode
+    " and stay there until the mode has existed.
+    let g:submode_always_show_submode = 1
+    "let g:submode_keep_leaving_key=1
+    let g:submode_timeout = 0
+    "let g:submode_timeoutlen=5000
+
+    " Implement feature 'dstein64/vim-win'
+        " We're taking over the default <C-w> setting. Don't worry we'll do
+        " our best to put back the default functionality.
+        call submode#enter_with('window', 'n', '', '<C-w>')
+        " Note: <C-c> will also get you out to the mode without this mapping.
+        " Note: <C-[> also behaves as <ESC>
+        call submode#leave_with('window', 'n', '', '<ESC>')
+                " Go through every letter
+                for key in ['a','b','c','d','e','f','g','h','i','j','k','l','m',
+                \           'n','o','p','q','r','s','t','u','v','w','x','y','z']
+                  " maps lowercase, uppercase and <C-key>
+                  call submode#map('window', 'n', '', key, '<C-w>' . key)
+                  call submode#map('window', 'n', '', toupper(key), '<C-w>' . toupper(key))
+                  call submode#map('window', 'n', '', '<C-' . key . '>', '<C-w>' . '<C-'.key . '>')
+                endfor
+                " Go through symbols. Sadly, '|', not supported in submode plugin.
+                for key in ['=','_','+','-','<','>']
+                  call submode#map('window', 'n', '', key, '<C-w>' . key)
+                endfor
+
+        " Old way, just in case.
+        nnoremap <Leader>w <C-w>
+endif
+
+
+if CheckPlug('nvim-libmodal', 1) | " {{{1
+    " Mode windows: Implement feature 'dstein64/vim-win'
+        nnoremap <Leader>w :call <sid>windowsMode()<cr>
+
+        let s:windowsModeRecurse = 0
+        let s:windowsModeCombos = {
+                    \   'j': 'wincmd j',
+                    \   'k': 'wincmd k',
+                    \   'h': 'wincmd h',
+                    \   'l': 'wincmd l',
+                    \   'H': '3 wincmd >',
+                    \   'L': '3 wincmd <',
+                    \   'J': '3 wincmd +',
+                    \   'K': '3 wincmd -',
+                    \   'r': 'wincmd r',
+                    \   'x': 'wincmd x',
+                    \}
+
+        " define the BarMode() function which is called whenever the user presses 'z'
+        function! s:windowsMode()
+            let s:windowsModeRecurse += 1
+            call libmodal#Enter('windows' . s:windowsModeRecurse, s:windowsModeCombos)
+            let s:windowsModeRecurse -= 1
+        endfunction
+endif
+
