@@ -1129,3 +1129,4 @@ if CheckPlug('nvim-libmodal', 1) | " {{{1
         endfunction
 endif
 
+
