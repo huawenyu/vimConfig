@@ -208,8 +208,11 @@ if CheckPlug('nerdtree', 1)  | " {{{1
     let NERDTreeWinSize = 25
 
     let g:NERDTreeIgnore = ['null']
-    call extend(g:NERDTreeIgnore, ['^build$', 'rusty-tags.vi', '^target$', 'tags', '^cscope\.', 'obj', '\.obj$', '\.o$', '\.lib$', '\.a$', '\.dll$', '\.pyc$'])
-    call extend(g:NERDTreeIgnore, ['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__', 'htmlcov', 'node_modules', '.idea', '.git'])
+    " dir
+    call extend(g:NERDTreeIgnore, ['__pycache__', 'CMakeFiles', 'htmlcov', 'node_modules', '.idea', '.git', '^build$', '^target$', 'obj', ])
+    " file
+    call extend(g:NERDTreeIgnore, ['rusty-tags.vi', '\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', 'tags', '^cscope\.', '\.obj$', '\.o$', '\.lib$', '\.a$', '\.dll$', '\.pyc$'])
+
     let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
 
     " Add spaces after comment delimiters by default
