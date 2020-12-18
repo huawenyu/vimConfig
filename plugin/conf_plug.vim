@@ -1132,4 +1132,10 @@ if CheckPlug('nvim-libmodal', 1) | " {{{1
         endfunction
 endif
 
+if CheckPlug('vim-shortcut', 1) | " {{{1
+    " Shortcut! keys description
+    " Must source it directly to make it works
+    "source ~/.config/nvim/bundle/vim-shortcut/plugin/shortcut.vim
+    nnoremap <silent> ;;     :Shortcuts<cr>
+endif
 
