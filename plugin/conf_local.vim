@@ -25,8 +25,10 @@ endif
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__,.idea,node_modules
 
-hi CursorLine guibg=Grey40
+"hi CursorLine guibg=Grey40
 "hi CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+" Disable insert mode color change
+hi CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 hi Visual term=reverse cterm=reverse guibg=Grey
 
 "hi MatchParen cterm=bold ctermfg=cyan
