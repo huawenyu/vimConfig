@@ -37,6 +37,13 @@ if CheckPlug('vcscommand.vim', 1) | " {{{1
 endif
 
 
+if CheckPlug('vim-doge', 1) | " {{{1
+    let g:doge_enable_mappings = 0
+    let g:doge_mapping = '<leader>vh'
+    Shortcut! <space>vh    Document Generate
+endif
+
+
 if CheckPlug('new-gdb.vim', 1) || CheckPlug('vimgdb', 1) " {{{1
     "let g:neogdb_window = ['backtrace', 'breakpoint']
     let g:gdb_require_enter_after_toggling_breakpoint = 0
@@ -48,6 +55,44 @@ if CheckPlug('new-gdb.vim', 1) || CheckPlug('vimgdb', 1) " {{{1
         "let g:neogdb_attach_remote_str = 'sysinit/init dut:444 -u admin -p "" -t "gdb:wad"'
         let g:neogdb_attach_remote_str = 'sysinit/init'
     endif
+elseif CheckPlug('vimspector', 1) | " {{{1
+    "let g:vimspector_base_dir=expand( '$HOME/.vim/vimspector-config' )
+    "let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-go', 'CodeLLDB' ]
+    let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
+    "let g:vimspector_enable_mappings = 'HUMAN'
+
+    let g:vimspector_sidebar_width = 35
+    let g:vimspector_bottombar_height = 5
+    let g:vimspector_code_minwidth = 90
+    let g:vimspector_terminal_maxwidth = 15
+    let g:vimspector_terminal_minwidth = 5
+
+    nmap <f2>    :call vimspector#Launch()<CR>
+    nmap <S-F2>  :VimspectorReset<CR>
+
+    nmap <f3> :call vimspector#Stop()<CR>
+    nmap <S-F3>  :vimspector#Restart()<CR>
+
+    "nmap <leader>do :VimspectorShowOutput
+
+    nmap <f4> :call vimspector#Continue()<CR>
+    nmap <S-F4> :call vimspector#Pause()<CR>
+
+    nmap <f5> :call vimspector#StepOver()<CR>
+    "nmap <S-f5> :call vimspector#SkipOver()<CR>
+
+    nmap <f6> :call vimspector#StepInto()<CR>
+    nmap <S-F6> :call vimspector#StepOut()<CR>
+
+    nmap <f7> :call vimspector#RunToCursor()<CR>
+    "nmap <S-f7> :call vimspector#SkipToCursor()<CR>
+
+    nmap <f8>    :VimspectorEval
+    nmap <S-F8>  :VimspectorWatch
+
+    nmap <f9> :call vimspector#ToggleBreakpoint()<CR>
+    nmap <S-F9> :call vimspector#AddFunctionBreakpoint( '<cexpr>' )<CR>
+
 endif
 
 
