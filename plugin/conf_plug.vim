@@ -67,31 +67,55 @@ elseif CheckPlug('vimspector', 1) | " {{{1
     let g:vimspector_terminal_maxwidth = 15
     let g:vimspector_terminal_minwidth = 5
 
-    nmap <f2>    :call vimspector#Launch()<CR>
-    nmap <S-F2>  :VimspectorReset<CR>
+    " Default:
+    "sign define vimspectorBP         text=\ ● texthl=WarningMsg
+    "sign define vimspectorBPCond     text=\ ◆ texthl=WarningMsg
+    "sign define vimspectorBPDisabled text=\ ● texthl=LineNr
+    "sign define vimspectorPC         text=\ ▶ texthl=MatchParen linehl=CursorLine
+    "sign define vimspectorPCBP       text=●▶  texthl=MatchParen linehl=CursorLine
 
-    nmap <f3> :call vimspector#Stop()<CR>
-    nmap <S-F3>  :vimspector#Restart()<CR>
+    " Customize
+    sign define vimspectorBP         text=\ ● texthl=Search
+    sign define vimspectorBPCond     text=\●² texthl=Search
+    sign define vimspectorBPDisabled text=\ ● texthl=Function
+    sign define vimspectorPC         text=\ ☛ texthl=Error linehl=CursorLine
+    sign define vimspectorPCBP       text=●☛  texthl=Error linehl=CursorLine
+    "sign define GdbCurrentLine   text=☛ texthl=Error
+    "sign define GdbBreakpointEn  text=● texthl=Search
+    "sign define GdbBreakpointDis text=● texthl=Function
+    "sign define GdbBreakpointDel text=● texthl=Comment
+    "let g:vimgdb_sign_breakpoints = ['●', '●²', '●³', '●⁴', '●⁵', '●⁶', '●⁷', '●⁸', '●⁹', '●ⁿ']
 
-    "nmap <leader>do :VimspectorShowOutput
+    nnoremap <silent> <f2>    :call vimspector#Launch()<CR>
+    nnoremap <silent> <S-F2>  :VimspectorReset<CR>
 
-    nmap <f4> :call vimspector#Continue()<CR>
-    nmap <S-F4> :call vimspector#Pause()<CR>
+    nnoremap <silent> <f3> :call vimspector#Stop()<CR>
+    nnoremap <silent> <S-F3>  :vimspector#Restart()<CR>
 
-    nmap <f5> :call vimspector#StepOver()<CR>
-    "nmap <S-f5> :call vimspector#SkipOver()<CR>
+    "nnoremap <silent> <leader>do :VimspectorShowOutput
 
-    nmap <f6> :call vimspector#StepInto()<CR>
-    nmap <S-F6> :call vimspector#StepOut()<CR>
+    nnoremap <silent> <f4> :call vimspector#Continue()<CR>
+    nnoremap <silent> <F14> :call vimspector#Pause()<CR>
 
-    nmap <f7> :call vimspector#RunToCursor()<CR>
-    "nmap <S-f7> :call vimspector#SkipToCursor()<CR>
+    nnoremap <silent> <f5> :call vimspector#StepOver()<CR>
+    "nnoremap <silent> <F15> :call vimspector#SkipOver()<CR>
 
-    nmap <f8>    :VimspectorEval
-    nmap <S-F8>  :VimspectorWatch
+    nnoremap <silent> <f6> :call vimspector#StepInto()<CR>
+    nnoremap <silent> <F16> :call vimspector#StepOut()<CR>
 
-    nmap <f9> :call vimspector#ToggleBreakpoint()<CR>
-    nmap <S-F9> :call vimspector#AddFunctionBreakpoint( '<cexpr>' )<CR>
+    nnoremap <silent> <f7> :call vimspector#RunToCursor()<CR>
+    "nnoremap <silent> <S-f7> :call vimspector#SkipToCursor()<CR>
+
+
+    nnoremap <f8>    :VimspectorEval <c-r>=hw#misc#GetWord('n')<cr>
+    vnoremap <f8>    :<c-u>VimspectorEval <c-r>=hw#misc#GetWord('v')<cr>
+    "
+    "nnoremap <F18>  :VimspectorWatch <c-r>=expand('<cword>')<cr>
+    nnoremap <S-F8>  :VimspectorWatch <c-r>=hw#misc#GetWord('n')<cr>
+    vnoremap <S-F8>  :<c-u>VimspectorWatch <c-r>=hw#misc#GetWord('v')<cr>
+
+    nnoremap <silent> <f9> :call vimspector#ToggleBreakpoint()<CR>
+    nnoremap <silent> <S-F9> :call vimspector#AddFunctionBreakpoint( '<cexpr>' )<CR>
 
 endif
 
@@ -419,38 +443,6 @@ if CheckPlug('w3m.vim', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-markdown', 1) | " {{{1
-    " ge: jump follow link
-    " gx: open link in browser
-
-    "set conceallevel=0
-    let g:vim_markdown_conceal = 0
-    let g:markdown_syntax_conceal = g:vim_markdown_conceal
-    let g:vim_markdown_toc_autofit = 1
-
-    "let g:vim_markdown_auto_extension_ext = 'wiki'
-
-    "let g:markdown_minlines = 200
-    let g:vim_markdown_folding_disabled = 1
-    let g:vim_markdown_override_foldtext = 0
-    let g:vim_markdown_folding_level = 6
-    let g:vim_markdown_folding_style_pythonic = 1
-    "
-    let g:vim_markdown_emphasis_multiline = 0
-    let g:vim_markdown_new_list_item_indent = 2
-    "let g:vim_markdown_no_default_key_mappings = 1
-    let g:vim_markdown_frontmatter = 1
-    let g:vim_markdown_json_frontmatter = 1
-    let g:vim_markdown_fenced_languages = ['C=c', 'c=c', 'Shell=sh', 'Java=java'
-          \ , 'Csharp=cs', 'c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini']
-    let g:markdown_fenced_languages = g:vim_markdown_fenced_languages
-    let g:vim_markdown_autowrite = 1       | " automatically save before jump
-    let g:vim_markdown_follow_anchor = 1   | " `ge` command to follow anchors: file#anchor or #anchor
-    let g:vim_markdown_strikethrough = 1   | " ~~Scratch this.~~
-    let g:vim_markdown_no_extensions_in_markdown = 1      | "`ge`: [link text](link-url), the (link-url) part donnot need .md extention, 'gx' open in browser
-endif
-
-
 "let g:AutoComplPop_CompleteoptPreview = 1
 "let g:AutoComplPop_Behavior = {
 "        \ 'c': [ {'command' : "\<C-x>\<C-o>",
@@ -573,7 +565,88 @@ if CheckPlug('vimwiki', 1) | " {{{1
     let g:vimwiki_menu = ""         | "Disable error msg: No menu 'Vimwiki'
     let g:vimwiki_url_maxsave = 0   | "Turn off the link shortening
     let g:vimwiki_conceallevel = 0  | "Default=2, -1 Disable conceal
+endif
 
+
+if CheckPlug('vim-markdown', 1) | " {{{1
+    " ge: jump follow link
+    " gx: open link in browser
+
+    "set conceallevel=0
+    let g:vim_markdown_conceal = 0
+    let g:markdown_syntax_conceal = g:vim_markdown_conceal
+    let g:vim_markdown_toc_autofit = 1
+
+    let g:vim_markdown_auto_extension_ext = 'wiki'
+
+    "let g:markdown_minlines = 200
+    let g:vim_markdown_folding_disabled = 1
+    let g:vim_markdown_override_foldtext = 0
+    let g:vim_markdown_folding_level = 6
+    let g:vim_markdown_folding_style_pythonic = 1
+    "
+    let g:vim_markdown_emphasis_multiline = 0
+    let g:vim_markdown_new_list_item_indent = 2
+    "let g:vim_markdown_no_default_key_mappings = 1
+    let g:vim_markdown_frontmatter = 1
+    let g:vim_markdown_json_frontmatter = 1
+    let g:vim_markdown_fenced_languages = ['C=c', 'c=c', 'Shell=sh', 'Java=java'
+          \ , 'Csharp=cs', 'c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini']
+    let g:markdown_fenced_languages = g:vim_markdown_fenced_languages
+    let g:vim_markdown_autowrite = 1       | " automatically save before jump
+    let g:vim_markdown_follow_anchor = 1   | " `ge` command to follow anchors: file#anchor or #anchor
+    let g:vim_markdown_strikethrough = 1   | " ~~Scratch this.~~
+    let g:vim_markdown_no_extensions_in_markdown = 1      | "`ge`: [link text](link-url), the (link-url) part donnot need .md extention, 'gx' open in browser
+
+
+    if !CheckPlug('vimwiki', 1) | " {{{1
+        augroup markdown_syntax
+            au! BufNewFile,BufFilePre,BufRead *.md,*.wiki set filetype=markdown
+        augroup END
+    endif
+endif
+
+
+if CheckPlug('mkdx', 1) | " {{{1
+    "let g:mkdx#settings = { 'map': { 'prefix': ';' } }
+
+    let g:mkdx#settings = { 'highlight': { 'enable': 1 },
+                        \ 'enter': { 'shift': 1 },
+                        \ 'links': { 'external': { 'enable': 0 } },
+                        \ 'toc': { 'text': 'Content', 'update_on_write': 1 },
+                        \ 'fold': { 'enable': 0 },
+                        \ 'checkbox': { 'toggles': [' ', '-', 'x'] },
+                        \ 'tokens': { 'enter': ['-', '*', '>'] },
+                        \ }
+
+    if CheckPlug('vim-markdown', 1) | " {{{1
+        " For vim-polyglot users, it loads Plasticboy's markdown
+        "   plugin which unfortunately interferes with mkdx list indentation.
+        let g:polyglot_disabled = ['markdown']
+    endif
+
+    augroup mkdx_remap
+        au! mkdx_remap
+        au! FileType conf,markdown nnoremap ;i :call      mkdx#GenerateOrUpdateTOC()<Cr>
+        "au! FileType conf,markdown nnoremap ;I :call      mkdx#QuickfixHeaders()<cr>
+        "au! FileType conf,markdown  noremap ;t :call      mkdx#ToggleCheckboxTask()<Cr>
+        "au! FileType conf,markdown  noremap ;l :call      mkdx#ToggleCheckList()<Cr>
+        "au! FileType conf,markdown nnoremap ;L :call      mkdx#QuickfixDeadLinks()<cr>
+        "au! FileType conf,markdown  noremap ;h :call      mkdx#JumpToHeader()<cr>
+    augroup END
+endif
+
+
+if CheckPlug('vim-pandoc', 1) | " {{{1
+    if CheckPlug('vimwiki', 1) | " {{{1
+        augroup pandoc_syntax
+            au! FileType vimwiki set syntax=markdown.pandoc
+        augroup END
+    else
+        augroup pandoc_syntax
+            au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+        augroup END
+    endif
 endif
 
 

@@ -1,0 +1,64 @@
+{
+	// React native projections: {{{1
+	"app/actions/*.js": {
+		"type": "action"
+	},
+	"app/containers/*.js": {
+		"type": "container",
+		"template": [
+			// This is because vim-projectionist uses curly braces to denote
+			//    placeholders and Component is not a valid placeholder. To output curly
+			//    braces in your template, you’ll need to use the {open} and {close}
+			//    placeholders.
+			"import React, {open} Component {close} from 'react';\n",
+			"export default class {capitalize} extends Component {",
+				"  render () {",
+					"    return (",
+						"    );",
+						"  };",
+						"}",
+						"",
+						"export default connect(",
+							"  state => ({open}state: state{close}),",
+							"  dispatch => ({open}actions: bindActionCreators(actions, dispatch){close})",
+							")({capitalize});"
+		]
+	},
+	"app/components/*.js": {
+		"type": "component",
+		"template": [
+			"import React, {open} Component {close} from 'react';\n",
+			"export default class \{} extends Component {",
+				"  render () {",
+					"    return (",
+						"    );",
+						"  };",
+						"}"
+		]
+	},
+	"app/reducers/*.js": {
+		"type": "reducer"
+	},
+	"package.json": {
+		"type": "package"
+	},
+	"app/services/*Service.js": {
+		"type": "service"
+	},
+	"app/styles/*.js": {
+		"type": "style",
+		"template": [
+			"import {open} Platform, StyleSheet {close} from 'react-native';",
+			"import COLORS from '../config/Colors';",
+			"import FONTS from '../config/Fonts';\n",
+			"export default StyleSheet.create({",
+				"});"
+		]
+	},
+	"app/Store.js": {
+		"type": "store"
+	},
+	"app/Root.js": {
+		"type": "root"
+	}
+}
