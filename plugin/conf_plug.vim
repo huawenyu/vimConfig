@@ -1257,3 +1257,9 @@ if CheckPlug('vim-shortcut', 1) | " {{{1
     nnoremap <silent> ;;     :Shortcuts<cr>
 endif
 
+
+if CheckPlug('vim-multiple-cursors', 1) | " {{{1
+    let g:multi_cursor_use_default_mapping=0
+
+    nnoremap <silent> ;;     :Shortcuts<cr>
+endif
