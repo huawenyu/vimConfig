@@ -3,11 +3,18 @@ troubleshooting
 
 ## start vi with verbosefile
 
-	$ vi -V/tmp/logfile.txt Promise.txt
+	$ vi -V20/tmp/vim.log Promise.txt
+
 	### using another window (feel better if using tmux)
 	$ tail -f /tmp/logfile.txt
 
-## log to file
+	<or> =but you can't do them at same time=
+
+	set directly from .vimrc:
+        set verbose=20
+        set verbosefile=/tmp/vim.log
+
+## plug use logger to file
 
 1. Put in .vimrc:
 

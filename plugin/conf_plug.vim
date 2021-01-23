@@ -210,6 +210,28 @@ endif
 if CheckPlug('asyncrun.vim', 1) | " {{{1
     let g:asyncrun_silent = 1
     let g:asyncrun_open = 8
+    let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg']
+    let g:asynctasks_term_reuse = 1
+    let g:asynctasks_term_focus = 0
+
+    " Create template
+    " :AsyncTaskEdit cargo
+    let g:asynctasks_template = {}
+    let g:asynctasks_template.cargo = [
+                \ "[project-init]",
+                \ "command=cargo update",
+                \ "cwd=<root>",
+                \ "",
+                \ "[project-build]",
+                \ "command=cargo build",
+                \ "cwd=<root>",
+                \ "errorformat=%. %#--> %f:%l:%c",
+                \ "",
+                \ "[project-run]",
+                \ "command=cargo run",
+                \ "cwd=<root>",
+                \ "output=terminal",
+                \ ]
 endif
 
 
@@ -991,7 +1013,7 @@ if CheckPlug('vim-qf', 1) | " {{{1
     let g:qf_auto_resize = 0
     let g:qf_auto_quit = 0
     let g:qf_save_win_view = 0
-    let g:qf_max_height = 4
+    let g:qf_max_height = 8
 endif
 
 
@@ -1250,7 +1272,7 @@ if CheckPlug('nvim-libmodal', 1) | " {{{1
         endfunction
 endif
 
-if CheckPlug('vim-shortcut', 1) | " {{{1
+if HasPlug('vim-shortcut') | " {{{1
     " Shortcut! keys description
     " Must source it directly to make it works
     "source ~/.config/nvim/bundle/vim-shortcut/plugin/shortcut.vim
@@ -1258,8 +1280,7 @@ if CheckPlug('vim-shortcut', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-multiple-cursors', 1) | " {{{1
+if HasPlug('vim-multiple-cursors') | " {{{1
     let g:multi_cursor_use_default_mapping=0
-
-    nnoremap <silent> ;;     :Shortcuts<cr>
 endif
+
