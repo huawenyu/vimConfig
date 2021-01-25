@@ -1,14 +1,14 @@
 {
-	// Vim plugin project: {{{1
-	//
-	// With these in place, you could use :Eplugin projectionist to edit
-	//   plugin/projectionist.vim and :Edoc projectionist to edit doc/projectionist.txt. If no
-	//   argument is given, it will edit an alternate file of that type (see below) or a projection
-	//   without a glob. So in this example :Edoc would default to editing README.markdown.
-	// The E stands for edit. You also get S, V, and T variants that split, vsplit, and tabedit.
-	//
-	"plugin/*.vim":    {"type": "plugin"},
-	"autoload/*.vim":  {"type": "autoload"},
-	"doc/*.txt":       {"type": "doc"},
-	"README.markdown": {"type": "doc"}
+    // Vim plugin project: {{{1
+    //
+    // With these in place, you could use :Eplugin projectionist to edit
+    //   plugin/projectionist.vim and :Edoc projectionist to edit doc/projectionist.txt. If no
+    //   argument is given, it will edit an alternate file of that type (see below) or a projection
+    //   without a glob. So in this example :Edoc would default to editing README.markdown.
+    // The E stands for edit. You also get S, V, and T variants that split, vsplit, and tabedit.
+    //
+    "plugin/*.vim":    {"type": "plugin"},
+    "autoload/*.vim":  {"type": "autoload"},
+    "doc/*.txt":       {"type": "doc"},
+    "README.markdown": {"type": "doc"}
 }

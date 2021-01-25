@@ -3,20 +3,15 @@ if exists('g:loaded_vim_projectionist_javascriptreact') || !CheckPlug('vim-proje
 endif
 let g:loaded_vim_projectionist_javascriptreact = 1
 
-let s:base_dir = resolve(expand("<sfile>:p:h"))
-let s:proj_jsn = s:base_dir . "/../conf/javascriptreact.json"
-if !filereadable(s:proj_jsn)
-    finish
+if HasPlug('vim-projectionist') | " {{{1
+    let s:base_dir = resolve(expand("<sfile>:p:h"))
+    let s:proj_jsn = s:base_dir . "/../conf/javascriptreact.json"
+    if !filereadable(s:proj_jsn)
+        finish
+    endif
+
+    augroup ProjectionistHelper
+        autocmd User ProjectionistDetect :call VimConfigLoadProjectionistJson(s:proj_jsn)
+    augroup end
 endif
-
-
-function! s:setProjections()
-    let l:json = filter(readfile(s:proj_jsn), 'match(v:val, "\s*//.*") < 0')
-    let l:dict = projectionist#json_parse(l:json)
-    call projectionist#append(getcwd(), l:dict)
-endfunction
-
-augroup ProjectionistHelper
-    autocmd User ProjectionistDetect :call s:setProjections()
-augroup end
 

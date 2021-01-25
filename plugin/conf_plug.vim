@@ -1378,3 +1378,50 @@ if HasPlug('vwm.vim') | " {{{1
     let g:vwm#layouts += [ s:vimdiff, s:frame, s:bot_panel ]
 endif
 
+
+if HasPlug('vim-projectionist') | " {{{1
+    function! VimConfigLoadProjectionistJson(proj_jsn)
+        " filter-out the comment line: beginwith '//'
+        let l:json = filter(readfile(a:proj_jsn), 'match(v:val, "\s*//.*") < 0')
+        let l:dict = projectionist#json_parse(l:json)
+        call projectionist#append(getcwd(), l:dict)
+    endfunction
+endif
+
+if HasPlug('vim-gitgutter') | " {{{1
+    let g:gitgutter_enabled = 0
+    let g:gitgutter_map_keys = 0
+    let g:gitgutter_max_signs = 500  " default value (Vim < 8.1.0614, Neovim < 0.4.0)
+    let g:gitgutter_show_msg_on_hunk_jumping = 0
+    let g:gitgutter_override_sign_column_highlight = 1
+    let g:gitgutter_highlight_lines = 1
+    let g:gitgutter_preview_win_floating = 1
+    let g:gitgutter_diff_relative_to = 'index'  " default 'index', 'working_tree'
+
+    " Use fontawesome icons as signs
+    let g:gitgutter_sign_added = '+'
+    let g:gitgutter_sign_modified = '>'
+    let g:gitgutter_sign_removed = '-'
+    let g:gitgutter_sign_removed_first_line = '^'
+    let g:gitgutter_sign_modified_removed = '<'
+
+
+    nmap ;gg    :GitGutterToggle <cr>
+    nmap ;gv    :GitGutterQuickFix \| copen <cr>
+
+    " Jump between hunks
+    nmap ;gn <Plug>(GitGutterNextHunk)
+    nmap ;gp <Plug>(GitGutterPrevHunk)
+
+    " Hunk-add and hunk-revert for chunk staging
+    nmap ;ga <Plug>(GitGutterStageHunk)
+    nmap ;gu <Plug>(GitGutterUndoHunk)
+
+    Shortcut! ;gg    Git Gutter Toggle
+    Shortcut! ;gv    Git Gutter Quickfix
+    Shortcut! ;gn    Git Hunk Next
+    Shortcut! ;gp    Git Hunk Prev
+    Shortcut! ;ga    Git Hunk Stage
+    Shortcut! ;gu    Git Hunk Undo
+endif
+
