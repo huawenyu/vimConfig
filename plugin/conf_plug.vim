@@ -376,7 +376,7 @@ endif
 
 
 if CheckPlug('fzf-cscope.vim', 1) | " {{{1
-    let g:fzf_cscope_map = 1
+    let g:fzf_cscope_map = 0
 
     if g:vim_confi_option.auto_install_tools
         if LINUX()
@@ -1405,17 +1405,28 @@ if HasPlug('vim-gitgutter') | " {{{1
     let g:gitgutter_sign_removed_first_line = '^'
     let g:gitgutter_sign_modified_removed = '<'
 
+    " " Reload all opened files
+    "     fun! PullAndRefresh()
+    "         set noconfirm
+    "         !git pull
+    "         bufdo e!
+    "         set confirm
+    "     endfun
 
-    nmap ;gg    :GitGutterToggle <cr>
-    nmap ;gv    :GitGutterQuickFix \| copen <cr>
+    "     nmap ;gr call PullAndRefresh()
+    " " --End
+
+    nnoremap <silent> ;gg   :GitGutterToggle <cr>
+    nnoremap <silent> ;gr   :GitGutter <cr>
+    nnoremap <silent> ;gv   :GitGutterQuickFix \| copen <cr>
 
     " Jump between hunks
-    nmap ;gn <Plug>(GitGutterNextHunk)
-    nmap ;gp <Plug>(GitGutterPrevHunk)
+    nnoremap <silent> ;gn   <Plug>(GitGutterNextHunk)
+    nnoremap <silent> ;gp   <Plug>(GitGutterPrevHunk)
 
     " Hunk-add and hunk-revert for chunk staging
-    nmap ;ga <Plug>(GitGutterStageHunk)
-    nmap ;gu <Plug>(GitGutterUndoHunk)
+    nnoremap <silent> ;ga   <Plug>(GitGutterStageHunk)
+    nnoremap <silent> ;gu   <Plug>(GitGutterUndoHunk)
 
     Shortcut! ;gg    Git Gutter Toggle
     Shortcut! ;gv    Git Gutter Quickfix
