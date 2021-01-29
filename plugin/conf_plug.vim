@@ -251,7 +251,7 @@ if CheckPlug('vista.vim', 1) | " {{{1
       \ }
     let g:vista_fzf_preview = ['right:50%']
     let g:vista#renderer#enable_icon = 0
-    let g:vista_sidebar_width = 25
+    let g:vista_sidebar_width = 40
     let g:vista_echo_cursor = 0
     let g:vista_blink = [0, 0]
     let g:vista_top_level_blink = [0, 0]
@@ -1039,8 +1039,10 @@ if CheckPlug('vim-grepper', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-motion', 1) | " {{{1
-    let g:vim_motion_maps = 1
+if HasPlug('vim-motion') | " {{{1
+    "let g:vim_motion_maps = 1
+    nmap <silent> <a-p>     <Plug>(VimMotionPrev)
+    nmap <silent> <a-n>     <Plug>(VimMotionNext)
 endif
 
 
@@ -1435,4 +1437,5 @@ if HasPlug('vim-gitgutter') | " {{{1
     Shortcut! ;ga    Git Hunk Stage
     Shortcut! ;gu    Git Hunk Undo
 endif
+
 
