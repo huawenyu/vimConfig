@@ -2,6 +2,9 @@
 
 My plugs config base on different plugs.
 
+## Ref vimrc
+https://github.com/habamax/.vim/blob/e9312935fb915fd6bfc4436b70b300387445aef8/vimrc#L270-L275
+
 ## Writing Vim Syntax Plugins
 https://neovim.io/doc/user/filetype.html
 https://thoughtbot.com/blog/writing-vim-syntax-plugins

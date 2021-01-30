@@ -196,6 +196,25 @@ if CheckPlug('vim-easymotion', 1) | " {{{1
 endif
 
 
+if HasPlug('vim-easy-align') | " {{{1
+    let g:easy_align_ignore_comment = 0 " align comments
+    vnoremap <silent> <Enter> :EasyAlign<cr>
+endif
+
+
+if HasPlug('rainbow_parentheses.vim') | " {{{1
+    Shortcut Toggle RainbowParentheses
+                \ vnoremap <silent> <leader>mm   :<c-u>RainbowParentheses!!<cr>
+
+    let g:rainbow#max_level = 16
+    let g:rainbow#pairs = [['(', ')'], ['[', ']']]
+
+    " List of colors that you do not want. ANSI code or #RRGGBB
+    "   :RainbowParenthesesColors
+    let g:rainbow#blacklist = [241, 242, 244]
+endif
+
+
 if CheckPlug('vim-autotag', 1) | " {{{1
     " log: /tmp/vim-autotag.log
     let g:autotagVerbosityLevel = 10
@@ -1278,6 +1297,7 @@ if HasPlug('vim-shortcut') | " {{{1
     " Shortcut! keys description
     " Must source it directly to make it works
     "source ~/.config/nvim/bundle/vim-shortcut/plugin/shortcut.vim
+    let g:shortcuts_overwrite_warning = 1
     nnoremap <silent> ;;     :Shortcuts<cr>
 endif
 
@@ -1286,6 +1306,15 @@ if HasPlug('vim-multiple-cursors') | " {{{1
     let g:multi_cursor_use_default_mapping=0
 endif
 
+
+if HasPlug('delimitMate') | " {{{1
+    let delimitMate_expand_space = 1
+    let delimitMate_expand_cr = 2
+    "let delimitMate_jump_expansion = 1
+    let delimitMate_expand_inside_quotes = 1
+    let delimitMate_nesting_quotes = ['"','`']
+    let delimitMate_excluded_regions = ""
+endif
 
 
 if HasPlug('vwm.vim') | " {{{1

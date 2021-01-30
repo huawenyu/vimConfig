@@ -22,6 +22,10 @@ else
     set viminfo='30,\"30,:30,n~/.viminfo
 endif
 
+if &history < 1000
+    set history=5000
+endif
+
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__,.idea,node_modules
 
