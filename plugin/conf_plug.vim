@@ -1435,36 +1435,5 @@ if HasPlug('vim-gitgutter') | " {{{1
     let g:gitgutter_sign_removed = '-'
     let g:gitgutter_sign_removed_first_line = '^'
     let g:gitgutter_sign_modified_removed = '<'
-
-    " " Reload all opened files
-    "     fun! PullAndRefresh()
-    "         set noconfirm
-    "         !git pull
-    "         bufdo e!
-    "         set confirm
-    "     endfun
-
-    "     nmap ;gr call PullAndRefresh()
-    " " --End
-
-    nnoremap <silent> ;gg   :GitGutterToggle <cr>
-    nnoremap <silent> ;gr   :GitGutter <cr>
-    nnoremap <silent> ;gv   :GitGutterQuickFix \| copen <cr>
-
-    " Jump between hunks
-    nnoremap <silent> ;gn   <Plug>(GitGutterNextHunk)
-    nnoremap <silent> ;gp   <Plug>(GitGutterPrevHunk)
-
-    " Hunk-add and hunk-revert for chunk staging
-    nnoremap <silent> ;ga   <Plug>(GitGutterStageHunk)
-    nnoremap <silent> ;gu   <Plug>(GitGutterUndoHunk)
-
-    Shortcut! ;gg    Git Gutter Toggle
-    Shortcut! ;gv    Git Gutter Quickfix
-    Shortcut! ;gn    Git Hunk Next
-    Shortcut! ;gp    Git Hunk Prev
-    Shortcut! ;ga    Git Hunk Stage
-    Shortcut! ;gu    Git Hunk Undo
 endif
-
 
