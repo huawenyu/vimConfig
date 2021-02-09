@@ -44,6 +44,12 @@ if CheckPlug('vim-doge', 1) | " {{{1
 endif
 
 
+if HasPlug('goyo.vim') | " {{{1
+    let g:goyo_width = 120
+    let g:goyo_height = 20
+endif
+
+
 if CheckPlug('new-gdb.vim', 1) || CheckPlug('vimgdb', 1) " {{{1
     "let g:neogdb_window = ['backtrace', 'breakpoint']
     let g:gdb_require_enter_after_toggling_breakpoint = 0
@@ -203,9 +209,6 @@ endif
 
 
 if HasPlug('rainbow_parentheses.vim') | " {{{1
-    Shortcut Toggle RainbowParentheses
-                \ vnoremap <silent> <leader>mm   :<c-u>RainbowParentheses!!<cr>
-
     let g:rainbow#max_level = 16
     let g:rainbow#pairs = [['(', ')'], ['[', ']']]
 
@@ -606,6 +609,15 @@ if CheckPlug('vimwiki', 1) | " {{{1
     let g:vimwiki_menu = ""         | "Disable error msg: No menu 'Vimwiki'
     let g:vimwiki_url_maxsave = 0   | "Turn off the link shortening
     let g:vimwiki_conceallevel = 0  | "Default=2, -1 Disable conceal
+endif
+
+
+if HasPlug('vim-mark') | " {{{1
+    let g:mw_no_mappings = 1
+    let g:mwDefaultHighlightingPalette = 'extended'
+    let g:mwHistAdd = '/@'
+    let g:mwAutoSaveMarks = 0
+    let g:mwMaxMatchPriority = -10
 endif
 
 
