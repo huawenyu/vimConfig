@@ -1449,3 +1449,6 @@ if HasPlug('vim-gitgutter') | " {{{1
     let g:gitgutter_sign_modified_removed = '<'
 endif
 
+if HasPlug('auto-session') | " {{{1
+    "let g:auto_session_root_dir = getcwd()
+endif
