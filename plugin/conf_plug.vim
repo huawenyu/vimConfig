@@ -1452,3 +1452,55 @@ endif
 if HasPlug('auto-session') | " {{{1
     "let g:auto_session_root_dir = getcwd()
 endif
+
+if HasPlug('cyclist.vim') | " {{{1
+    "
+    " set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
+    " set listchars=tab:→\ ,trail:␣,extends:…,eol:⏎
+    " set listchars=tab:‣\ ,trail:·,precedes:«,extends:»,eol:¬
+    " set listchars=tab:␋\ ,trail:␠,precedes:«,extends:»,eol:␤
+    " set listchars=tab:>-,trail:.,precedes:<,extends:>,eol:$
+
+    " call cyclist#set_trail('default', '░')
+    call cyclist#set_trail('default', '~')
+    call cyclist#set_precedes('default', '☚')
+    call cyclist#set_extends('default', '☛')
+    call cyclist#set_eol('default', '')
+
+    call cyclist#add_listchar_option_set('code', {
+        \ 'tab': '» ',
+        \ 'trail': '~',
+        \ 'extends': '<',
+        \ 'precedes': '>',
+        \ 'conceal': '┊',
+        \ 'nbsp': '.',
+        \ })
+    call cyclist#add_listchar_option_set('little', {
+        \ 'tab': '  ',
+        \ })
+    call cyclist#add_listchar_option_set('limited', {
+        \ 'eol': '↲',
+        \ 'tab': '» ',
+        \ 'trail': '·',
+        \ 'extends': '<',
+        \ 'precedes': '>',
+        \ 'conceal': '┊',
+        \ 'nbsp': '␣',
+        \ })
+  call cyclist#add_listchar_option_set('busy', {
+        \ 'eol': '↲',
+        \ 'tab': '»·',
+        \ 'space': '␣',
+        \ 'trail': '-',
+        \ 'extends': '☛',
+        \ 'precedes': '☚',
+        \ 'conceal': '┊',
+        \ 'nbsp': '☠',
+        \ })
+
+  augroup ChangeListChars
+      au!
+      au FileType c,cpp,c++,java,c+,javascript :call cyclist#activate_listchars('code')
+      au FileType conf,markdown :call cyclist#activate_listchars('little')
+  augroup END
+endif

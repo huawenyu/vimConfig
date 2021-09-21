@@ -56,7 +56,9 @@ hi clear SpecialKey
 hi link SpecialKey NonText
 
 " The characters after tab is U+2002. in vim with Ctrl-v u 2 0 0 2 (in insert mode).
-set listchars=tab:»\ ,trail:~,extends:<,nbsp:.
+if DenyPlug('cyclist.vim') | " {{{1
+    set listchars=tab:»\ ,trail:~,extends:<,nbsp:.
+endif
 "set listchars=nbsp:.,tab:>-,trail:~,extends:>,precedes:<
 "set listchars=tab:>.,trail:~,extends:<,nbsp:.
 "set listchars=tab:> ,trail:~,extends:<,nbsp:.
