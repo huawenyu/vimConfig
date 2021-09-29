@@ -598,12 +598,12 @@ endif
 if CheckPlug('vimwiki', 1) | " {{{1
     " {'path': '$HOME/wiki', 'auto_toc': 1, 'syntax': 'markdown', 'ext': '.md', 'maxhi': 1, 'auto_tags': 1},
     let g:vimwiki_list = [
-          \{'name': 'work', 'path': '$HOME/dotwiki', 'syntax': 'markdown', 'auto_toc': 1, 'maxhi': 1, 'auto_tags': 1},
-          \{'name': 'linux', 'path': '$HOME/wiki', 'syntax': 'markdown', 'auto_toc': 1, 'maxhi': 1, 'auto_tags': 1},
+          \{'name': 'work',  'path': '$HOME/dotwiki', 'ext': '.md', 'syntax': 'markdown', 'auto_toc': 1, 'maxhi': 1, 'auto_tags': 1},
+          \{'name': 'linux', 'path': '$HOME/wiki',    'ext': '.md', 'syntax': 'markdown', 'auto_toc': 1, 'maxhi': 1, 'auto_tags': 1},
           \]
 
     let g:vimwiki_global_ext = 0    | " only set the 'vimwiki' filetype of markdown files inside a wiki directory, rather than globally.
-    let g:vimwiki_ext2syntax = {'.md': 'markdown', '.mkd': 'markdown', '.wiki': 'media'}
+    let g:vimwiki_ext2syntax = {'.wiki': 'media', '.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown', '.mkd': 'markdown'}
     "let g:vimwiki_ext2syntax = {'.md': 'markdown', '.mkd': 'markdown', '.wiki': 'markdown'}
 
     let g:vimwiki_menu = ""         | "Disable error msg: No menu 'Vimwiki'
@@ -1461,6 +1461,7 @@ if HasPlug('cyclist.vim') | " {{{1
     " set listchars=tab:␋\ ,trail:␠,precedes:«,extends:»,eol:␤
     " set listchars=tab:>-,trail:.,precedes:<,extends:>,eol:$
 
+    call cyclist#set_tab('default', '  ')
     " call cyclist#set_trail('default', '░')
     call cyclist#set_trail('default', '~')
     call cyclist#set_precedes('default', '☚')
@@ -1501,6 +1502,5 @@ if HasPlug('cyclist.vim') | " {{{1
   augroup ChangeListChars
       au!
       au FileType c,cpp,c++,java,c+,javascript :call cyclist#activate_listchars('code')
-      au FileType conf,markdown :call cyclist#activate_listchars('little')
   augroup END
 endif
