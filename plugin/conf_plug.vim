@@ -47,6 +47,65 @@ endif
 if HasPlug('goyo.vim') | " {{{1
     let g:goyo_width = 120
     let g:goyo_height = 20
+
+    " Markdown configuration
+    augroup MarkdownConfiguration
+        autocmd BufNewFile,BufRead *.markdown Goyo 80
+        autocmd BufNewFile,BufRead *.markdown set wrap
+        autocmd BufNewFile,BufRead *.markdown set linebreak breakindent
+        autocmd BufNewFile,BufRead *.markdown nnoremap j gj
+        autocmd BufNewFile,BufRead *.markdown nnoremap k gk
+    augroup END
+endif
+
+
+if HasPlug('presenting.vim') | " {{{1
+    Shortcut Text Presenting PPT
+			\ nnoremap <silent> <Space>,,a :PresentingStart<cr>
+endif
+
+
+if HasPlug('vim-floaterm') | " {{{1
+    if HasPlug('vim-floaterm-repl') | " {{{1
+        Shortcut Run Repl inner code fence
+                    \ nnoremap <silent> <Space>rr :FloatermRepl<cr>
+    endif
+
+    Shortcut Wiki(cheat) find current cmd file
+                \ nnoremap <Space>,,i      :call hw#misc#Execute('n', 'cheat')<cr>
+endif
+
+
+if HasPlug('venn.nvim') | " {{{1
+    Shortcut Text draw pencil box
+			\ nnoremap <silent> <Space>,,b :VennToggleMap<cr>
+
+    " Troubleshooting:
+    "   let g:venn_debug = 1
+    "   tail -f ~/.local/share/nvim/venn.log
+    "
+    command! VennToggleMap call s:VennToggleMap()
+    let s:vennMapState=1
+    function! s:VennToggleMap()
+        if s:vennMapState
+            let s:vennMap1 = hw#misc#SaveMaps(['J', 'K', 'K', 'H'], 'n', 1)
+            let s:vennMap2 = hw#misc#SaveMaps(['b'], 'v', 1)
+            "let old_ve=&ve
+            setlocal ve=all
+            nnoremap <silent> J  <C-v>j:VBox<cr>
+            nnoremap <silent> K  <C-v>k:VBox<cr>
+            nnoremap <silent> L  <C-v>l:VBox<cr>
+            nnoremap <silent> H  <C-v>h:VBox<cr>
+            vnoremap <silent> b  :VBox<cr>
+        else
+            "set ve=&old_ve
+            setlocal ve=
+            call hw#misc#RestoreMaps(s:vennMap1)
+            call hw#misc#RestoreMaps(s:vennMap2)
+        endif
+
+        let s:vennMapState = !s:vennMapState
+    endfunction
 endif
 
 
@@ -390,6 +449,13 @@ if CheckPlug('VOoM', 1) | " {{{1
 endif
 
 
+if HasPlug('fzf-folds.vim') | " {{{1
+    " tpope/vim-markdown Fold:  zR openAll, zM closeAll, zr +foldLevel, zm -foldLevel, zo opencurr,
+    nnoremap zs :Folds<CR>
+    let g:fzf_folds_open = 1
+endif
+
+
 if CheckPlug('gist-vim', 1) | " {{{1
     let g:gist_show_privates = 1
     let g:gist_post_private = 1
@@ -609,6 +675,29 @@ if CheckPlug('vimwiki', 1) | " {{{1
     let g:vimwiki_menu = ""         | "Disable error msg: No menu 'Vimwiki'
     let g:vimwiki_url_maxsave = 0   | "Turn off the link shortening
     let g:vimwiki_conceallevel = 0  | "Default=2, -1 Disable conceal
+
+endif
+
+
+if HasPlug('vim-tldr') | " {{{1
+    Shortcut Help another Man tldr ':TldrUpdateDocs'
+			\ nnoremap <Space>,,g      :Tldr<Space>
+endif
+
+
+if HasPlug('notational-fzf-vim') | " {{{1
+    let g:nv_search_paths = ['~/wiki', '~/dotwiki', '~/work-doc']
+    let g:nv_default_extension = '.md'
+
+    " let g:nv_keymap = {
+    "                 \ 'ctrl-s': 'split ',
+    "                 \ 'ctrl-v': 'vertical split ',
+    "                 \ 'ctrl-t': 'tabedit ',
+    "                 \ })
+    " let g:nv_create_note_key = 'ctrl-x'
+
+    Shortcut Wiki(all) search full text
+			\ nnoremap <Space>,,h      :NV<Space>
 endif
 
 
@@ -621,22 +710,33 @@ if HasPlug('vim-mark') | " {{{1
 endif
 
 
+if HasPlug('tpope_vim-markdown') | " {{{1
+    let g:markdown_folding = 2
+    "let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+    let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'java', 'c']
+    let g:markdown_minlines = 500
+    "let g:markdown_syntax_conceal = 0
+    if exists("g:vim_markdown_conceal")
+        let g:markdown_syntax_conceal = g:vim_markdown_conceal
+    endif
+endif
+
+
 if CheckPlug('vim-markdown', 1) | " {{{1
     " ge: jump follow link
     " gx: open link in browser
 
     "set conceallevel=0
     let g:vim_markdown_conceal = 0
-    let g:markdown_syntax_conceal = g:vim_markdown_conceal
     let g:vim_markdown_toc_autofit = 1
 
     let g:vim_markdown_auto_extension_ext = 'wiki'
 
     "let g:markdown_minlines = 200
-    let g:vim_markdown_folding_disabled = 1
+    "let g:vim_markdown_folding_disabled = 1
     let g:vim_markdown_override_foldtext = 0
     let g:vim_markdown_folding_level = 6
-    let g:vim_markdown_folding_style_pythonic = 1
+    "let g:vim_markdown_folding_style_pythonic = 1
     "
     let g:vim_markdown_emphasis_multiline = 0
     let g:vim_markdown_new_list_item_indent = 2
@@ -1311,6 +1411,7 @@ if HasPlug('vim-shortcut') | " {{{1
     "source ~/.config/nvim/bundle/vim-shortcut/plugin/shortcut.vim
     let g:shortcuts_overwrite_warning = 1
     nnoremap <silent> ;;     :Shortcuts<cr>
+    vnoremap <silent> ;;     :Shortcuts<cr>
 endif
 
 
@@ -1504,3 +1605,10 @@ if HasPlug('cyclist.vim') | " {{{1
       au FileType c,cpp,c++,java,c+,javascript :call cyclist#activate_listchars('code')
   augroup END
 endif
+
+if HasPlug('vim-diff-enhanced') | " {{{1
+    set diffopt+=internal,algorithm:patience
+    "EnhancedDiffIgnorePat ^WARNING:.*
+    let g:enhanced_diff_ignore_pat = '^WARNING:.*'
+endif
+
