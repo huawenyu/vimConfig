@@ -65,17 +65,51 @@ if HasPlug('presenting.vim') | " {{{1
 endif
 
 
-if HasPlug('vim-floaterm') | " {{{1
-    if HasPlug('vim-floaterm-repl') | " {{{1
-        Shortcut Run Repl inner code fence
-                    \ nnoremap <silent> <Space>rr :FloatermRepl<cr>
-    endif
-
-    Shortcut Wiki(cheat) find current cmd file
-                \ nnoremap <Space>,,i      :call hw#misc#Execute('n', 'cheat')<cr>
+if HasPlug('vim-floaterm-repl') | " {{{1
+    Shortcut Run Repl inner code fence
+                \ nnoremap <silent> <Space>rr :FloatermRepl<cr>
 endif
 
 
+if HasPlug('vim-floaterm') | " {{{1
+    Shortcut Wiki(cheat) find current cmd file
+                \ nnoremap <Space>,,i      :call hw#misc#Execute('n', 'cheat')<cr>
+
+    fun! s:compile_run(filetype)
+        let l:command=':FloatermNew --name=repl --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'. a:filetype
+        if a:filetype ==? "c"
+            let l:command = l:command. printf("  gcc -pthread -lrt -g -finstrument-functions -fms-extensions %s && ./a.out && rm a.out", expand('%'))
+        elseif a:filetype ==? "cpp"
+            let l:command = l:command. printf("  g++ -pthread -lrt -g -finstrument-functions -fms-extensions %s && ./a.out && rm a.out", expand('%'))
+        elseif a:filetype ==? "javascript"
+            let l:command = l:command. printf("  node %s", expand('%'))
+        elseif a:filetype ==? "python"
+            let l:command = l:command. printf("  python %s", expand('%'))
+        else
+            echomsg "Not support filetype, but can reference 'SingleCompile' to append it."
+            return
+        endif
+
+        "echomsg "Debug: ". l:command
+        silent execute l:command
+        " Avoid terminal-window exit when enter-any-key
+        stopinsert
+    endfun
+
+    autocmd FileType c          nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run('c')<cr>
+    autocmd FileType cpp        nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run('cpp')<cr>
+    autocmd FileType python     nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run('python')<cr>
+    autocmd FileType javascript nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run('javascript')<cr>
+endif
+
+
+if HasPlug('vim-eval')
+    autocmd FileType python     nnoremap <buffer> <leader>ee  <Plug>eval_viml
+    autocmd FileType vim        vnoremap <buffer> <leader>ee  <Plug>eval_viml_region
+endif
+
+
+" Pencil draw
 if HasPlug('venn.nvim') | " {{{1
     Shortcut Text draw pencil box
 			\ nnoremap <silent> <Space>,,b :VennToggleMap<cr>
