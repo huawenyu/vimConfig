@@ -766,7 +766,10 @@ endif
 if HasPlug('tpope_vim-markdown') | " {{{1
     let g:markdown_folding = 2
     "let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
-    let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'java', 'c']
+    " About yaml fence-code:
+    "   Download yaml.vim from https://github.com/stephpy/vim-yaml/blob/master/after/syntax/yaml.vim
+    "                     to ~/.vim/bundle/tpope_vim-markdown/syntax/yaml.vim
+    let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'java', 'c', 'yaml']
     let g:markdown_minlines = 500
     "let g:markdown_syntax_conceal = 0
     if exists("g:vim_markdown_conceal")

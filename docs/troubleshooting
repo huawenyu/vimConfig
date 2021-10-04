@@ -17,20 +17,7 @@
 troubleshooting
 ===
 
-## start vi with verbosefile
-
-	$ vi -V20/tmp/vim.log Promise.txt
-
-	### using another window (feel better if using tmux)
-	$ tail -f /tmp/logfile.txt
-
-	<or> =but you can't do them at same time=
-
-	set directly from .vimrc:
-        set verbose=20
-        set verbosefile=/tmp/vim.log
-
-## plug use logger to file
+## option 1: use logger plug to file
 
 1. Put in .vimrc:
 
@@ -50,6 +37,19 @@ troubleshooting
 4. View log
 
 	$ tail -f /tmp/vim.log
+
+## option 2: start vi with verbosefile
+
+	$ vi -V20/tmp/vim.log Promise.txt
+
+	### using another window (feel better if using tmux)
+	$ tail -f /tmp/logfile.txt
+
+	<or> =but you can't do them at same time=
+
+	set directly from .vimrc:
+        set verbose=20
+        set verbosefile=/tmp/vim.log
 
 ## log to list by vim-basic.vlog tool
 
