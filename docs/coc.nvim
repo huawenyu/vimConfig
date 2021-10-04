@@ -1,5 +1,19 @@
+// vim: set filetype=markdown:
 coc.nvim
 ===
+
+Prerequire:
+  - install nodejs
+    - curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+    //- sudo apt-get install -y nodejs
+  - install yarn (-- a node package manger) first.
+      cd ~/.vim/bundle/coc.nvim
+      yarn install
+      yarn build
+AfterRequire:
+  - :CocInstall coc-rust-analyzer
+Note:
+   - ccls sometimes cause high cpu
 
 # setup
 

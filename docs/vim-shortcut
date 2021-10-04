@@ -1,0 +1,14 @@
+// vim: set ft=markdown:
+
+# Two_mode:
+- 1. Shortcut! <shortcut><description>
+- 2. Shortcut  <description>
+            \ <vim-original-map>
+# Sample:
+- 1. only shortcut to existed map:
+      Shortcut! ;f    Jump file
+- 2. shortcut + map
+      Shortcut fzf files in directory and go to chosen file
+                  \ nnoremap <silent> <Space>ef :Files<Return>
+      Shortcut save file as...
+                  \ nnoremap <silent> <Space>yf :call feedkeys(":saveas %\t", "t")<Return>

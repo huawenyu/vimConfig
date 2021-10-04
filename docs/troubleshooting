@@ -1,3 +1,19 @@
+// vim: set filetype=markdown:
+
+# Quickstart
+
+    " 1. Init: Put these in the head-part of your script file.
+    "if !exists("s:init")
+    "    let s:init = 1
+    "    silent! let s:log = logger#getLogger(expand('<sfile>:t'))
+    "endif
+    "
+    " 2. Use:
+    "silent! call s:log.debug("test=", var)
+    "
+    " 3. View log
+    " $ tail -f /tmp/vim.log
+
 troubleshooting
 ===
 

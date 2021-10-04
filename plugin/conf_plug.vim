@@ -73,17 +73,18 @@ endif
 
 if HasPlug('vim-floaterm') | " {{{1
     Shortcut Wiki(cheat) find current cmd file
-                \ nnoremap <Space>,,i      :call hw#misc#Execute('n', 'cheat')<cr>
+                \ nnoremap H      :call hw#misc#Execute('n', 'cheat')<cr><cr>
 
-    fun! s:compile_run(filetype)
+    fun! s:compile_run()
         let l:command=':FloatermNew --name=repl --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'. a:filetype
-        if a:filetype ==? "c"
+        " (&ft=='c' || &ft=='cpp')
+        if &ft=='c'
             let l:command = l:command. printf("  gcc -pthread -lrt -g -finstrument-functions -fms-extensions %s && ./a.out && rm a.out", expand('%'))
-        elseif a:filetype ==? "cpp"
+        elseif &ft=='cpp'
             let l:command = l:command. printf("  g++ -pthread -lrt -g -finstrument-functions -fms-extensions %s && ./a.out && rm a.out", expand('%'))
-        elseif a:filetype ==? "javascript"
+        elseif &ft=='javascript'
             let l:command = l:command. printf("  node %s", expand('%'))
-        elseif a:filetype ==? "python"
+        elseif &ft=='python'
             let l:command = l:command. printf("  python %s", expand('%'))
         else
             echomsg "Not support filetype, but can reference 'SingleCompile' to append it."
@@ -96,16 +97,24 @@ if HasPlug('vim-floaterm') | " {{{1
         stopinsert
     endfun
 
-    autocmd FileType c          nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run('c')<cr>
-    autocmd FileType cpp        nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run('cpp')<cr>
-    autocmd FileType python     nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run('python')<cr>
-    autocmd FileType javascript nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run('javascript')<cr>
+    "autocmd FileType * nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run()<cr>
+    Shortcut Repl run me
+                \ nnoremap <leader>ee      :w<esc>:call <sid>compile_run()<cr>
 endif
 
 
-if HasPlug('vim-eval')
-    autocmd FileType python     nnoremap <buffer> <leader>ee  <Plug>eval_viml
-    autocmd FileType vim        vnoremap <buffer> <leader>ee  <Plug>eval_viml_region
+if HasPlug('vim-evalvim') | " {{{1
+    autocmd FileType vim    nmap <buffer> <leader>ee <Plug>(EvalVimLine)
+    autocmd FileType vim    vmap <buffer> <leader>ee <Plug>(EvalVim)
+elseif HasPlug('vim-eval') | " {{{1
+    autocmd FileType vim    nmap <buffer> <leader>ee <Plug>eval_viml
+    autocmd FileType vim    vmap <buffer> <leader>ee <Plug>eval_viml_region
+elseif HasPlug('vim-basic') | " {{{1
+    " Don't why the this map cause VimL execute '10new' error, and VimL get Select not correct
+    "autocmd FileType vim    vmap <buffer> <leader>ee <Plug>(EvalVim)
+    "
+    autocmd FileType vim    nnoremap <buffer> <leader>ee :<c-u>call hw#eval#repl('n')<cr>
+    autocmd FileType vim    vnoremap <buffer> <leader>ee :<c-u>call hw#eval#repl('v')<cr>
 endif
 
 
@@ -126,14 +135,24 @@ if HasPlug('venn.nvim') | " {{{1
             let s:vennMap2 = hw#misc#SaveMaps(['b'], 'v', 1)
             "let old_ve=&ve
             setlocal ve=all
+            " silent! unmap! J
+            " silent! unmap! K
+            " silent! unmap! L
+            " silent! unmap! H
+            " silent! unmap! bb
             nnoremap <silent> J  <C-v>j:VBox<cr>
             nnoremap <silent> K  <C-v>k:VBox<cr>
             nnoremap <silent> L  <C-v>l:VBox<cr>
             nnoremap <silent> H  <C-v>h:VBox<cr>
-            vnoremap <silent> b  :VBox<cr>
+            vnoremap <silent> bb :VBox<cr>
         else
             "set ve=&old_ve
             setlocal ve=
+            silent! unmap J
+            silent! unmap K
+            silent! unmap L
+            silent! unmap H
+            silent! unmap bb
             call hw#misc#RestoreMaps(s:vennMap1)
             call hw#misc#RestoreMaps(s:vennMap2)
         endif
@@ -1645,4 +1664,12 @@ if HasPlug('vim-diff-enhanced') | " {{{1
     "EnhancedDiffIgnorePat ^WARNING:.*
     let g:enhanced_diff_ignore_pat = '^WARNING:.*'
 endif
+
+
+if HasPlug('editorconfig-vim') | " {{{1
+    let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+    au FileType gitcommit let b:EditorConfig_disable = 1
+    let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
+endif
+
 
