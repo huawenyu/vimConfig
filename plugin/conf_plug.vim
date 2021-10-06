@@ -1640,14 +1640,14 @@ if HasPlug('cyclist.vim') | " {{{1
     " set listchars=tab:␋\ ,trail:␠,precedes:«,extends:»,eol:␤
     " set listchars=tab:>-,trail:.,precedes:<,extends:>,eol:$
 
-    call cyclist#set_tab('default', '  ')
-    " call cyclist#set_trail('default', '░')
-    call cyclist#set_trail('default', '~')
-    call cyclist#set_precedes('default', '☚')
-    call cyclist#set_extends('default', '☛')
-    call cyclist#set_eol('default', '')
+    silent! call cyclist#set_tab('default', '  ')
+    "silent! call cyclist#set_trail('default', '░')
+    silent!call cyclist#set_trail('default', '~')
+    silent!call cyclist#set_precedes('default', '☚')
+    silent!call cyclist#set_extends('default', '☛')
+    silent!call cyclist#set_eol('default', '')
 
-    call cyclist#add_listchar_option_set('code', {
+    silent! call cyclist#add_listchar_option_set('code', {
         \ 'tab': '» ',
         \ 'trail': '~',
         \ 'extends': '<',
@@ -1655,10 +1655,10 @@ if HasPlug('cyclist.vim') | " {{{1
         \ 'conceal': '┊',
         \ 'nbsp': '.',
         \ })
-    call cyclist#add_listchar_option_set('little', {
+    silent! call cyclist#add_listchar_option_set('little', {
         \ 'tab': '  ',
         \ })
-    call cyclist#add_listchar_option_set('limited', {
+    silent! call cyclist#add_listchar_option_set('limited', {
         \ 'eol': '↲',
         \ 'tab': '» ',
         \ 'trail': '·',
@@ -1667,7 +1667,7 @@ if HasPlug('cyclist.vim') | " {{{1
         \ 'conceal': '┊',
         \ 'nbsp': '␣',
         \ })
-  call cyclist#add_listchar_option_set('busy', {
+  silent! call cyclist#add_listchar_option_set('busy', {
         \ 'eol': '↲',
         \ 'tab': '»·',
         \ 'space': '␣',
@@ -1680,7 +1680,7 @@ if HasPlug('cyclist.vim') | " {{{1
 
   augroup ChangeListChars
       au!
-      au FileType c,cpp,c++,java,c+,javascript :call cyclist#activate_listchars('code')
+      au FileType c,cpp,c++,java,c+,javascript :silent! call cyclist#activate_listchars('code')
   augroup END
 endif
 
