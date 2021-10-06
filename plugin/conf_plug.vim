@@ -760,9 +760,9 @@ if HasPlug('notational-fzf-vim') | " {{{1
             endif
         endfor
     endif
-    if empty(g:nv_search_paths)
-        unlet g:nv_search_paths
-    endif
+    " if empty(g:nv_search_paths)
+    "     unlet g:nv_search_paths
+    " endif
 
 
     " let g:nv_keymap = {
