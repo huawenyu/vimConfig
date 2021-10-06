@@ -761,7 +761,7 @@ if HasPlug('notational-fzf-vim') | " {{{1
         endfor
     endif
 
-    if empty(g:nv_search_paths)
+    if g:vim_confi_option.verbose && empty(g:nv_search_paths)
         echomsg "Plug:notational-fzf-vim require a wiki directory, like ~/wiki"
     endif
 
@@ -1272,29 +1272,6 @@ endif
 if CheckPlug('new.vim', 1) | " {{{1
     " neovim expect window
     let g:new#eager_render = 1
-endif
-
-
-if CheckPlug('vim-notes', 1) | " {{{1
-    let g:notes_dir_order_type = {'wiki': 0, 'vim': 1}
-    " The 1st is our routine notes dir, the 2nd is our plugin's help notes.
-    let g:notes_directories = ['~/wiki/Notes', PlugGetDir(g:vim_confi_option.plug_note). 'docs']
-    let g:notes_dir_order = g:notes_dir_order_type.wiki
-    let g:notes_suffix = '.md'
-
-    let g:notes_smart_quotes = 0
-    let g:notes_conceal_code = 0
-    let g:notes_conceal_italic = 0
-    let g:notes_conceal_bold = 0
-    let g:notes_conceal_url = 0
-    let g:notes_tab_indents = 0
-    let g:notes_alt_indents = 0
-endif
-
-
-if CheckPlug('accelerated-jk', 1) | " {{{1
-    let g:accelerated_jk_acceleration_table = [1,3,6,9,12,9,6,3,2,1]
-    let g:accelerated_jk_enable_deceleration = 1
 endif
 
 
