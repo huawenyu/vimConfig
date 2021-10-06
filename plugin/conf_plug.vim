@@ -523,10 +523,20 @@ if CheckPlug('fzf-cscope.vim', 1) | " {{{1
         if LINUX()
             if UBUNTU()
                 if !executable('cscope')
-                    call system("sudo apt install cscope")
+                    echomsg "Auto installing cscope"
+                    call system("sudo apt install -y cscope")
                 endif
                 if !executable('ctags')
-                    call system("sudo apt install ctags")
+                    echomsg "Auto installing ctags"
+                    call system("sudo apt install -y ctags")
+                endif
+                if !executable('bat')
+                    echomsg "Auto installing batcat"
+                    call system("sudo apt install -y bat")
+                endif
+                if !executable('bat')
+                    echomsg "Auto installing gawk"
+                    call system("sudo apt install -y gawk")
                 endif
             elseif CENTOS() || FEDORA()
                 if !executable('cscope')
@@ -739,7 +749,18 @@ endif
 
 
 if HasPlug('notational-fzf-vim') | " {{{1
-    let g:nv_search_paths = ['~/wiki', '~/dotwiki', '~/work-doc']
+    let g:nv_search_paths = []
+    if !empty(g:vim_confi_option.fzf_notes)
+        for dir in g:vim_confi_option.fzf_notes
+            if !empty(glob(dir))
+                add(g:nv_search_paths, dir)
+            endif
+        endfor
+    endif
+    if empty(g:nv_search_paths)
+        unlet g:nv_search_paths
+    endif
+
     let g:nv_default_extension = '.md'
 
     " let g:nv_keymap = {
@@ -778,7 +799,7 @@ if HasPlug('tpope_vim-markdown') | " {{{1
 endif
 
 
-if CheckPlug('vim-markdown', 1) | " {{{1
+if HasPlug('vim-markdown') | " {{{1
     " ge: jump follow link
     " gx: open link in browser
 
@@ -863,7 +884,6 @@ if CheckPlug('vim-zettel', 1) | " {{{1
     let g:zettel_default_mappings = 0
     let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading --color=always "
     let g:zettel_fzf_options = ['--exact', '--tiebreak=end']
-    let g:nv_search_paths = ['$HOME/wiki', '$HOME/dotwiki']
 endif
 
 
