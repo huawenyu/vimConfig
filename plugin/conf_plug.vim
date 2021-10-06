@@ -750,10 +750,13 @@ endif
 
 if HasPlug('notational-fzf-vim') | " {{{1
     let g:nv_search_paths = []
+    let g:nv_default_extension = '.md'
+
+    " Load dirs from global config
     if !empty(g:vim_confi_option.fzf_notes)
         for dir in g:vim_confi_option.fzf_notes
             if !empty(glob(dir))
-                add(g:nv_search_paths, dir)
+                call add(g:nv_search_paths, dir)
             endif
         endfor
     endif
@@ -761,7 +764,6 @@ if HasPlug('notational-fzf-vim') | " {{{1
         unlet g:nv_search_paths
     endif
 
-    let g:nv_default_extension = '.md'
 
     " let g:nv_keymap = {
     "                 \ 'ctrl-s': 'split ',
