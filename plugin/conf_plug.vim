@@ -73,7 +73,7 @@ endif
 
 if HasPlug('vim-floaterm') | " {{{1
     Shortcut Wiki(cheat) find current cmd file
-                \ nnoremap H      :call hw#misc#Execute('n', 'cheat')<cr><cr>
+                \ nnoremap <silent> H      :call hw#misc#Execute('n', 'cheat', "Cheat")<cr>
 
     fun! s:compile_run()
         let l:command=':FloatermNew --name=repl --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'. a:filetype
@@ -1467,7 +1467,7 @@ if HasPlug('vim-shortcut') | " {{{1
     "source ~/.config/nvim/bundle/vim-shortcut/plugin/shortcut.vim
     let g:shortcuts_overwrite_warning = 1
     nnoremap <silent> ;;     :Shortcuts<cr>
-    vnoremap <silent> ;;     :Shortcuts<cr>
+    vnoremap <silent> ;;     :<c-u>let g:my_selstr=utils#GetSelected('v') <bar> Shortcuts<cr>
 endif
 
 

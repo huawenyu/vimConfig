@@ -58,3 +58,9 @@ troubleshooting
 	### view by vim command, current map to <leader>el
 	:VlogDisplay \| Messages \| VlogClear
 
+
+## Check who change my option value
+
+	:verbose set tabstop sw softtabstop expandtab ?
+	:verbose map <leader>ee
+
