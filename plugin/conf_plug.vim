@@ -760,10 +760,10 @@ if HasPlug('notational-fzf-vim') | " {{{1
             endif
         endfor
     endif
-    " if empty(g:nv_search_paths)
-    "     unlet g:nv_search_paths
-    " endif
 
+    if empty(g:nv_search_paths)
+        echomsg "Plug:notational-fzf-vim require a wiki directory, like ~/wiki"
+    endif
 
     " let g:nv_keymap = {
     "                 \ 'ctrl-s': 'split ',
