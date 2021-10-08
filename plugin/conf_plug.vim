@@ -60,6 +60,9 @@ endif
 
 
 if HasPlug('presenting.vim') | " {{{1
+    let g:presenting_figlets = 0
+    let g:presenting_font_large = 'doh'
+    let g:presenting_font_small = 'univers'
     Shortcut Text Presenting PPT
 			\ nnoremap <silent> <Space>,,a :PresentingStart<cr>
 endif
