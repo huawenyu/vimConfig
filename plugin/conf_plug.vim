@@ -79,12 +79,12 @@ if HasPlug('vim-floaterm') | " {{{1
                 \ nnoremap <silent> H      :call hw#misc#Execute('n', 'cheat', "Cheat")<cr>
 
     fun! s:compile_run()
-        let l:command=':FloatermNew --name=repl --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'. a:filetype
+        let l:command=':FloatermNew --name=repl --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'..&filetype
         " (&ft=='c' || &ft=='cpp')
         if &ft=='c'
-            let l:command = l:command. printf("  gcc -pthread -lrt -g -finstrument-functions -fms-extensions %s && ./a.out && rm a.out", expand('%'))
+            let l:command = l:command. printf("  gcc -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s", expand('%:r'), expand('%'), expand('%:r'))
         elseif &ft=='cpp'
-            let l:command = l:command. printf("  g++ -pthread -lrt -g -finstrument-functions -fms-extensions %s && ./a.out && rm a.out", expand('%'))
+            let l:command = l:command. printf("  g++ -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s", expand('%:r'), expand('%'), expand('%:r'))
         elseif &ft=='javascript'
             let l:command = l:command. printf("  node %s", expand('%'))
         elseif &ft=='python'
@@ -555,10 +555,11 @@ if HasPlug('fzf-cscope.vim') | " {{{1
 endif
 
 
-if CheckPlug('c-utils.vim', 1) | " {{{1
+if HasPlug('c-utils.vim') | " {{{1
     let g:tlTokenList = ["FIXME @wilson", "TODO @wilson", "XXX @wilson"]
     let g:ctrlsf_mapping = { "next": "n", "prev": "N", }
     let g:utilquickfix_file = $HOME."/.vim/vim.quickfix"
+    let g:c_utils_map = get(g:, 'c_utils_map', 1)
 endif
 
 
@@ -612,11 +613,14 @@ if CheckPlug('neosnippet.vim', 1) | " {{{1
 endif
 
 
-if CheckPlug('w3m.vim', 1) | " {{{1
+if HasPlug('w3m.vim') | " {{{1
     let g:w3m#command = '/usr/bin/w3m'
     let g:w3m#lang = 'en_US'
     let g:w3m#disable_vimproc = 1
     "let g:w3m#disable_default_keymap = 1
+
+    nnoremap <leader>fo     :W3m <c-r>=hw#misc#GetWord('http')<cr><cr>
+    Shortcut! <space>fo     Website W3m Open doc
 endif
 
 

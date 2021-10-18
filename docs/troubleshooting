@@ -2,6 +2,14 @@
 
 # Quickstart
 
+## Check who change/set the map or other
+
+    verbose autocmd filetype markdown
+    verbose map <a-'>
+    verbose set ft?
+
+## debug the plugin by log
+
     " 1. Init: Put these in the head-part of your script file.
     "if !exists("s:init")
     "    let s:init = 1
@@ -63,4 +71,5 @@ troubleshooting
 
 	:verbose set tabstop sw softtabstop expandtab ?
 	:verbose map <leader>ee
+
 
