@@ -118,6 +118,11 @@ elseif HasPlug('vim-basic') | " {{{1
     "
     autocmd FileType vim    nnoremap <buffer> <leader>ee :<c-u>call hw#eval#repl('n')<cr>
     autocmd FileType vim    vnoremap <buffer> <leader>ee :<c-u>call hw#eval#repl('v')<cr>
+
+    autocmd FileType log    nnoremap <buffer> <leader>ee :<c-u>call vimuxscript#CallRegion(1)<cr>
+    Shortcut Vim auto interact script
+			\ nnoremap <silent> ;ee     :<c-u>call vimuxscript#CallRegion(1)<cr>
+
 endif
 
 
@@ -1682,4 +1687,7 @@ if HasPlug('editorconfig-vim') | " {{{1
     let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
 endif
 
+if HasPlug('vim-searchindex') | " {{{1
+    let g:searchindex_line_limit=1000000
+endif
 
