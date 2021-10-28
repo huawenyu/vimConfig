@@ -68,12 +68,6 @@ if HasPlug('presenting.vim') | " {{{1
 endif
 
 
-if HasPlug('vim-floaterm-repl') | " {{{1
-    Shortcut Run Repl inner code fence
-                \ nnoremap <silent> <Space>rr :FloatermRepl<cr>
-endif
-
-
 if HasPlug('vim-floaterm') | " {{{1
     Shortcut Wiki(cheat) find current cmd file
                 \ nnoremap <silent> H      :call hw#misc#Execute('n', 'cheat', "Cheat")<cr>
@@ -106,6 +100,12 @@ if HasPlug('vim-floaterm') | " {{{1
 endif
 
 
+if HasPlug('vim-floaterm-repl') | " {{{1
+    autocmd FileType markdown    nnoremap <buffer> <leader>ee :<c-u>FloatermRepl<cr>
+    Shortcut! <space>ee     Run Repl inner code fence
+endif
+
+
 if HasPlug('vim-evalvim') | " {{{1
     autocmd FileType vim    nmap <buffer> <leader>ee <Plug>(EvalVimLine)
     autocmd FileType vim    vmap <buffer> <leader>ee <Plug>(EvalVim)
@@ -120,9 +120,10 @@ elseif HasPlug('vim-basic') | " {{{1
     autocmd FileType vim    vnoremap <buffer> <leader>ee :<c-u>call hw#eval#repl('v')<cr>
 
     autocmd FileType log    nnoremap <buffer> <leader>ee :<c-u>call vimuxscript#CallRegion(1)<cr>
-    Shortcut Vim auto interact script
-			\ nnoremap <silent> ;ee     :<c-u>call vimuxscript#CallRegion(1)<cr>
-
+    nnoremap <silent> ;ee     :<c-u>call vimuxscript#CallRegion(1)<cr>
+    nnoremap <silent> ;ss     :<c-u>call vimuxscript#Stop()<cr>
+    Shortcut! ;ee     Vim tmux auto interact script
+    Shortcut! ;ss     Vim Stop tmux auto interact script
 endif
 
 
