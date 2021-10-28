@@ -527,7 +527,7 @@ endif
 
 if HasPlug('fzf-cscope.vim') | " {{{1
     let g:fzf_cscope_map = get(g:, 'fzf_cscope_map', 1)
-    let g:fzf_cscope_tag_filter = get(g:, 'fzf_cscope_tag_filter', "daemon/wad/")
+    let g:fzfCscopeFilter = get(g:, 'fzfCscopeFilter', "daemon/wad/")
 
     if g:vim_confi_option.auto_install_tools
         if LINUX()
