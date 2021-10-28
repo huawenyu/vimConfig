@@ -1,0 +1,16 @@
+// vim: set ft=python:
+
+def 'diag sys process pstack <pid>'
+
+init {{{1
+@begin Call Trace:
+@end Detaching from target
+@begin_cmd #----------------------------------
+@begin_cmd <Enter>
+@begin_cmd set listsize 3
+@end_cmd   #==================================
+@end_cmd <Enter>
+@match "^[" => "0xx$xx0il *0x"
+}}}
+
+
