@@ -121,9 +121,9 @@ elseif HasPlug('vim-basic') | " {{{1
 
     autocmd FileType log    nnoremap <buffer> <leader>ee :<c-u>call vimuxscript#CallRegion(1)<cr>
     nnoremap <silent> ;ee     :<c-u>call vimuxscript#CallRegion(1)<cr>
-    nnoremap <silent> ;ss     :<c-u>call vimuxscript#Stop()<cr>
+    "nnoremap <silent> ;ss     :<c-u>call vimuxscript#Stop()<cr>
     Shortcut! ;ee     Vim tmux auto interact script
-    Shortcut! ;ss     Vim Stop tmux auto interact script
+    "Shortcut! ;ss     Vim Stop tmux auto interact script
 endif
 
 
@@ -1691,4 +1691,147 @@ endif
 if HasPlug('vim-searchindex') | " {{{1
     let g:searchindex_line_limit=1000000
 endif
+
+
+" https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L284
+if HasPlug('nvim-cmp') | " {{{1
+set completeopt=menu,menuone,noselect
+
+lua <<EOF
+  -- Setup nvim-cmp.
+  local nvim_lsp = require('lspconfig')
+  local cmp = require'cmp'
+
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+        -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
+      end,
+    },
+    mapping = {
+      ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-y>'] = cmp.config.disable, -- If you want to remove the default `<C-y>` mapping, You can specify `cmp.config.disable` value.
+      ['<C-e>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+      }),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'rg' },
+      { name = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Use buffer source for `/`.
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':'.
+  cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+EOF
+endif
+
+
+if HasPlug('nvim-lspconfig') | " {{{1
+    if HasPlug('fzf-lsp.nvim') | " {{{2
+        lua <<EOF
+        local nvim_lsp = require('lspconfig')
+
+        -- nvim-cmp supports additional completion capabilities
+        local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+        -- Enable the following language servers
+        local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+        for _, lsp in ipairs(servers) do
+            nvim_lsp[lsp].setup {
+                capabilities = capabilities,
+            }
+        end
+EOF
+        nnoremap <silent>        ;fD    :Declarations <cr>
+        nnoremap <silent>        ;fd    :Definitions <cr>
+        nnoremap <silent>        ;fi    :Implementations <cr>
+        nnoremap <silent>        ;fr    :CodeActions <cr>
+        nnoremap <silent>        ;fs    :References <cr>
+        nnoremap <silent>        ;f1    :IncomingCalls <cr>
+        nnoremap <silent>        ;f2    :OutgoingCalls <cr>
+        nnoremap <silent>        ;f3    :Diagnostics <cr>
+        nnoremap <silent>        ;f4    :DiagnosticsAll <cr>
+
+    else
+        lua <<EOF
+        local nvim_lsp = require('lspconfig')
+        local on_attach = function(_, bufnr)
+            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+            local opts = { noremap = true, silent = true }
+            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fH', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fs', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>ca', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
+            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fw', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fn', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fp', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
+
+            vim.api.nvim_set_keymap('n', ';fD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+            vim.api.nvim_set_keymap('n', ';fd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+            vim.api.nvim_set_keymap('n', ';fh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+            vim.api.nvim_set_keymap('n', ';fH', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+            vim.api.nvim_set_keymap('n', ';fi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+            vim.api.nvim_set_keymap('n', ';fr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+            vim.api.nvim_set_keymap('n', ';fs', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+            vim.api.nvim_set_keymap('n', ';fn', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+            vim.api.nvim_set_keymap('n', ';fp', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+            vim.api.nvim_set_keymap('n', ';fq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+            vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
+        end
+        -- nvim-cmp supports additional completion capabilities
+        local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+        -- Enable the following language servers
+        local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+        for _, lsp in ipairs(servers) do
+            nvim_lsp[lsp].setup {
+                on_attach = on_attach,
+                capabilities = capabilities,
+            }
+        end
+EOF
+    endif
+endif
+
 
