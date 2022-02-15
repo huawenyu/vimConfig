@@ -1693,6 +1693,18 @@ if HasPlug('vim-searchindex') | " {{{1
 endif
 
 
+if HasPlug('any-jump.vim') | " {{{1
+    let g:any_jump_disable_default_keybindings = 1
+    nnoremap ;jj :AnyJump<CR>
+    xnoremap ;jj :AnyJumpVisual<CR>
+    nnoremap ;jb :AnyJumpBack<CR>
+    nnoremap ;jl :AnyJumpLastResults<CR>
+
+    " Prefered search engine: rg or ag
+    let g:any_jump_search_prefered_engine = 'ag'
+endif
+
+
 " https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L284
 if HasPlug('nvim-cmp') | " {{{1
 set completeopt=menu,menuone,noselect
@@ -1751,6 +1763,18 @@ lua <<EOF
   })
 
 EOF
+endif
+
+
+if HasPlug('vim-signify') | " {{{1
+    " Diff by commit SHA: 76748de92fa
+    let g:signify_git_sha = $GitSHA
+
+    if len(g:signify_git_sha) > 8
+        let g:signify_vcs_cmds = {
+                \ 'git': 'git diff '.. g:signify_git_sha.. '^ '..g:signify_git_sha.. ' --no-color --no-ext-diff -U0 -- %f'
+                \ }
+    endif
 endif
 
 
