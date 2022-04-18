@@ -78,9 +78,6 @@ endif
 
 
 if HasPlug('vim-floaterm') | " {{{1
-    Shortcut Wiki(cheat) find current cmd file
-                \ nnoremap <silent> H      :call hw#misc#Execute('n', 'cheat', "Cheat")<cr>
-
     fun! s:compile_run()
         let l:command=':FloatermNew --name=repl --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'..&filetype
         " (&ft=='c' || &ft=='cpp')
@@ -92,6 +89,8 @@ if HasPlug('vim-floaterm') | " {{{1
             let l:command = l:command. printf("  node %s", expand('%'))
         elseif &ft=='python'
             let l:command = l:command. printf("  python %s", expand('%'))
+        elseif &ft=='tcl'
+            let l:command = l:command. printf("  expect %s", expand('%'))
         else
             echomsg "Not support filetype, but can reference 'SingleCompile' to append it."
             return
@@ -537,6 +536,10 @@ endif
 if HasPlug('fzf-cscope.vim') | " {{{1
     let g:fzf_cscope_map = get(g:, 'fzf_cscope_map', 1)
     let g:fzfCscopeFilter = get(g:, 'fzfCscopeFilter', "daemon/wad/")
+
+    "nnoremap <silent> H      :call hw#misc#Execute('n', 'cheat', "Cheat")<cr>
+    Shortcut Wiki(cheat) find current cmd file
+                \ nnoremap <silent> H      :Cheat<cr>
 
     if g:vim_confi_option.auto_install_tools
         if LINUX()
@@ -1867,4 +1870,41 @@ EOF
     endif
 endif
 
+
+if HasPlug('cheatsheet.nvim') | " {{{1
+    if HasPlug('telescope.nvim') | " {{{2
+    lua <<EOF
+    require("cheatsheet").setup({
+        -- Whether to show bundled cheatsheets
+
+        -- For generic cheatsheets like default, unicode, nerd-fonts, etc
+        -- bundled_cheatsheets = {
+        --     enabled = {},
+        --     disabled = {},
+        -- },
+        bundled_cheatsheets = true,
+
+        -- For plugin specific cheatsheets
+        -- bundled_plugin_cheatsheets = {
+        --     enabled = {},
+        --     disabled = {},
+        -- }
+        bundled_plugin_cheatsheets = true,
+
+        -- For bundled plugin cheatsheets, do not show a sheet if you
+        -- don't have the plugin installed (searches runtimepath for
+        -- same directory name)
+        include_only_installed_plugins = true,
+
+        -- Key mappings bound inside the telescope window
+        telescope_mappings = {
+            ['<CR>'] = require('cheatsheet.telescope.actions').select_or_fill_commandline,
+            ['<A-CR>'] = require('cheatsheet.telescope.actions').select_or_execute,
+            ['<C-Y>'] = require('cheatsheet.telescope.actions').copy_cheat_value,
+            ['<C-E>'] = require('cheatsheet.telescope.actions').edit_user_cheatsheet,
+        }
+    })
+EOF
+    endif
+endif
 
