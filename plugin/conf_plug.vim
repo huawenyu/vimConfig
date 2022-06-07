@@ -1799,7 +1799,8 @@ if HasPlug('nvim-lspconfig') | " {{{1
         local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
         -- Enable the following language servers
-        local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+        -- local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+        local servers = { 'clangd', 'rust_analyzer' }
         for _, lsp in ipairs(servers) do
             nvim_lsp[lsp].setup {
                 capabilities = capabilities,
@@ -1859,7 +1860,8 @@ EOF
         local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
         -- Enable the following language servers
-        local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+        -- local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+        local servers = { 'clangd', 'rust_analyzer' }
         for _, lsp in ipairs(servers) do
             nvim_lsp[lsp].setup {
                 on_attach = on_attach,
@@ -1907,4 +1909,13 @@ if HasPlug('cheatsheet.nvim') | " {{{1
 EOF
     endif
 endif
+
+
+if HasPlug('cheatsheet.nvim') | " {{{1
+    let g:coq_settings = {
+                \ 'auto_start': 'shut-up',
+                \ 'display.icons.mode': 'none',
+                \}
+endif
+
 
