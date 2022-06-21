@@ -1649,57 +1649,11 @@ if HasPlug('auto-session') | " {{{1
     "let g:auto_session_root_dir = getcwd()
 endif
 
-if HasPlug('cyclist.vim') | " {{{1
-    "
-    " set listchars=tab:→\ ,trail:·,precedes:«,extends:»,eol:¶
-    " set listchars=tab:→\ ,trail:␣,extends:…,eol:⏎
-    " set listchars=tab:‣\ ,trail:·,precedes:«,extends:»,eol:¬
-    " set listchars=tab:␋\ ,trail:␠,precedes:«,extends:»,eol:␤
-    " set listchars=tab:>-,trail:.,precedes:<,extends:>,eol:$
 
-    silent! call cyclist#set_tab('default', '  ')
-    "silent! call cyclist#set_trail('default', '░')
-    silent!call cyclist#set_trail('default', '~')
-    silent!call cyclist#set_precedes('default', '☚')
-    silent!call cyclist#set_extends('default', '☛')
-    silent!call cyclist#set_eol('default', '')
-
-    silent! call cyclist#add_listchar_option_set('code', {
-        \ 'tab': '» ',
-        \ 'trail': '~',
-        \ 'extends': '<',
-        \ 'precedes': '>',
-        \ 'conceal': '┊',
-        \ 'nbsp': '.',
-        \ })
-    silent! call cyclist#add_listchar_option_set('little', {
-        \ 'tab': '  ',
-        \ })
-    silent! call cyclist#add_listchar_option_set('limited', {
-        \ 'eol': '↲',
-        \ 'tab': '» ',
-        \ 'trail': '·',
-        \ 'extends': '<',
-        \ 'precedes': '>',
-        \ 'conceal': '┊',
-        \ 'nbsp': '␣',
-        \ })
-  silent! call cyclist#add_listchar_option_set('busy', {
-        \ 'eol': '↲',
-        \ 'tab': '»·',
-        \ 'space': '␣',
-        \ 'trail': '-',
-        \ 'extends': '☛',
-        \ 'precedes': '☚',
-        \ 'conceal': '┊',
-        \ 'nbsp': '☠',
-        \ })
-
-  augroup ChangeListChars
-      au!
-      au FileType c,cpp,c++,java,c+,javascript :silent! call cyclist#activate_listchars('code')
-  augroup END
+if HasPlug('vim-basic') | " {{{1
+    noremap <F11> <Plug>(ToggleListchars)
 endif
+
 
 if HasPlug('vim-diff-enhanced') | " {{{1
     set diffopt+=internal,algorithm:patience
@@ -1976,4 +1930,10 @@ if HasPlug('cheatsheet.nvim') | " {{{1
                 \}
 endif
 
+if HasPlug('which-key.nvim') | " {{{1
+    lua <<EOF
+    require("which-key").setup({
+    })
+EOF
+endif
 

@@ -9,8 +9,8 @@
 "}}}
 
 " ColorTheme {{{2
-    Plug 'vim-scripts/holokai', Cond(DenyPlug('seoul256.vim') && Mode(['theme',]))
-    Plug 'junegunn/seoul256.vim', Cond(DenyPlug('holokai') && Mode(['theme',]))
+    Plug 'vim-scripts/holokai', Cond(IfNoPlug('seoul256.vim') && Mode(['theme',]))
+    Plug 'junegunn/seoul256.vim', Cond(IfNoPlug('holokai') && Mode(['theme',]))
     Plug 'NLKNguyen/papercolor-theme', Cond(Mode(['theme',]))  | " set background=light;colorscheme PaperColor
     "Plug 'tomasr/molokai', Cond(Mode(['theme',]))
     "Plug 'darkspectrum', Cond(Mode(['theme',]))
@@ -235,8 +235,8 @@
 " Facade {{{2
     Plug 'huawenyu/startscreen.vim', Cond(Mode(['editor',]) && len(g:vim_confi_option.start_page))
     Plug 'millermedeiros/vim-statline'      | " Simple, not annoy to distract our focus
-    Plug 'Raimondi/delimitMate', Cond(DenyPlug('auto-pairs') && Mode(['editor',]))
-    Plug 'jiangmiao/auto-pairs', Cond(DenyPlug('delimitMate') && Mode(['editor',]))   | " Not work if `set paste`
+    Plug 'Raimondi/delimitMate', Cond(IfNoPlug('auto-pairs') && Mode(['editor',]))
+    Plug 'jiangmiao/auto-pairs', Cond(IfNoPlug('delimitMate') && Mode(['editor',]))   | " Not work if `set paste`
     Plug 'huawenyu/vim-linux-coding-style', Cond(Mode(['coder',]))
     Plug 'paroxayte/vwm.vim', Cond(Mode(['editor',]))    | " vim windows management
     Plug 'junegunn/rainbow_parentheses.vim', Cond(Mode(['editor',]))
@@ -330,8 +330,8 @@
                 "Plug 'neoclide/coc-rls', Cond(Mode(['coder',]) && LINUX())
 
             "Plug 'chengzeyi/fzf-preview.vim', Cond(Mode(['coder',]) && Mode(['advance',]))
-            Plug 'liuchengxu/vista.vim', Cond(DenyPlug('tagbar') && Mode(['coder',]))
-            Plug 'majutsushi/tagbar', Cond(DenyPlug('vista.vim') && Mode(['coder',]))
+            Plug 'liuchengxu/vista.vim', Cond(IfNoPlug('tagbar') && Mode(['coder',]))
+            Plug 'majutsushi/tagbar', Cond(IfNoPlug('vista.vim') && Mode(['coder',]))
             Plug 'vim-scripts/taglist.vim', Cond(NeedPlug('tagbar') && Mode(['coder',]) && LINUX())
             "Plug 'tomtom/ttags_vim', Cond(Mode(['coder',]))
         "}}}
@@ -658,8 +658,8 @@
         " Depend
         "    cargo install git-delta
         "Plug 'puremourning/vimspector', Cond(HasEnv($debugger) && Mode(['coder',]))   | " Best debugger for vim/neovim
-        "Plug 'huawenyu/vimgdb', Cond(DenyPlug('vimspector') && Mode(['coder',]) && has('nvim'), { 'rtp': 'nvim' })    | " Base on Tmux + neovim, don't want struggle with neovim.terminal, layout by Tmux
-        Plug 'huawenyu/vimgdb', Cond(DenyPlug('vimspector') && Mode(['coder',]) && has('nvim'))    | " Base on Tmux + neovim, don't want struggle with neovim.terminal, layout by Tmux
+        "Plug 'huawenyu/vimgdb', Cond(IfNoPlug('vimspector') && Mode(['coder',]) && has('nvim'), { 'rtp': 'nvim' })    | " Base on Tmux + neovim, don't want struggle with neovim.terminal, layout by Tmux
+        Plug 'huawenyu/vimgdb', Cond(IfNoPlug('vimspector') && Mode(['coder',]) && has('nvim'))    | " Base on Tmux + neovim, don't want struggle with neovim.terminal, layout by Tmux
 
         "Plug 'cpiger/NeoDebug', Cond(Mode(['coder',]) && has('nvim'), {'on': 'NeoDebug'})
         "Plug 'idanarye/vim-vebugger', Cond(Mode(['coder',]))
