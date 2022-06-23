@@ -1530,19 +1530,19 @@ if HasPlug('vwm.vim') | " {{{1
 
     " Vista attempts to move itself, the sleep prevents a race.
     let s:dev_panel = {
-          \  'name': 'dev_panel',
-          \  'opnAftr': ['edit'],
-          \  'right':
-          \  {
-          \    'v_sz': 33,
-          \    'init': ['NERDTree'],
-          \    'bot':
-          \    {
-          \      'init': ['Vista', 'sleep 50ms']
-          \    }
+          \  'default': {
+          \      'name': 'default',
+          \      'opnAftr': ['edit'],
+          \      'right': {
+          \          'v_sz': 33,
+          \          'init': ['NERDTree'],
+          \          'bot': {
+          \              'init': ['Vista', 'sleep 50ms']
+          \          }
+          \      }
           \  }
           \}
-    let g:vwm#layouts = [s:dev_panel]
+
 
     "Make sure the right tab is closed on vimdiff toggle
     fun! s:open_vimdiff()
@@ -1557,64 +1557,78 @@ if HasPlug('vwm.vim') | " {{{1
     endfun
 
     let s:vimdiff = {
-          \  'name': 'vimdiff',
-          \  'opnBfr': [function('s:open_vimdiff')],
-          \  'clsAftr': [function('s:close_vimdiff')],
-          \  'set_all': ['nobl', 'bh=wipe', 'nomodified'],
-          \  'init': ['normal imerge'],
-          \  'top':
-          \  {
-          \    'init': ['normal ibase'],
-          \    'left':
-          \    {
-          \      'init': ['normal ilocal']
-          \    },
-          \    'right':
-          \    {
-          \      'init': ['normal iremote']
-          \    }
+          \  'vimdiff': {
+          \      'name': 'vimdiff',
+          \      'opnBfr': [function('s:open_vimdiff')],
+          \      'clsAftr': [function('s:close_vimdiff')],
+          \      'set_all': ['nobl', 'bh=wipe', 'nomodified'],
+          \      'init': ['normal imerge'],
+          \      'top': {
+          \          'init': ['normal ibase'],
+          \          'left': {
+          \              'init': ['normal ilocal']
+          \          },
+          \          'right': {
+          \              'init': ['normal iremote']
+          \          }
+          \      }
           \  }
           \}
 
     let s:frame = {
-          \  'name': 'frame',
-          \  'top': {
-          \    'left': {
-          \      'init': []
-          \    },
-          \    'right': {
-          \      'init': []
-          \    }
-          \  },
-          \  'bot': {
-          \    'left': {
-          \      'init': []
-          \    },
-          \    'right': {
-          \      'init': []
-          \    }
-          \  },
-          \  'left': {
-          \    'init' :[]
-          \  },
-          \  'right': {
-          \    'init' :[]
+          \  'frame': {
+          \      'name': 'frame',
+          \      'top': {
+          \          'init': ['norm itop'],
+          \          'left': {
+          \              'init': ['norm itop-left']
+          \          },
+          \          'right': {
+          \              'init': ['norm itop-right']
+          \          }
+          \      },
+          \      'bot': {
+          \          'init': ['norm ibot'],
+          \          'left': {
+          \              'init': ['norm ibot-left']
+          \          },
+          \          'right': {
+          \              'init': ['norm ibot-right']
+          \          }
+          \      },
+          \      'left': {
+          \          'init' :['norm ileft']
+          \      },
+          \      'right': {
+          \          'init' :['norm iright']
+          \      }
           \  }
           \}
 
     let s:bot_panel = {
-          \    'name': 'bot_panel',
-          \    'bot':
-          \    {
-          \      'h_sz': 12,
-          \      'left':
-          \      {
-          \        'init': []
+          \  'bot_panel': {
+          \      'name': 'bot_panel',
+          \      'bot': {
+          \          'h_sz': 12,
+          \          'left': {
+          \              'init': []
+          \          }
           \      }
-          \    }
           \  }
+          \}
 
-    let g:vwm#layouts += [ s:vimdiff, s:frame, s:bot_panel ]
+    if !exists('g:vwm#layouts')
+        let g:vwm#layouts = {}
+    endif
+
+    let g:vwm#layouts = hw#misc#merge(g:vwm#layouts, s:dev_panel)
+    let g:vwm#layouts = hw#misc#merge(g:vwm#layouts, s:vimdiff)
+    let g:vwm#layouts = hw#misc#merge(g:vwm#layouts, s:frame)
+    let g:vwm#layouts = hw#misc#merge(g:vwm#layouts, s:bot_panel)
+
+    if exists('g:vwm#active')
+        VwmReinit
+    endif
 endif
 
 
