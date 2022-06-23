@@ -1893,6 +1893,10 @@ EOF
         vim.api.nvim_set_keymap('n', ';fp', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
         vim.api.nvim_set_keymap('n', ';fq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
+        -- Disable diagnostics globally
+        vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
+        -- vim.lsp.callbacks["textDocument/publishDiagnostics"] = function() end
+
         vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 EOF
     endif
