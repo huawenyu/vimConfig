@@ -18,6 +18,7 @@ More cool searching tricks:
     g*              - search for partial word under cursor (repeat with n)
     ctrl-o, ctrl-i  - go through jump locations
     [I              - show lines with matching word under cursor
+    :%s///gn        - Count all occurrences of the last used search pattern.
 
 Search and quickfix:
     :vimgrep /an error/ *.c
@@ -29,3 +30,10 @@ Search and replace...
     :%s/search_for_this/replace_with_this/    - search whole file and replace
     :%s/search_for_this/replace_with_this/c   - confirm each replace
 
+Maps:
+    " Count all occurrences of the last used search pattern.
+    nnoremap  ;#   :<c-u>%s///gn<cr>
+    " Show directly all occurrences of the last used search pattern.
+    nnoremap  ;^   :<c-u>g//p<cr>
+    " Populate all occurrences of the last used search pattern into quickfix
+    nnoremap  ;*   :cexpr []<cr> <bar>:<c-u>g//caddexpr expand("%") . ":" . line(".") . ":" . getline(".")<cr> <bar>:copen<cr>
