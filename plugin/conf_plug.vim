@@ -392,6 +392,7 @@ if CheckPlug('tagbar', 1) | " {{{1
     "let NERDTreeWinPos = 'left'
     let g:tagbar_autofocus = 0
     let g:tagbar_sort = 0
+    let g:tagbar_position = 'left'
 endif
 
 
