@@ -128,6 +128,8 @@ elseif HasPlug('vim-basic') | " {{{1
     autocmd FileType vim    vnoremap <buffer> <leader>ee :<c-u>call hw#eval#repl('v')<cr>
 
     autocmd FileType log    nnoremap <buffer> <leader>ee :<c-u>call vimuxscript#CallRegion(1)<cr>
+    autocmd FileType log    nnoremap <buffer> <leader>ee :<c-u>call vimuxscript#CallRegion(1)<cr>
+
     nnoremap <silent> ;ee     :<c-u>call vimuxscript#CallRegion(1)<cr>
     "nnoremap <silent> ;ss     :<c-u>call vimuxscript#Stop()<cr>
     Shortcut! ;ee     Vim tmux auto interact script
