@@ -126,8 +126,6 @@ elseif HasPlug('vim-basic') | " {{{1
     "
     autocmd FileType vim    nnoremap <buffer> <leader>ee :<c-u>call hw#eval#repl('n')<cr>
     autocmd FileType vim    vnoremap <buffer> <leader>ee :<c-u>call hw#eval#repl('v')<cr>
-
-    autocmd FileType log    nnoremap <buffer> <leader>ee :<c-u>call vimuxscript#CallRegion(1)<cr>
     autocmd FileType log    nnoremap <buffer> <leader>ee :<c-u>call vimuxscript#CallRegion(1)<cr>
 
     nnoremap <silent> ;ee     :<c-u>call vimuxscript#CallRegion(1)<cr>
