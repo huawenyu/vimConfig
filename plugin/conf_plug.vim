@@ -49,7 +49,7 @@ endif
 if CheckPlug('vim-doge', 1) | " {{{1
     let g:doge_enable_mappings = 0
     let g:doge_mapping = '<leader>vh'
-    Shortcut! <space>vh    Document Generate
+    silent! Shortcut! <space>vh    Document Generate
 endif
 
 
@@ -72,7 +72,7 @@ if HasPlug('presenting.vim') | " {{{1
     let g:presenting_figlets = 0
     let g:presenting_font_large = 'doh'
     let g:presenting_font_small = 'univers'
-    Shortcut Text Presenting PPT
+    silent! Shortcut Text Presenting PPT
 			\ nnoremap <silent> <Space>,,a :PresentingStart<cr>
 endif
 
@@ -103,14 +103,14 @@ if HasPlug('vim-floaterm') | " {{{1
     endfun
 
     "autocmd FileType * nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run()<cr>
-    Shortcut Repl run me
+    silent! Shortcut Repl run me
                 \ nnoremap <leader>ee      :w<esc>:call <sid>compile_run()<cr>
 endif
 
 
 if HasPlug('vim-floaterm-repl') | " {{{1
     autocmd FileType markdown    nnoremap <buffer> <leader>ee :<c-u>FloatermRepl<cr>
-    Shortcut! <space>ee     Run Repl inner code fence
+    silent! Shortcut! <space>ee     Run Repl inner code fence
 endif
 
 
@@ -130,14 +130,14 @@ elseif HasPlug('vim-basic') | " {{{1
 
     nnoremap <silent> ;ee     :<c-u>call vimuxscript#CallRegion(1)<cr>
     "nnoremap <silent> ;ss     :<c-u>call vimuxscript#Stop()<cr>
-    Shortcut! ;ee     Vim tmux auto interact script
-    "Shortcut! ;ss     Vim Stop tmux auto interact script
+    silent! Shortcut! ;ee     Vim tmux auto interact script
+    "silent! Shortcut! ;ss     Vim Stop tmux auto interact script
 endif
 
 
 " Pencil draw
 if HasPlug('venn.nvim') | " {{{1
-    Shortcut Text draw pencil box
+    silent! Shortcut Text draw pencil box
 			\ nnoremap <silent> <Space>,,b :VennToggleMap<cr>
 
     " Troubleshooting:
@@ -539,7 +539,7 @@ if HasPlug('fzf-cscope.vim') | " {{{1
     let g:fzfCscopeFilter = get(g:, 'fzfCscopeFilter', "daemon/wad/")
 
     "nnoremap <silent> H      :call hw#misc#Execute('n', 'cheat', "Cheat")<cr>
-    Shortcut Wiki(cheat) find current cmd file
+    silent! Shortcut Wiki(cheat) find current cmd file
                 \ nnoremap <silent> H      :Cheat<cr>
 
     if g:vim_confi_option.auto_install_tools
@@ -639,7 +639,7 @@ if HasPlug('w3m.vim') | " {{{1
     "let g:w3m#disable_default_keymap = 1
 
     nnoremap <leader>fo     :W3m <c-r>=hw#misc#GetWord('http')<cr><cr>
-    Shortcut! <space>fo     Website W3m Open doc
+    silent! Shortcut! <space>fo     Website W3m Open doc
 endif
 
 
@@ -770,7 +770,7 @@ endif
 
 
 if HasPlug('vim-tldr') | " {{{1
-    Shortcut Help another Man tldr ':TldrUpdateDocs'
+    silent! Shortcut Help another Man tldr ':TldrUpdateDocs'
 			\ nnoremap <Space>,,g      :Tldr<Space>
 endif
 
@@ -799,7 +799,7 @@ if HasPlug('notational-fzf-vim') | " {{{1
     "                 \ })
     " let g:nv_create_note_key = 'ctrl-x'
 
-    Shortcut Wiki(all) search full text
+    silent! Shortcut Wiki(all) search full text
 			\ nnoremap <Space>,,h      :NV<Space>
 endif
 
@@ -1502,7 +1502,7 @@ if CheckPlug('nvim-libmodal', 1) | " {{{1
 endif
 
 if HasPlug('vim-shortcut') | " {{{1
-    " Shortcut! keys description
+    " silent! Shortcut! keys description
     " Must source it directly to make it works
     "source ~/.config/nvim/bundle/vim-shortcut/plugin/shortcut.vim
     let g:shortcuts_overwrite_warning = 1
