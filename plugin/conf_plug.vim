@@ -46,13 +46,6 @@ if CheckPlug('vcscommand.vim', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-doge', 1) | " {{{1
-    let g:doge_enable_mappings = 0
-    let g:doge_mapping = '<leader>vh'
-    silent! Shortcut! <space>vh    Document Generate
-endif
-
-
 if HasPlug('goyo.vim') | " {{{1
     let g:goyo_width = 120
     let g:goyo_height = 20
@@ -72,8 +65,7 @@ if HasPlug('presenting.vim') | " {{{1
     let g:presenting_figlets = 0
     let g:presenting_font_large = 'doh'
     let g:presenting_font_small = 'univers'
-    silent! Shortcut Text Presenting PPT
-			\ nnoremap <silent> <Space>,,a :PresentingStart<cr>
+    nnoremap <silent>   ;vP     :"(mode)Presenting PPT      "<c-U>PresentingStart<cr>
 endif
 
 
@@ -103,14 +95,12 @@ if HasPlug('vim-floaterm') | " {{{1
     endfun
 
     "autocmd FileType * nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run()<cr>
-    silent! Shortcut Repl run me
-                \ nnoremap <leader>ee      :w<esc>:call <sid>compile_run()<cr>
+    nnoremap <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run()<cr>
 endif
 
 
 if HasPlug('vim-floaterm-repl') | " {{{1
-    autocmd FileType markdown    nnoremap <buffer> <leader>ee :<c-u>FloatermRepl<cr>
-    silent! Shortcut! <space>ee     Run Repl inner code fence
+    autocmd FileType markdown    nnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>FloatermRepl<cr>
 endif
 
 
@@ -124,21 +114,18 @@ elseif HasPlug('vim-basic') | " {{{1
     " Don't why the this map cause VimL execute '10new' error, and VimL get Select not correct
     "autocmd FileType vim    vmap <buffer> <leader>ee <Plug>(EvalVim)
     "
-    autocmd FileType vim    nnoremap <buffer> <leader>ee :<c-u>call hw#eval#repl('n')<cr>
-    autocmd FileType vim    vnoremap <buffer> <leader>ee :<c-u>call hw#eval#repl('v')<cr>
-    autocmd FileType log    nnoremap <buffer> <leader>ee :<c-u>call vimuxscript#CallRegion(1)<cr>
+    autocmd FileType vim    nnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call hw#eval#repl('n')<cr>
+    autocmd FileType vim    vnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call hw#eval#repl('v')<cr>
+    autocmd FileType log    nnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call vimuxscript#CallRegion(1)<cr>
 
-    nnoremap <silent> ;ee     :<c-u>call vimuxscript#CallRegion(1)<cr>
-    "nnoremap <silent> ;ss     :<c-u>call vimuxscript#Stop()<cr>
-    silent! Shortcut! ;ee     Vim tmux auto interact script
-    "silent! Shortcut! ;ss     Vim Stop tmux auto interact script
+    nnoremap <silent> ;ee     :"(repl)Run me        "<c-U>call vimuxscript#CallRegion(1)<cr>
+    "nnoremap <silent> ;ss     :"(repl)Run me        "<c-U>call vimuxscript#Stop()<cr>
 endif
 
 
 " Pencil draw
 if HasPlug('venn.nvim') | " {{{1
-    silent! Shortcut Text draw pencil box
-			\ nnoremap <silent> <Space>,,b :VennToggleMap<cr>
+    nnoremap <silent>   ;vb     :"(mode)Draw pencil box     "<c-U>VennToggleMap<cr>
 
     " Troubleshooting:
     "   let g:venn_debug = 1
@@ -539,7 +526,7 @@ if HasPlug('fzf-cscope.vim') | " {{{1
     let g:fzfCscopeFilter = get(g:, 'fzfCscopeFilter', "daemon/wad/")
 
     "nnoremap <silent> H      :call hw#misc#Execute('n', 'cheat', "Cheat")<cr>
-    silent! Shortcut Wiki(cheat) find current cmd file
+    silent! Shortcut [vim.config] Help/Usage from conf.'fzf_files'
                 \ nnoremap <silent> H      :Cheat<cr>
 
     if g:vim_confi_option.auto_install_tools
@@ -638,8 +625,7 @@ if HasPlug('w3m.vim') | " {{{1
     let g:w3m#disable_vimproc = 1
     "let g:w3m#disable_default_keymap = 1
 
-    nnoremap <leader>fo     :W3m <c-r>=hw#misc#GetWord('http')<cr><cr>
-    silent! Shortcut! <space>fo     Website W3m Open doc
+    nnoremap <leader>fo     :"(tool)WebBrowser terminal       "<c-U>W3m <c-r>=hw#misc#GetWord('http')<cr><cr>
 endif
 
 
@@ -770,8 +756,7 @@ endif
 
 
 if HasPlug('vim-tldr') | " {{{1
-    silent! Shortcut Help another Man tldr ':TldrUpdateDocs'
-			\ nnoremap <Space>,,g      :Tldr<Space>
+    nnoremap    <Space>vm      :"(man)Another Man tldr ':TldrUpdateDocs'    "<c-U>Tldr<Space>
 endif
 
 
@@ -799,8 +784,7 @@ if HasPlug('notational-fzf-vim') | " {{{1
     "                 \ })
     " let g:nv_create_note_key = 'ctrl-x'
 
-    silent! Shortcut Wiki(all) search full text
-			\ nnoremap <Space>,,h      :NV<Space>
+    nnoremap    <Space>vw      :"(man)Wiki search all text    "<c-U>NV<Space>
 endif
 
 
@@ -1385,18 +1369,20 @@ if CheckPlug('fzf.vim', 1) | " {{{1
       \   <bang>0)
 
 
-    "" Send results to quickfix list from any fzf command
+    ""https://github.com/junegunn/fzf.vim/issues/185
+    ""CTRL-A CTRL-Q to select all and build quickfix list
     "function! s:build_quickfix_list(lines)
-    "    call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-    "    copen
-    "    cc
+    "  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+    "  copen
+    "  cc
     "endfunction
-
+    "
     "let g:fzf_action = {
-    "  \ 'ctrl-s': function('s:build_quickfix_list'),
+    "  \ 'ctrl-q': function('s:build_quickfix_list'),
     "  \ 'ctrl-t': 'tab split',
+    "  \ 'ctrl-x': 'split',
     "  \ 'ctrl-v': 'vsplit' }
-
+    "
     "let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
 endif
 
@@ -1774,6 +1760,8 @@ endif
 
 
 if HasPlug('nvim-lspconfig') | " {{{1
+    silent! Shortcut!   ;f      [vim.config](lsp)Find/fzf, sink-to-quickfix <c-q><cr>: Symbol, References, Caller, Callee, Diagnostics
+
     if HasPlug('fzf-lsp.nvim') | " {{{2
         lua <<EOF
         local nvim_lsp = require('lspconfig')
@@ -1861,7 +1849,7 @@ EOF
         -- require 'lspsaga'.init_lsp_saga()
 
         -- Plug 'ojroques/nvim-lspfuzzy'
-        -- require('lspfuzzy').setup{}
+        require('lspfuzzy').setup{}
 
         local opts = { noremap = true, silent = true }
         -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -1883,16 +1871,16 @@ EOF
         -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
         -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
 
-        vim.api.nvim_set_keymap('n', ';fD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-        vim.api.nvim_set_keymap('n', ';fd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-        vim.api.nvim_set_keymap('n', ';fh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-        vim.api.nvim_set_keymap('n', ';fH', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-        vim.api.nvim_set_keymap('n', ';fi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-        vim.api.nvim_set_keymap('n', ';fr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-        vim.api.nvim_set_keymap('n', ';fs', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-        vim.api.nvim_set_keymap('n', ';fn', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-        vim.api.nvim_set_keymap('n', ';fp', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-        vim.api.nvim_set_keymap('n', ';fq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+        opts.desc = "(lsp)Goto Declaration";     vim.api.nvim_set_keymap('n', ';fD', '<cmd>lua vim.lsp.buf.declaration()<CR>',        opts)
+        opts.desc = "(lsp)Goto Definition";      vim.api.nvim_set_keymap('n', ';fd', '<cmd>lua vim.lsp.buf.definition()<CR>',         opts)
+        opts.desc = "(lsp)Goto Implement";       vim.api.nvim_set_keymap('n', ';fi', '<cmd>lua vim.lsp.buf.implementation()<CR>',     opts)
+        opts.desc = "(lsp)Show Info";            vim.api.nvim_set_keymap('n', ';fh', '<cmd>lua vim.lsp.buf.hover()<CR>',              opts)
+        opts.desc = "(lsp)Show Signature";       vim.api.nvim_set_keymap('n', ';fH', '<cmd>lua vim.lsp.buf.signature_help()<CR>',     opts)
+        opts.desc = "(lsp)Refactor rename)";     vim.api.nvim_set_keymap('n', ';fr', '<cmd>lua vim.lsp.buf.rename()<CR>',             opts)
+        opts.desc = "(lsp)References";           vim.api.nvim_set_keymap('n', ';fs', '<cmd>lua vim.lsp.buf.references()<CR>',         opts)
+        opts.desc = "(lsp)Diag prev";            vim.api.nvim_set_keymap('n', ';fn', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>',   opts)
+        opts.desc = "(lsp)Diag next";            vim.api.nvim_set_keymap('n', ';fp', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>',   opts)
+        opts.desc = "(lsp)Diag sink local list"; vim.api.nvim_set_keymap('n', ';fq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
         -- Disable diagnostics globally
         vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
@@ -1949,10 +1937,35 @@ if HasPlug('cheatsheet.nvim') | " {{{1
                 \}
 endif
 
+
 if HasPlug('which-key.nvim') | " {{{1
-    lua <<EOF
-    require("which-key").setup({
-    })
+    lua << EOF
+    require("which-key").setup {
+        key_labels = {
+            -- override the label used to display some keys. It doesn't effect WK in any other way.
+            -- For example:
+            -- ["<space>"] = "SPC",
+            -- ["<cr>"] = "↲",
+            -- ["<tab>"] = "TAB",
+            -- ["<C-U>"] = "┊",
+            },
+        icons = {
+            breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
+            separator = "░", -- symbol used between a key and it's label
+            group = "▶", -- symbol prepended to a group
+            },
+        popup_mappings = {
+            -- scroll_down = '<c-n>', -- binding to scroll down inside the popup
+            -- scroll_up = '<c-p>', -- binding to scroll up inside the popup
+            },
+        layout = {
+            height = { min = 4, max = 25 }, -- min and max height of the columns
+            width = { min = 20, max = 40 }, -- min and max width of the columns
+            spacing = 4, -- spacing between columns
+            align = "left", -- align columns left, center or right
+            },
+        }
 EOF
 endif
+
 
