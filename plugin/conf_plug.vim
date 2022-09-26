@@ -16,7 +16,7 @@ if g:vim_confi_option.auto_install_plugs
 endif
 
 
-if CheckPlug('syntastic', 1) | " {{{1
+if HasPlug('syntastic') | " {{{1
     "set statusline+=%#warningmsg#
     "set statusline+=%{SyntasticStatuslineFlag()}
     "set statusline+=%*
@@ -31,17 +31,24 @@ if CheckPlug('syntastic', 1) | " {{{1
 endif
 
 
-if CheckPlug('ctrlp.vim', 1) | " {{{1
+if HasPlug('vim-unimpaired') | " {{{1
+    silent! Shortcut!   [o      [vim-unimpaired](option) <[o*> Enable option; <]o*> Disable option: number, cursorline, copy-mode, tabstop
+    let g:unimpaired_listchar = 0
+    noremap <F11> <Plug>(SwitchListchars)
+endif
+
+
+if HasPlug('ctrlp.vim') | " {{{1
     if exists("g:ctrl_user_command") | unlet g:ctrlp_user_command | endif
 endif
 
 
-if CheckPlug('vimfiler.vim', 1) | " {{{1
+if HasPlug('vimfiler.vim') | " {{{1
     let g:vimfiler_as_default_explorer = 1
 endif
 
 
-if CheckPlug('vcscommand.vim', 1) | " {{{1
+if HasPlug('vcscommand.vim') | " {{{1
     "let g:signify_vcs_list = [ 'git', 'svn' ]
 endif
 
@@ -526,8 +533,8 @@ if HasPlug('fzf-cscope.vim') | " {{{1
     let g:fzfCscopeFilter = get(g:, 'fzfCscopeFilter', "daemon/wad/")
 
     "nnoremap <silent> H      :call hw#misc#Execute('n', 'cheat', "Cheat")<cr>
-    silent! Shortcut [vim.config] Help/Usage from conf.'fzf_files'
-                \ nnoremap <silent> H      :Cheat<cr>
+    nnoremap <silent> H      :Cheat<cr>
+    silent! Shortcut! H      [vim.config] ▶1◀ <H>fzf conf.'fzf_files', ▶2◀ <K>Pop man-doc ▶3◀ <Alt-#> choose-tmux-window
 
     if g:vim_confi_option.auto_install_tools
         if LINUX()
@@ -1648,11 +1655,6 @@ endif
 
 if HasPlug('auto-session') | " {{{1
     "let g:auto_session_root_dir = getcwd()
-endif
-
-
-if HasPlug('vim-basic') | " {{{1
-    noremap <F11> <Plug>(ToggleListchars)
 endif
 
 
