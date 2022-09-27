@@ -1,50 +1,45 @@
-// vim: set filetype=markdown:
+// vim: set filetype=markdown softtabstop=4 expandtab:
 
 # Quickstart
 
 ## Check who change/set the map or other
 
     verbose autocmd filetype markdown
+
     verbose map <a-'>
+
+    ## it will show you from where the <var> was set last time
     verbose set ft?
+    verbose set commentstring?
+    verbose setlocal commentstring?
 
-## debug the plugin by log
+# Troubleshooting
 
-    " 1. Init: Put these in the head-part of your script file.
-    "if !exists("s:init")
-    "    let s:init = 1
-    "    silent! let s:log = logger#getLogger(expand('<sfile>:t'))
-    "endif
-    "
-    " 2. Use:
-    "silent! call s:log.debug("test=", var)
-    "
-    " 3. View log
-    " $ tail -f /tmp/vim.log
+## option 1: Debug the plugin by log
 
-troubleshooting
-===
+1. Enable debug in .vimrc
+```vim
+    let g:vim_confi_option.debug = 1
+```
 
-## option 1: use logger plug to file
-
-1. Put in .vimrc:
-
-	silent! call logger#init('ALL', ['/dev/stdout', '/tmp/vim.log'])
-
-2. Init: Put these in the header of your script file.
-
-	if !exists("s:init")
-		let s:init = 1
-		silent! let s:log = logger#getLogger(expand('<sfile>:t'))
-	endif
+2. Enable debug at your plugin/script file
+```vim
+    "Put these in the head-part of your script file.
+    if !exists("s:init")
+        let s:init = 1
+        silent! let s:log = logger#getLogger(expand('<sfile>:t'))
+    endif
+```
 
 3. Use:
-
-	silent! call s:log.debug("test=", var)
+```vim
+    silent! call s:log.debug("test=", var)
+```
 
 4. View log
-
-	$ tail -f /tmp/vim.log
+```sh
+    $ tail -f /tmp/vim.log
+```
 
 ## option 2: start vi with verbosefile
 

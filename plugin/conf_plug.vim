@@ -1971,3 +1971,25 @@ EOF
 endif
 
 
+if HasPlug('nerdcommenter') | " {{{1
+    let g:NERDCreateDefaultMappings = 0
+    let g:NERDCompactSexyComs = 1
+    let g:NERDSpaceDelims = 1
+    let g:NERDDefaultAlign = 'left'
+    let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+    let g:NERDAltDelims_java = 1
+    let g:NERDCommentEmptyLines = 1
+    let g:NERDTrimTrailingWhitespace = 1
+    let g:NERDToggleCheckAllLines = 1
+
+    " Remap as <c-/>
+    silent! Shortcut!   <c-/>      [vim.config] (*)Comment: <c-/> Toggle comment
+
+    "nnoremap    <leader>c   :"Comment toggle but not fancy!              "<c-U>call nerdcommenter#Comment('n', "Toggle")<cr>
+    "xnoremap    <leader>c                                                     :call nerdcommenter#Comment('x', "Toggle")<cr>gv
+
+    nnoremap    <c-_>                                                         :call nerdcommenter#Comment('n', "Sexy")<cr>
+    xnoremap    <c-_>                                                         :call nerdcommenter#Comment('x', "Sexy")<cr>gv
+    "nnoremap    ;c      :"Comment: <C-/> or <leader>c add,   <;c> uncomment"<c-U>call nerdcommenter#Comment('n', "Uncomment")<cr>
+    "xnoremap    ;c                                                            :call nerdcommenter#Comment('x', "Uncomment")<cr>gv
+endif
