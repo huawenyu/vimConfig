@@ -57,6 +57,8 @@ if HasPlug('goyo.vim') | " {{{1
     let g:goyo_width = 120
     let g:goyo_height = 20
 
+    nnoremap <silent>   ;vc         :"(mode)Goyo reader/present         "<c-U>Goyo<CR>
+
     " Markdown configuration
     augroup MarkdownConfiguration
         autocmd BufNewFile,BufRead *.markdown Goyo 80
@@ -127,6 +129,11 @@ elseif HasPlug('vim-basic') | " {{{1
 
     nnoremap <silent> ;ee     :"(repl)Run me        "<c-U>call vimuxscript#CallRegion(1)<cr>
     "nnoremap <silent> ;ss     :"(repl)Run me        "<c-U>call vimuxscript#Stop()<cr>
+endif
+
+
+if HasPlug('vim-pencil') | " {{{1
+    nnoremap <silent>   ;vp     :"(mode)Pencil              "<c-U>TogglePencil<CR>
 endif
 
 
@@ -352,7 +359,9 @@ if CheckPlug('vim-autotag', 1) | " {{{1
 endif
 
 
-if CheckPlug('asyncrun.vim', 1) | " {{{1
+if HasPlug('asyncrun.vim') | " {{{1
+    nnoremap        <leader>f]      :"(tool)Auto generate tags          "<c-U>AsyncStop! <bar> AsyncTask! tagme<cr>
+
     let g:asyncrun_silent = 1
     let g:asyncrun_open = 8
     let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg']
