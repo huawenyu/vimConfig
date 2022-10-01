@@ -1277,8 +1277,12 @@ endif
 
 if HasPlug('vim-motion') | " {{{1
     "let g:vim_motion_maps = 1
-    nmap <silent> <a-p>     <Plug>(VimMotionPrev)
-    nmap <silent> <a-n>     <Plug>(VimMotionNext)
+    nnoremap <silent> <a-p>     <Plug>_JumpPrevIndent
+    nnoremap <silent> <a-n>     <Plug>_JumpNextIndent
+    vnoremap <silent> <a-p>     <Plug>_JumpPrevIndent
+    vnoremap <silent> <a-n>     <Plug>_JumpNextIndent
+    onoremap <silent> <a-p>     <Plug>_JumpPrevIndent
+    onoremap <silent> <a-n>     <Plug>_JumpNextIndent
 endif
 
 
