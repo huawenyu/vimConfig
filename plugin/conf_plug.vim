@@ -360,7 +360,7 @@ endif
 
 
 if HasPlug('asyncrun.vim') | " {{{1
-    nnoremap        <leader>f]      :"(tool)Auto generate tags          "<c-U>AsyncStop! <bar> AsyncTask! tagme<cr>
+    nnoremap        <leader>f]      :"(tool)Auto generate tags          "<c-U>AsyncRun! tagme<cr>
 
     let g:asyncrun_silent = 1
     let g:asyncrun_open = 8
