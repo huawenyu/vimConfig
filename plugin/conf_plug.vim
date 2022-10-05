@@ -839,7 +839,7 @@ if HasPlug('vim-markdown') | " {{{1
     let g:vim_markdown_auto_extension_ext = 'wiki'
 
     "let g:markdown_minlines = 200
-    "let g:vim_markdown_folding_disabled = 1
+    let g:vim_markdown_folding_disabled = 1
     let g:vim_markdown_override_foldtext = 0
     let g:vim_markdown_folding_level = 6
     "let g:vim_markdown_folding_style_pythonic = 1
