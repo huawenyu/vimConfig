@@ -753,7 +753,7 @@ if CheckPlug('vimdiff', 1) | " {{{1
 endif
 
 
-if CheckPlug('vimwiki', 1) | " {{{1
+if HasPlug('vimwiki') | " {{{1
     " {'path': '$HOME/wiki', 'auto_toc': 1, 'syntax': 'markdown', 'ext': '.md', 'maxhi': 1, 'auto_tags': 1},
     let g:vimwiki_list = [
           \{'name': 'work',  'path': '$HOME/dotwiki', 'ext': '.md', 'syntax': 'markdown', 'auto_toc': 1, 'maxhi': 1, 'auto_tags': 1},
@@ -768,6 +768,30 @@ if CheckPlug('vimwiki', 1) | " {{{1
     let g:vimwiki_url_maxsave = 0   | "Turn off the link shortening
     let g:vimwiki_conceallevel = 0  | "Default=2, -1 Disable conceal
 
+endif
+
+
+if HasPlug('wiki.vim') | " {{{1
+    let g:wiki_mappings_use_defaults = 'none'
+    let g:wiki_root = '~/dotwiki'
+    let g:wiki_log_verbose = 0
+    let g:wiki_completion_enabled = 0
+    let g:wiki_filetypes = ['md']
+    let g:wiki_link_extension = '.md'
+    let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
+
+    nnoremap    <Space>wb      :"WikiLinkReturn    "<c-U>WikiLinkReturn<cr>
+    nnoremap    <Space>wc      :"WikiFzfTags       "<c-U>WikiFzfTags<cr>
+    nnoremap    <Space>wd      :"WikiPageDelete    "<c-U>WikiPageDelete<cr>
+    nnoremap    <Space>wh      :"WikiFzfPages      "<c-U>WikiFzfPages<cr>
+    nnoremap    <Space>wi      :"WikiIndex         "<c-U>WikiIndex<cr>
+    nnoremap    <Space>wj      :"WikiLinkFollow    "<c-U>WikiLinkFollow<cr>
+    nnoremap    <Space>wl      :"WikiLinkToggle    "<c-U>WikiLinkToggle<cr>
+    nnoremap    <Space>wn      :"WikiOpen          "<c-U>WikiOpen<cr>
+    nnoremap    <Space>wr      :"WikiPageRename    "<c-U>WikiPageRename<cr>
+    nnoremap    <Space>wt      :"WikiFzfToc        "<c-U>WikiFzfToc<cr>
+    nnoremap    <Space>wT      :"WikiPageToc       "<c-U>WikiPageToc<cr>
+    nnoremap    <Space>ww      :"WikiEnable        "<c-U>WikiEnable<cr>
 endif
 
 
