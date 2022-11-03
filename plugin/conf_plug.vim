@@ -32,7 +32,6 @@ endif
 
 
 if HasPlug('vim-unimpaired') | " {{{1
-    silent! Shortcut!   [o      [vim-unimpaired](option) <[o*> Enable option; <]o*> Disable option: number, cursorline, copy-mode, tabstop
     let g:unimpaired_listchar = 0
     noremap <F11> <Plug>(SwitchListchars)
 endif
@@ -543,7 +542,6 @@ if HasPlug('fzf-cscope.vim') | " {{{1
 
     "nnoremap <silent> H      :call hw#misc#Execute('n', 'cheat', "Cheat")<cr>
     nnoremap <silent> H      :Cheat<cr>
-    silent! Shortcut! H      [vim.config] ▶1◀ <H>fzf conf.'fzf_files', ▶2◀ <K>Pop man-doc ▶3◀ <Alt-#> choose-tmux-window
 
     if g:vim_confi_option.auto_install_tools
         if LINUX()
