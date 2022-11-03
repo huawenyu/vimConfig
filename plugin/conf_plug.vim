@@ -2039,7 +2039,6 @@ if HasPlug('nerdcommenter') | " {{{1
     let g:NERDToggleCheckAllLines = 1
 
     " Remap as <c-/>
-    silent! Shortcut! <C-/>    [vim.config] Comment: Toggle C-Style Comments /** TEXT */
     nnoremap <silent> <c-_>    :call nerdcommenter#Comment('n', "Sexy")<cr>
     xnoremap <silent> <c-_>    :call nerdcommenter#Comment('x', "Sexy")<cr>gv
 
