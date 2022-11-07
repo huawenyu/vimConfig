@@ -776,6 +776,8 @@ if HasPlug('wiki.vim') | " {{{1
     let g:wiki_completion_enabled = 0
     let g:wiki_filetypes = ['md']
     let g:wiki_link_extension = '.md'
+    let g:wiki_link_target_type = 'md'
+    let g:wiki_link_toggle_on_follow = 1
     let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
 
     nnoremap    <Space>wb      :"WikiLinkReturn    "<c-U>WikiLinkReturn<cr>
