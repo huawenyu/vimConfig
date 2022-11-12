@@ -540,9 +540,6 @@ if HasPlug('fzf-cscope.vim') | " {{{1
     let g:fzf_cscope_map = get(g:, 'fzf_cscope_map', 1)
     let g:fzfCscopeFilter = get(g:, 'fzfCscopeFilter', "daemon/wad/")
 
-    "nnoremap <silent> H      :call hw#misc#Execute('n', 'cheat', "Cheat")<cr>
-    nnoremap <silent> H      :Cheat<cr>
-
     if g:vim_confi_option.auto_install_tools
         if LINUX()
             if UBUNTU()
@@ -780,18 +777,31 @@ if HasPlug('wiki.vim') | " {{{1
     let g:wiki_link_toggle_on_follow = 1
     let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
 
-    nnoremap    <Space>wb      :"WikiLinkReturn    "<c-U>WikiLinkReturn<cr>
-    nnoremap    <Space>wc      :"WikiFzfTags       "<c-U>WikiFzfTags<cr>
-    nnoremap    <Space>wd      :"WikiPageDelete    "<c-U>WikiPageDelete<cr>
-    nnoremap    <Space>wh      :"WikiFzfPages      "<c-U>WikiFzfPages<cr>
-    nnoremap    <Space>wi      :"WikiIndex         "<c-U>WikiIndex<cr>
-    nnoremap    <Space>wj      :"WikiLinkFollow    "<c-U>WikiLinkFollow<cr>
-    nnoremap    <Space>wl      :"WikiLinkToggle    "<c-U>WikiLinkToggle<cr>
-    nnoremap    <Space>wn      :"WikiOpen          "<c-U>WikiOpen<cr>
-    nnoremap    <Space>wr      :"WikiPageRename    "<c-U>WikiPageRename<cr>
-    nnoremap    <Space>wt      :"WikiFzfToc        "<c-U>WikiFzfToc<cr>
-    nnoremap    <Space>wT      :"WikiPageToc       "<c-U>WikiPageToc<cr>
-    nnoremap    <Space>ww      :"WikiEnable        "<c-U>WikiEnable<cr>
+    nnoremap    <leader>wb      :"WikiLinkReturn    "<c-U>WikiLinkReturn<cr>
+    "nnoremap    <leader>wc     :"WikiFzfTags       "<c-U>WikiFzfTags<cr>
+    nnoremap    <leader>wd      :"WikiPageDelete    "<c-U>WikiPageDelete<cr>
+    "nnoremap   <leader>wh      :"WikiFzfPages      "<c-U>WikiFzfPages<cr>
+    nnoremap    <leader>wi      :"WikiIndex         "<c-U>WikiIndex<cr>
+    nnoremap    <leader>wj      :"WikiLinkFollow    "<c-U>WikiLinkFollow<cr>
+    nnoremap    <leader>wl      :"WikiLinkToggle    "<c-U>WikiLinkToggle<cr>
+    nnoremap    <leader>wn      :"WikiOpen          "<c-U>WikiOpen<cr>
+    nnoremap    <leader>wr      :"WikiPageRename    "<c-U>WikiPageRename<cr>
+    nnoremap    <leader>wt      :"CurPageListToc    "<c-U>WikiFzfToc<cr>
+    nnoremap    <leader>wT      :"CurPageCreateToc  "<c-U>WikiPageToc<cr>
+    nnoremap    <leader>ww      :"WikiEnable        "<c-U>WikiEnable<cr>
+endif
+
+
+if HasPlug('fzf-cscope.vim') | " {{{1
+    nnoremap    <leader>wh      :"WikiFzfTags(`tagme -a wiki`) "<c-U>FzfTagHomeCacheTag<cr>
+    nnoremap    <leader>ws      :"WikiFzfText       "<c-U>WikiFzfText<cr>
+    nnoremap    <leader>wf      :"WikiFzfFiles      "<c-U>WikiFzfFiles<cr>
+
+    nnoremap    <leader>ft      :"(fzf)Tag          "<c-U>FzfTagFilter<cr>
+    nnoremap    <leader>fj      :"(fzf)Jumps        "<c-U>FZFJump<cr>
+    nnoremap    <leader>fe      :"(fzf)Edit/changes "<c-U>FZFChange<cr>
+    nnoremap    <leader>fm      :"(fzf)Marks        "<c-U>FZFMarks<cr>
+
 endif
 
 
@@ -803,6 +813,7 @@ endif
 if HasPlug('notational-fzf-vim') | " {{{1
     let g:nv_search_paths = []
     let g:nv_default_extension = '.md'
+    "let g:nv_ignore_pattern = ['*.log', '*.conf']
 
     " Load dirs from global config
     if !empty(g:vim_confi_option.fzf_notes)
@@ -824,7 +835,7 @@ if HasPlug('notational-fzf-vim') | " {{{1
     "                 \ })
     " let g:nv_create_note_key = 'ctrl-x'
 
-    nnoremap    <Space>vw      :"(man)Wiki search all text    "<c-U>NV<Space>
+    "nnoremap    <Space>vw      :"(man)Wiki search all text    "<c-U>NV<Space>
 endif
 
 
