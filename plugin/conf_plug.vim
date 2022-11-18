@@ -1810,8 +1810,6 @@ endif
 
 
 if HasPlug('nvim-lspconfig') | " {{{1
-    silent! Shortcut!   ;f      [vim.config](lsp)Find/fzf, sink-to-quickfix <c-q><cr>: Symbol, References, Caller, Callee, Diagnostics
-
     if HasPlug('fzf-lsp.nvim') | " {{{2
         lua <<EOF
         local nvim_lsp = require('lspconfig')
