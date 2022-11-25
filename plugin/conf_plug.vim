@@ -78,8 +78,10 @@ endif
 
 
 if HasPlug('vim-floaterm') | " {{{1
+    let g:floaterm_autoinsert = 1
+
     fun! s:compile_run()
-        let l:command=':FloatermNew --name=repl --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'..&filetype
+        let l:command=':FloatermNew --name=repl --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'..&filetype
         " (&ft=='c' || &ft=='cpp')
         if &ft=='c'
             let l:command = l:command. printf("  gcc -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s", expand('%:r'), expand('%'), expand('%:r'))
@@ -99,11 +101,12 @@ if HasPlug('vim-floaterm') | " {{{1
         "echomsg "Debug: ". l:command
         silent execute l:command
         " Avoid terminal-window exit when enter-any-key
-        stopinsert
+        "stopinsert
     endfun
 
     "autocmd FileType * nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run()<cr>
     nnoremap <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run()<cr>
+    nnoremap        ;ee      :"(diag)Make buffer    "<c-U>make <C-R>=expand('%:t:r')<cr><cr><cr> \| :copen<cr> \| :wincmd p<cr>
 endif
 
 
@@ -126,7 +129,7 @@ elseif HasPlug('vim-basic') | " {{{1
     autocmd FileType vim    vnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call hw#eval#repl('v')<cr>
     autocmd FileType log    nnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call vimuxscript#CallRegion(1)<cr>
 
-    nnoremap <silent> ;ee     :"(repl)Run me        "<c-U>call vimuxscript#CallRegion(1)<cr>
+    "nnoremap <silent> ;ee     :"(repl)Run me        "<c-U>call vimuxscript#CallRegion(1)<cr>
     "nnoremap <silent> ;ss     :"(repl)Run me        "<c-U>call vimuxscript#Stop()<cr>
 endif
 
@@ -1736,6 +1739,45 @@ if HasPlug('any-jump.vim') | " {{{1
 endif
 
 
+if HasPlug('nerdcommenter') | " {{{1
+    let g:NERDCreateDefaultMappings = 0
+    let g:NERDCompactSexyComs = 1
+    let g:NERDSpaceDelims = 1
+    let g:NERDDefaultAlign = 'left'
+    let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+    let g:NERDAltDelims_java = 1
+    let g:NERDCommentEmptyLines = 1
+    let g:NERDTrimTrailingWhitespace = 1
+    let g:NERDToggleCheckAllLines = 1
+
+    " Remap as <c-/>
+    nnoremap <silent> <c-_>    :call nerdcommenter#Comment('n', "Sexy")<cr>
+    xnoremap <silent> <c-_>    :call nerdcommenter#Comment('x', "Sexy")<cr>gv
+
+    "nnoremap    <leader>c   :"Comment toggle but not fancy!              "<c-U>call nerdcommenter#Comment('n', "Toggle")<cr>
+    "xnoremap    <leader>c                                                     :call nerdcommenter#Comment('x', "Toggle")<cr>gv
+    "nnoremap    ;c      :"Comment: <C-/> or <leader>c add,   <;c> uncomment"<c-U>call nerdcommenter#Comment('n', "Uncomment")<cr>
+    "xnoremap    ;c                                                            :call nerdcommenter#Comment('x', "Uncomment")<cr>gv
+endif
+
+
+if HasPlug('vim-signify') | " {{{1
+    " Diff by commit SHA: 76748de92fa
+    let g:signify_git_sha = $GitSHA
+
+    if len(g:signify_git_sha) > 8
+        let g:signify_vcs_cmds = {
+                \ 'git': 'git diff '.. g:signify_git_sha.. '^ '..g:signify_git_sha.. ' --no-color --no-ext-diff -U0 -- %f'
+                \ }
+    else
+        let g:signify_vcs_cmds = {
+                \ 'git': 'git diff HEAD --no-color --no-ext-diff -U0 -- %f'
+                \ }
+    endif
+endif
+
+
+
 " https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L284
 if HasPlug('nvim-cmp') | " {{{1
 set completeopt=menu,menuone,noselect
@@ -1794,18 +1836,6 @@ lua <<EOF
   })
 
 EOF
-endif
-
-
-if HasPlug('vim-signify') | " {{{1
-    " Diff by commit SHA: 76748de92fa
-    let g:signify_git_sha = $GitSHA
-
-    if len(g:signify_git_sha) > 8
-        let g:signify_vcs_cmds = {
-                \ 'git': 'git diff '.. g:signify_git_sha.. '^ '..g:signify_git_sha.. ' --no-color --no-ext-diff -U0 -- %f'
-                \ }
-    endif
 endif
 
 
@@ -1986,6 +2016,23 @@ if HasPlug('cheatsheet.nvim') | " {{{1
 endif
 
 
+if HasPlug('neomux') | " {{{1
+    " If don't change from <leader> to ';', cause the terminal <space> slow
+    "   We can check by :verbose tmap <leader>
+    let g:neomux_start_term_map = ";sx"
+    let g:neomux_exit_term_mode_map = ";sX"
+    let g:neomux_start_term_split_map = ";sh"
+    let g:neomux_start_term_vsplit_map = ";sv"
+endif
+
+
+if HasPlug('toggleterm.nvim') | " {{{1
+    lua << EOF
+	require("toggleterm").setup{}
+EOF
+endif
+
+
 if HasPlug('which-key.nvim') | " {{{1
     lua << EOF
     require("which-key").setup {
@@ -2035,24 +2082,3 @@ if HasPlug('which-key.nvim') | " {{{1
 EOF
 endif
 
-
-if HasPlug('nerdcommenter') | " {{{1
-    let g:NERDCreateDefaultMappings = 0
-    let g:NERDCompactSexyComs = 1
-    let g:NERDSpaceDelims = 1
-    let g:NERDDefaultAlign = 'left'
-    let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
-    let g:NERDAltDelims_java = 1
-    let g:NERDCommentEmptyLines = 1
-    let g:NERDTrimTrailingWhitespace = 1
-    let g:NERDToggleCheckAllLines = 1
-
-    " Remap as <c-/>
-    nnoremap <silent> <c-_>    :call nerdcommenter#Comment('n', "Sexy")<cr>
-    xnoremap <silent> <c-_>    :call nerdcommenter#Comment('x', "Sexy")<cr>gv
-
-    "nnoremap    <leader>c   :"Comment toggle but not fancy!              "<c-U>call nerdcommenter#Comment('n', "Toggle")<cr>
-    "xnoremap    <leader>c                                                     :call nerdcommenter#Comment('x', "Toggle")<cr>gv
-    "nnoremap    ;c      :"Comment: <C-/> or <leader>c add,   <;c> uncomment"<c-U>call nerdcommenter#Comment('n', "Uncomment")<cr>
-    "xnoremap    ;c                                                            :call nerdcommenter#Comment('x', "Uncomment")<cr>gv
-endif
