@@ -837,8 +837,6 @@ if HasPlug('notational-fzf-vim') | " {{{1
     "                 \ 'ctrl-t': 'tabedit ',
     "                 \ })
     " let g:nv_create_note_key = 'ctrl-x'
-
-    "nnoremap    <Space>vw      :"(man)Wiki search all text    "<c-U>NV<Space>
 endif
 
 
@@ -1021,6 +1019,8 @@ if CheckPlug('NrrwRgn', 1) | " {{{1
     "let g:nrrw_rgn_vert = 1
     let g:nrrw_rgn_rel_min = 30
     "let g:nrrw_rgn_rel_max = 80
+
+    vnoremap    <leader>ce      :"(edit)Narrow edit    "<c-U>NRV<cr>
 endif
 
 
