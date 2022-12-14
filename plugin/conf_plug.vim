@@ -796,7 +796,8 @@ endif
 
 
 if HasPlug('fzf-cscope.vim') | " {{{1
-    nnoremap    <leader>wh      :"WikiFzfTags(`tagme -a wiki`) "<c-U>FzfTagHomeCacheTag<cr>
+    nnoremap    <leader>wh      :"TldrFzfHeader     "<c-U>Wiki2FzfText<cr>
+    nnoremap    <leader>wH      :"TldrFzfText       "<c-U>Wiki2FzfHeader<cr>
     nnoremap    <leader>ws      :"WikiFzfText       "<c-U>WikiFzfText<cr>
     nnoremap    <leader>wf      :"WikiFzfFiles      "<c-U>WikiFzfFiles<cr>
 
