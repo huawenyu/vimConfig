@@ -55,7 +55,7 @@ endif
 
 if HasPlug('vim-unimpaired') | " {{{1
     let g:unimpaired_listchar = 0
-    noremap <F11> <Plug>(SwitchListchars)
+    noremap <F12> <Plug>(SwitchListchars)
 endif
 
 
