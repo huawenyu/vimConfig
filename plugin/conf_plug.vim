@@ -20,7 +20,7 @@ silent! Shortcut! […_OR_]…    [Misc]•••■ o★enable option  ■ <spa
 silent! Shortcut! <space>w…   [Wiki]•••■ w★Enable  ■ l/h/H★Tldr.File/Header/Text  ■ s★fzfText  ■ f★fzfFiles  ■ i★Index  ■ n★new page
 silent! Shortcut! <space>s…   [Save]•••■ s★SaveAs  ■ s••★SecreenJump
 silent! Shortcut! <space>y…   [Copy]•••■ yy★CopyAsTmpfile  ■ yp★Paste-from-tmpfile
-silent! Shortcut! <space>c…   [Text]•••■ w★Wrap paragraph  ■ e★Narror Edit  ■ d★Right Trim  ■ u★Uppercase  ■ c★Capitalize  ■ l★Lowercase
+silent! Shortcut! <space>c…   [Text]•••■ w★Wrap/format paragraph  ■ e★Narror Edit  ■ d★Right Trim  ■ u★Uppercase  ■ c★Capitalize  ■ l★Lowercase
 silent! Shortcut! <space>f…   [Find](cscope)  ■ f(F)★Files(all)  ■ s(S)★Symbol(references)  ■ c(C)★Caller(callee)  ■ w★Assign  ■ t★tags  ■ b★buffers  ■ e★changes  ■ j★Jumps  ■ m★Marks  ■ <c-q><cr>★Sink-to-quickfix
 silent! Shortcut! <space>m…   [Mark]•••■ mm★colorize word  ■ ma★Make all  ■ mk★Make wad  ■ <space>ee-execute  ■ ;ee-make buffer  ■ mf★quickfix filter  ■ mc★quickfix show caller  ■ Macro record/play
 silent! Shortcut! <space>d…   [Help]•••■ t★Right trim all  ■ d★Remove search lines
@@ -73,6 +73,9 @@ if HasPlug('vcscommand.vim') | " {{{1
     "let g:signify_vcs_list = [ 'git', 'svn' ]
 endif
 
+if HasPlug('vim-oscyank') | " {{{1
+    "let g:oscyank_term = 'default'
+endif
 
 if HasPlug('goyo.vim') | " {{{1
     let g:goyo_width = 120
