@@ -30,7 +30,7 @@ silent! Shortcut! <C-…>       [Motion]•■ <C-h,j,k,l>★Vim/Tmux-panel  ■
 silent! Shortcut! <A-…>       [Views]••■ <A-e>★Explore<>  ■ <A-'>★Outline  ■ <A-;>★Quickfix  ■ <A-/>★Taglist  ■ <A-w>★Maximize
 silent! Shortcut! ;f…         [Mode](clangd)  ■ f★Files  ■ s★Symbol  ■ s★References  ■ c★Caller  ■ h/H★Info/Macro-expand  ■ •★Diagnostics
 silent! Shortcut! ;v…         [Mode]•••■ •★(Goyo_Column,Pencil)
-silent! Shortcut! ;s…         [Mode]•••■ sv★term-vert  ■ sh★term-horizon
+silent! Shortcut! ;s…         [Mode]•••■ sx★terminal(<esc><esc>-EditMode)  ■ sv★term-vert  ■ sh★term-horizon
 silent! Shortcut! <F…>        [gdb]••••■ F4★Continue  ■ F5★Next(S-Skip)  ■ F6★StepIn(S-Finish)  ■ F7★RunToHere  ■ F8★Evaluate(S-Watch)  ■ F9★ToggleBreak
 silent! Shortcut! v…          [Object]•■ vie★whole buffer  ■ vi`★Code-fence  ■ vif★Function  ■ viu★URL  ■ vij★Brace  ■ vic★Comment  ■ vib★Block  ■ vi'★Quota
 silent! Shortcut! K           [Help]•••■ K★Man  ■ gf★Openfile  ■ <A-#>★Tmux_WinTab  ■ ;#★VimTab  ■ <c-q><cr>★Sink-fzf-preview-to-quickfix
@@ -2058,8 +2058,10 @@ endif
 if HasPlug('neomux') | " {{{1
     " If don't change from <leader> to ';', cause the terminal <space> slow
     "   We can check by :verbose tmap <leader>
-    let g:neomux_start_term_map = ";sx"
+    let g:neomux_no_exit_term_map = 1
     let g:neomux_exit_term_mode_map = ";sX"
+
+    let g:neomux_start_term_map = ";sx"
     let g:neomux_start_term_split_map = ";sh"
     let g:neomux_start_term_vsplit_map = ";sv"
 endif
