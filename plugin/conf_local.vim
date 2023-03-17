@@ -28,6 +28,7 @@ endif
 
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__,.idea,node_modules
+set updatetime=600
 
 "hi CursorLine guibg=Grey40
 "hi CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
