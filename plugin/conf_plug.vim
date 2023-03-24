@@ -17,7 +17,7 @@ endif
 
 
 silent! Shortcut! […_OR_]…    [Misc]•••■ o★enable option  ■ <space>★add blank lines  ■ e★exchange lines  ■ n★conflict
-silent! Shortcut! <space>w…   [Wiki]•••■ w★Enable  ■ l/h/H★Tldr.File/Header/Text  ■ s★fzfText  ■ f★fzfFiles  ■ i★Index  ■ n★new page
+silent! Shortcut! <space>w…   [Wiki]•••■ ;★Win/Buf-Swap  ■ w★Enable  ■ l/h/H★Tldr.File/Header/Text  ■ s★fzfText  ■ f★fzfFiles  ■ i★Index  ■ n★new page
 silent! Shortcut! <space>s…   [Save]•••■ s★SaveAs  ■ s••★SecreenJump
 silent! Shortcut! <space>y…   [Copy]•••■ yy★CopyAsTmpfile  ■ yp★Paste-from-tmpfile
 silent! Shortcut! <space>c…   [Text]•••■ w★Wrap/format paragraph  ■ e★Narror Edit  ■ d★Right Trim  ■ u★Uppercase  ■ c★Capitalize  ■ l★Lowercase
@@ -1835,6 +1835,13 @@ if HasPlug('neomux')
     let g:neomux_start_term_vsplit_map = ";sv"
 endif
 
+
+if HasPlug('vim-windowswap')
+    let g:windowswap_map_keys = 0
+    "nnoremap <silent> <leader>wy :call WindowSwap#MarkWindowSwap()<CR>
+    "nnoremap <silent> <leader>wp :call WindowSwap#DoWindowSwap()<CR>
+    nnoremap <silent> <leader>w; :call WindowSwap#EasyWindowSwap()<CR>
+endif
 
 " https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L284
 if HasPlug('nvim-cmp') | " {{{1
