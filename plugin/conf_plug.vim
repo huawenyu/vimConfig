@@ -36,7 +36,7 @@ silent! Shortcut! v…          [Object]•■ vie★whole buffer  ■ vi`★Cod
 silent! Shortcut! g…          [Jump]•••■ gi★Last-insert  ■ gv★Reselect  ■ gd★Definition  ■ g;★Changelist-older  ■ g,★Changelist-newer  ■ gg/G★begin/end   ■ zt/zz/zb★Top/Middle/Bottom
 silent! Shortcut! K           [Help]•••■ K★Man  ■ gf★Openfile  ■ <A-#>★Tmux_WinTab  ■ ;#★VimTab  ■ <c-q><cr>★Sink-fzf-preview-to-quickfix
 silent! Shortcut! ;;          [••••]•••■ Leader★<space>  ■ 2nd-leader★;  ■ <space><space>★Preview Tag  ■ ;q★Smartclose  ■ <leader>q★Exit
-silent! Shortcut! …           [Misc]•••■ <space>ee★REPL(markdown-CodeFence, c-compile&run)
+silent! Shortcut! …           [Misc]•••■ <space>ee★REPL(md-Code, C-repl),  ■ GitGutter(ENV $VimGitRange)
 
 
 if HasPlug('syntastic') | " {{{1
@@ -1802,11 +1802,13 @@ endif
 
 if HasPlug('vim-signify') | " {{{1
     " Diff by commit SHA: 76748de92fa
-    let g:signify_git_sha = $GitSHA
+    "             OR SHA..HEAD:
+    let g:signify_sha_range = $VimGitRange
 
-    if len(g:signify_git_sha) > 8
+    if len(g:signify_sha_range) > 8
+        echomsg "GitGutter by "..g:signify_sha_range
         let g:signify_vcs_cmds = {
-                \ 'git': 'git diff '.. g:signify_git_sha.. '^ '..g:signify_git_sha.. ' --no-color --no-ext-diff -U0 -- %f'
+                \ 'git': 'git diff '.. g:signify_sha_range.. ' --no-color --no-ext-diff -U0 -- %f'
                 \ }
     else
         let g:signify_vcs_cmds = {
@@ -1842,6 +1844,14 @@ if HasPlug('vim-windowswap')
     "nnoremap <silent> <leader>wp :call WindowSwap#DoWindowSwap()<CR>
     nnoremap <silent> <leader>w; :call WindowSwap#EasyWindowSwap()<CR>
 endif
+
+
+if HasPlug('fidget.nvim')
+    lua << EOF
+    require('fidget').setup {}
+EOF
+endif
+
 
 " https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L284
 if HasPlug('nvim-cmp') | " {{{1
