@@ -1808,7 +1808,7 @@ if HasPlug('vim-signify') | " {{{1
     if len(g:signify_sha_range) > 8
         echomsg "GitGutter by "..g:signify_sha_range
         let g:signify_vcs_cmds = {
-                \ 'git': 'git diff '.. g:signify_sha_range.. ' --no-color --no-ext-diff -U0 -- %f'
+                \ 'git': 'git diff '.. g:signify_sha_range .. ' --no-color --no-ext-diff -U0 -- %f'
                 \ }
     else
         let g:signify_vcs_cmds = {
