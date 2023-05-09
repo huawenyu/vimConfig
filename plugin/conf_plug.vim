@@ -36,6 +36,7 @@ silent! Shortcut! v…          [Object]•■ vie★whole buffer  ■ vi`★Cod
 silent! Shortcut! g…          [Jump]•••■ gi★Last-insert  ■ gv★Reselect  ■ gd★Definition  ■ g;★Changelist-older  ■ g,★Changelist-newer  ■ gg/G★begin/end   ■ zt/zz/zb★Top/Middle/Bottom
 silent! Shortcut! K           [Help]•••■ K★Man  ■ gf★Openfile  ■ <A-#>★Tmux_WinTab  ■ ;#★VimTab  ■ <c-q><cr>★Sink-fzf-preview-to-quickfix
 silent! Shortcut! ;;          [••••]•••■ Leader★<space>  ■ 2nd-leader★;  ■ <space><space>★Preview Tag  ■ ;q★Smartclose  ■ <leader>q★Exit
+silent! Shortcut! ;…          [••••]•••■ ;#★Count  ■ ;^★Popup pattern  ■ ;*★Quickfix-pattern
 silent! Shortcut! …           [Misc]•••■ <space>ee★REPL(md-Code, C-repl),  ■ GitGutter(ENV $VimGitRange)
 
 
@@ -2118,6 +2119,25 @@ if HasPlug('auto-session')
 
     vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
     require('auto-session').setup(opts)
+EOF
+endif
+
+
+if HasPlug('hop.nvim')
+    lua << EOF
+    local opts = {
+        keys = 'etovxqpdygfblzhckisuran'
+    }
+
+    require'hop'.setup(opts)
+    local hop = require('hop')
+    local directions = require('hop.hint').HintDirection
+    vim.keymap.set('', 's', function()
+        hop.hint_char1({ current_line_only = true })
+        end, {remap=true})
+    vim.keymap.set('', 'S', function()
+        hop.hint_char1({})
+        end, {remap=true})
 EOF
 endif
 
