@@ -2099,6 +2099,13 @@ EOF
 endif
 
 
+if HasPlug('todo-comments.nvim')
+    lua << EOF
+    require("todo-comments.config").setup{}
+EOF
+endif
+
+
 if HasPlug('auto-session')
     let g:auto_session_root_dir = "$HOME/.vim/tmp-sessions"
     let g:auto_session_pre_save_cmds = ["tabdo NERDTreeClose"]
