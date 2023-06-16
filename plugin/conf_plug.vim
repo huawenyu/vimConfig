@@ -24,7 +24,7 @@ silent! Shortcut! <space>c…   [Text]•••■ w★Wrap/format paragraph  �
 silent! Shortcut! <space>f…   [Find](cscope)  ■ f(F)★Files(all)  ■ s(S)★Symbol(references)  ■ c(C)★Caller(callee)  ■ w★Assign  ■ t★tags  ■ b★buffers  ■ e★changes  ■ j★Jumps  ■ m★Marks  ■ <c-q><cr>★Sink-to-quickfix
 silent! Shortcut! <space>m…   [Mark]•••■ mm★colorize word  ■ ma★Make all  ■ mk★Make wad  ■ <space>ee-execute  ■ ;ee-make buffer  ■ mf★quickfix filter  ■ mc★quickfix show caller  ■ Macro record/play
 silent! Shortcut! <space>d…   [Help]•••■ t★Right trim all  ■ d★Remove search lines
-silent! Shortcut! <space>g…   [Git]••••■ b★Blame  ■ s★Status  ■ d★Diff  ■ l★Log  ■ f★Preview file
+silent! Shortcut! <space>g…   [Git]••••■ b★Blame  ■ s★Status  ■ d★Diff  ■ l★Log  ■ f★Preview file  ■ a★EasyAlign
 silent! Shortcut! <space>v…   [Views]••■ Same as <A-…>
 silent! Shortcut! <C-…>       [Motion]•■ <C-h,j,k,l>★Vim/Tmux-panel  ■ <C-]>★tags  ■ g<C-]>★select tags  ■ <C-i,o>★history  ■ <C-n,p>★quickfix  ■ <C-/>★Comment  ■ <C-w#>★Sel-window
 silent! Shortcut! <A-…>       [Views]••■ <A-e>★Explore<>  ■ <A-'>★Outline  ■ <A-;>★Quickfix  ■ <A-/>★Taglist  ■ <A-w>★Maximize
@@ -363,7 +363,38 @@ endif
 
 if HasPlug('vim-easy-align') | " {{{1
     let g:easy_align_ignore_comment = 0 " align comments
-    vnoremap <silent> <Enter> :EasyAlign<cr>
+    vnoremap <leader>ga      :"(edit)EasyAlign    "<c-U>'<,'>EasyAlign -1/\\$/
+
+    let g:easy_align_delimiters = {
+        \ '>': { 'pattern': '>>\|=>\|>' },
+        \ '/': {
+        \     'pattern':         '//\+\|/\*\|\*/',
+        \     'delimiter_align': 'l',
+        \     'ignore_groups':   ['!Comment'] },
+        \ ']': {
+        \     'pattern':       '[[\]]',
+        \     'left_margin':   0,
+        \     'right_margin':  0,
+        \     'stick_to_left': 0
+        \   },
+        \ ')': {
+        \     'pattern':       '[()]',
+        \     'left_margin':   0,
+        \     'right_margin':  0,
+        \     'stick_to_left': 0
+        \   },
+        \ 'd': {
+        \     'pattern':      ' \(\S\+\s*[;=]\)\@=',
+        \     'left_margin':  0,
+        \     'right_margin': 0
+        \   },
+        \ 'm': {
+        \     'pattern':      '/\\$/',
+        \     'stick_to_left':0,
+        \     'left_margin':  2,
+        \     'right_margin': 0,
+        \   },
+        \ }
 endif
 
 
