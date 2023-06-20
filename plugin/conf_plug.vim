@@ -37,7 +37,7 @@ silent! Shortcut! g…          [Jump]•••■ gi★Last-insert  ■ gv★Re
 silent! Shortcut! K           [Help]•••■ K★Man  ■ gf★Openfile  ■ <A-#>★Tmux_WinTab  ■ ;#★VimTab  ■ <c-q><cr>★Sink-fzf-preview-to-quickfix
 silent! Shortcut! ;;          [••••]•••■ Leader★<space>  ■ 2nd-leader★;  ■ <space><space>★Preview Tag  ■ ;q★Smartclose  ■ <leader>q★Exit
 silent! Shortcut! ;…          [••••]•••■ ;#★Count  ■ ;^★Popup pattern  ■ ;*★Quickfix-pattern
-silent! Shortcut! …           [Misc]•••■ <space>ee★REPL(md-Code, C-repl),  ■ GitGutter(ENV $VimGitRange)
+silent! Shortcut! …           [Misc]•••■ <space>ee★REPL(md-Code, C-repl),  ■ GitGutter(ENV $VimGitRange),  ■ ^M(Windows-newline) SpeedUp(`:e ++ff=dos`) Convert2Unix(`:set ff=unix`)
 
 
 if HasPlug('syntastic') | " {{{1
