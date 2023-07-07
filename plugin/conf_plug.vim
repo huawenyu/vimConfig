@@ -2185,7 +2185,8 @@ if HasPlug('nvim-treesitter')
     require'nvim-treesitter.configs'.setup {
       -- A list of parser names, or "all" (the five listed parsers should always be installed)
       ensure_installed = { "c", "lua", "vim", "vimdoc", "query",
-        "markdown", "markdown_inline",
+        -- "markdown",
+        "markdown_inline",
         "cmake", "comment", "cpp", "css", "diff", "dockerfile", "bash", "awk",
         "git_config", "gitignore", "go", "gowork", "haskell", "java", "python", "http", "html",
         "julia", "latex", "llvm", "make", "matlab", "meson", "nix",
@@ -2231,6 +2232,50 @@ if HasPlug('nvim-treesitter')
     }
 EOF
 
+    lua << EOF
+    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+    parser_config.tcl = {
+      install_info = {
+        --  Issues:
+        --    Compile error: can't find <tree-sitter/parser.h>
+        --  :checkhealth nvim-treesitter
+        --  Ubuntu 22.04
+        --    sudo apt install libtree-sitter-dev
+        --  Ubuntu 20.04 (Install pkg manually: search package at https://ubuntu.pkgs.org)
+        --    wget http://archive.ubuntu.com/ubuntu/pool/universe/t/tree-sitter/libtree-sitter0_0.20.3-1_amd64.deb
+        --    wget http://archive.ubuntu.com/ubuntu/pool/universe/t/tree-sitter/libtree-sitter-dev_0.20.3-1_amd64.deb
+        --    sudo dpkg -i libtree-sitter0_0.20.3-1_amd64.deb
+        --    sudo dpkg -i libtree-sitter-dev_0.20.3-1_amd64.deb
+        --
+        url = "https://github.com/nawordar/tree-sitter-tcl.git", -- local path or git repo
+        files = {"tcl/src/parser.c", "tcl/src/scanner.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
+        -- optional entries:
+        branch = "main", -- default branch in case of git repo if different from master
+        generate_requires_npm = false, -- if stand-alone parser without npm dependencies
+        requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
+      },
+      filetype = "tcl", -- if filetype does not match the parser name
+    }
+EOF
+
+    lua << EOF
+    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+    parser_config.markdown = {
+      install_info = {
+        url = "https://github.com/MDeiml/tree-sitter-markdown.git", -- local path or git repo
+        files = {"tree-sitter-markdown/src/parser.c", "tree-sitter-markdown/src/scanner.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
+        -- optional entries:
+        branch = "main", -- default branch in case of git repo if different from master
+        generate_requires_npm = false, -- if stand-alone parser without npm dependencies
+        requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
+      },
+      filetype = "markdown", -- if filetype does not match the parser name
+    }
+EOF
+endif
+
+
+if HasPlug('vim-colorscheme-switcher') | " {{{1
 endif
 
 
