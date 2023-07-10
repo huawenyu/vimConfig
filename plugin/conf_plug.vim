@@ -2181,7 +2181,14 @@ endif
 
 
 if HasPlug('nvim-treesitter')
+"
+" :TSInstall diff
+"
+
+for _ in ['once']
     lua << EOF
+    if (isModuleAvailable('nvim-treesitter.configs'))
+    then
     require'nvim-treesitter.configs'.setup {
       -- A list of parser names, or "all" (the five listed parsers should always be installed)
       ensure_installed = { "c", "lua", "vim", "vimdoc", "query",
@@ -2230,9 +2237,12 @@ if HasPlug('nvim-treesitter')
         additional_vim_regex_highlighting = false,
       },
     }
+    end
 EOF
 
     lua << EOF
+    if (isModuleAvailable('nvim-treesitter.configs'))
+    then
     local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
     parser_config.tcl = {
       install_info = {
@@ -2256,9 +2266,12 @@ EOF
       },
       filetype = "tcl", -- if filetype does not match the parser name
     }
+    end
 EOF
 
     lua << EOF
+    if (isModuleAvailable('nvim-treesitter.configs'))
+    then
     local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
     parser_config.markdown = {
       install_info = {
@@ -2271,7 +2284,27 @@ EOF
       },
       filetype = "markdown", -- if filetype does not match the parser name
     }
+    end
 EOF
+
+    lua << EOF
+    if (isModuleAvailable('nvim-treesitter.configs'))
+    then
+    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+    parser_config.diff = {
+      install_info = {
+        url = "https://github.com/the-mikedavis/tree-sitter-diff.git", -- local path or git repo
+        files = {"src/parser.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
+        -- optional entries:
+        branch = "main", -- default branch in case of git repo if different from master
+        generate_requires_npm = false, -- if stand-alone parser without npm dependencies
+        requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
+      },
+      filetype = "diff", -- if filetype does not match the parser name
+    }
+    end
+EOF
+endfor
 endif
 
 
