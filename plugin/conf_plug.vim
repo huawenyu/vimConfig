@@ -1775,10 +1775,6 @@ if HasPlug('vim-gitgutter') | " {{{1
     let g:gitgutter_sign_modified_removed = '<'
 endif
 
-if HasPlug('auto-session') | " {{{1
-    "let g:auto_session_root_dir = getcwd()
-endif
-
 
 if HasPlug('vim-diff-enhanced') | " {{{1
     set diffopt+=internal,algorithm:patience
@@ -2137,14 +2133,24 @@ EOF
 endif
 
 
+if HasPlug('asynctasks.vim')
+    if filereadable(expand('~/.vim_tasks.ini')) && !filereadable(expand('~/.vim/tasks.ini'))
+        call system(expand('ln -s ~/.vim_tasks.ini ~/.vim/tasks.ini' )
+    endif
+endif
+
+
 if HasPlug('auto-session')
-    let g:auto_session_root_dir = "$HOME/.vim/tmp-sessions"
+    let g:auto_session_root_dir = expand('~/.vim/tmp-sessions')
+    if !isdirectory(g:auto_session_root_dir)
+        call mkdir(g:auto_session_root_dir, 'p')
+    endif
     let g:auto_session_pre_save_cmds = ["tabdo NERDTreeClose"]
 
     lua << EOF
     local opts = {
-        log_level = 'info',
-        auto_session_enable_last_session = false,
+        log_level = 'error', -- info
+        auto_session_enable_last_session = true,
         auto_session_root_dir = vim.fn.stdpath('data').."/sessions/",
         auto_session_enabled = true,
         auto_save_enabled = nil,
@@ -2152,7 +2158,8 @@ if HasPlug('auto-session')
         auto_session_suppress_dirs = nil,
         auto_session_use_git_branch = nil,
         -- the configs below are lua only
-        bypass_session_save_file_types = nil
+        bypass_session_save_file_types = nil,
+        auto_session_suppress_dirs = { "/" }
     }
 
     vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
