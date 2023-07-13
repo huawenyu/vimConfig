@@ -18,7 +18,7 @@ endif
 
 silent! Shortcut! […_OR_]…    [Misc]•••■ o★enable option  ■ <space>★add blank lines  ■ e★exchange lines  ■ n★conflict
 silent! Shortcut! <space>w…   [Wiki]•••■ ;★Win/Buf-Swap  ■ w★Enable  ■ l/h/H★Tldr.File/Header/Text  ■ s★fzfText  ■ f★fzfFiles  ■ i★Index  ■ n★new page
-silent! Shortcut! <space>s…   [Save]•••■ s★SaveAs  ■ s••★SecreenJump
+silent! Shortcut! <space>s…   [Save]•••■ <C-s>/<A-s>★Save/Restore workspace/session/vim  ■ s••★SecreenJump
 silent! Shortcut! <space>y…   [Copy]•••■ yy★CopyAsTmpfile  ■ yp★Paste-from-tmpfile
 silent! Shortcut! <space>c…   [Text]•••■ w★Wrap/format paragraph  ■ e★Narror Edit  ■ d★Right Trim  ■ u★Uppercase  ■ c★Capitalize  ■ l★Lowercase
 silent! Shortcut! <space>f…   [Find](cscope)  ■ f(F)★Files(all)  ■ s(S)★Symbol(references)  ■ c(C)★Caller(callee)  ■ w★Assign  ■ t★tags  ■ b★buffers  ■ e★changes  ■ j★Jumps  ■ m★Marks  ■ <c-q><cr>★Sink-to-quickfix
@@ -1881,69 +1881,8 @@ EOF
 endif
 
 
-" https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L284
-if HasPlug('nvim-cmp') | " {{{1
-set completeopt=menu,menuone,noselect
-
-lua <<EOF
-  -- Setup nvim-cmp.
-  local nvim_lsp = require('lspconfig')
-  local cmp = require'cmp'
-
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-        -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
-      end,
-    },
-    mapping = {
-      ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-      ['<C-y>'] = cmp.config.disable, -- If you want to remove the default `<C-y>` mapping, You can specify `cmp.config.disable` value.
-      ['<C-e>'] = cmp.mapping({
-        i = cmp.mapping.abort(),
-        c = cmp.mapping.close(),
-      }),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    },
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'rg' },
-      { name = 'vsnip' }, -- For vsnip users.
-      -- { name = 'luasnip' }, -- For luasnip users.
-      -- { name = 'ultisnips' }, -- For ultisnips users.
-      -- { name = 'snippy' }, -- For snippy users.
-    }, {
-      { name = 'buffer' },
-    })
-  })
-
-  -- Use buffer source for `/`.
-  cmp.setup.cmdline('/', {
-    sources = {
-      { name = 'buffer' }
-    }
-  })
-
-  -- Use cmdline & path source for ':'.
-  cmp.setup.cmdline(':', {
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      { name = 'cmdline' }
-    })
-  })
-
-EOF
-endif
-
-
-if HasPlug('nvim-lspconfig') | " {{{1
-    if HasPlug('fzf-lsp.nvim') | " {{{2
+if HasPlug('nvim-lspconfig')
+    if HasPlug('fzf-lsp.nvim')
         lua <<EOF
         local nvim_lsp = require('lspconfig')
 
@@ -2135,34 +2074,29 @@ endif
 
 if HasPlug('asynctasks.vim')
     if filereadable(expand('~/.vim_tasks.ini')) && !filereadable(expand('~/.vim/tasks.ini'))
-        call system(expand('ln -s ~/.vim_tasks.ini ~/.vim/tasks.ini' )
+        call system(expand('ln -s ~/.vim_tasks.ini ~/.vim/tasks.ini'))
     endif
 endif
 
 
 if HasPlug('auto-session')
+
+    nnoremap <a-s>      :SessionRestore<cr>
+    nnoremap <c-s>      :SessionSave<cr>
+
     let g:auto_session_root_dir = expand('~/.vim/tmp-sessions')
     if !isdirectory(g:auto_session_root_dir)
         call mkdir(g:auto_session_root_dir, 'p')
     endif
-    let g:auto_session_pre_save_cmds = ["tabdo NERDTreeClose"]
+    let g:auto_session_pre_save_cmds = ['if exists(":NERDTreeClose") | exe "tabdo NERDTreeClose\<CR>" | endif']
 
     lua << EOF
     local opts = {
         log_level = 'error', -- info
-        auto_session_enable_last_session = true,
-        auto_session_root_dir = vim.fn.stdpath('data').."/sessions/",
-        auto_session_enabled = true,
-        auto_save_enabled = nil,
-        auto_restore_enabled = nil,
-        auto_session_suppress_dirs = nil,
-        auto_session_use_git_branch = nil,
-        -- the configs below are lua only
-        bypass_session_save_file_types = nil,
         auto_session_suppress_dirs = { "/" }
     }
 
-    vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+    vim.o.sessionoptions="blank,buffers,curdir,folds,tabpages,winsize,winpos,terminal,localoptions"
     require('auto-session').setup(opts)
 EOF
 endif
@@ -2314,9 +2248,6 @@ EOF
 endfor
 endif
 
-
-if HasPlug('vim-colorscheme-switcher') | " {{{1
-endif
 
 
 if HasPlug('which-key.nvim') | " {{{1
