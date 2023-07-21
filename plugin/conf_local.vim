@@ -6,6 +6,9 @@ else
   let g:loaded_local_myconfig = 'yes'
 endif
 
+"https://vi.stackexchange.com/questions/15383/how-can-i-suppress-startup-error-e575
+"  E575: Error while reading ShaDa file:
+"
 " viminfo {{{2}}}
 " Tell vim to remember certain things when we exit
 "  !    :  The uppercase global VARIABLE will saved
@@ -15,9 +18,7 @@ endif
 "  %    :  saves and restores the buffer list
 "  n... :  where to save the viminfo files,
 "            here save to /tmp means we have another viminfo manager 'workspace'
-if has("nvim")
-    set viminfo=!,'30,\"30,:30,%,n~/.nviminfo
-else
+if !has("nvim")
     "set viminfo=!,'30,\"300,:30,%,n/tmp/viminfo
     set viminfo='30,\"30,:30,n~/.viminfo
 endif
