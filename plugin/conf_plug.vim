@@ -101,6 +101,8 @@ if HasPlug('presenting.vim') | " {{{1
     let g:presenting_font_large = 'doh'
     let g:presenting_font_small = 'univers'
     nnoremap <silent>   ;vP     :"(mode)Presenting PPT      "<c-U>PresentingStart<cr>
+
+    "au FileType markdown let b:presenting_slide_separator = '\v(^|\n)\~{4,}'
 endif
 
 
