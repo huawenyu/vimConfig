@@ -122,8 +122,10 @@ if HasPlug('vim-floaterm') | " {{{1
             let l:command = l:command. printf("  python %s", expand('%'))
         elseif &ft=='tcl'
             let l:command = l:command. printf("  expect %s", expand('%'))
+        elseif &ft=='awk'
+            let l:command = l:command. printf("  LC_ALL=C awk -f %s", expand('%'))
         else
-            echomsg "Not support filetype, but can reference 'SingleCompile' to append it."
+            echomsg "Not support filetype, but can reference 'vim.config::compile_run()' to append it."
             return
         endif
 
