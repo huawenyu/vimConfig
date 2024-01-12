@@ -2272,6 +2272,17 @@ endfor
 endif
 
 
+if HasPlug('glow.nvim') | " {{{1
+    nnoremap <silent>   <leader>vi         :"(mode)Glow reader/present         "<c-U>Glow<CR>
+
+    lua << EOF
+    require('glow').setup({
+	  style = "dark",
+	  width = 120,
+	})
+EOF
+endif
+
 
 if HasPlug('which-key.nvim') | " {{{1
     lua << EOF
