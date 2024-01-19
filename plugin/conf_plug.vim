@@ -109,21 +109,30 @@ endif
 if HasPlug('vim-floaterm') | " {{{1
     let g:floaterm_autoinsert = 1
 
-    fun! s:compile_run()
+    fun! s:compile_run(mode)
         let l:command=':FloatermNew --name=repl --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'..&filetype
+
+        if a:mode == 1
+            let l:fname = "/tmp/vim.out"
+        else
+            let l:fname = expand('%')
+        endif
+
         " (&ft=='c' || &ft=='cpp')
         if &ft=='c'
             let l:command = l:command. printf("  gcc -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s", expand('%:r'), expand('%'), expand('%:r'))
         elseif &ft=='cpp'
             let l:command = l:command. printf("  g++ -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s", expand('%:r'), expand('%'), expand('%:r'))
         elseif &ft=='javascript'
-            let l:command = l:command. printf("  node %s", expand('%'))
+            let l:command = l:command. printf("  node %s", l:fname)
         elseif &ft=='python'
-            let l:command = l:command. printf("  python %s", expand('%'))
+            let l:command = l:command. printf("  python %s", l:fname)
         elseif &ft=='tcl'
-            let l:command = l:command. printf("  expect %s", expand('%'))
+            let l:command = l:command. printf("  expect %s", l:fname)
         elseif &ft=='awk'
-            let l:command = l:command. printf("  LC_ALL=C awk -f %s", expand('%'))
+            let l:command = l:command. printf("  LC_ALL=C awk -f %s", l:fname)
+        elseif &ft=='sh'
+            let l:command = l:command. printf("  LC_ALL=C bash %s", l:fname)
         else
             echomsg "Not support filetype, but can reference 'vim.config::compile_run()' to append it."
             return
@@ -136,7 +145,8 @@ if HasPlug('vim-floaterm') | " {{{1
     endfun
 
     "autocmd FileType * nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run()<cr>
-    nnoremap <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run()<cr>
+    nnoremap <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run(0)<cr>
+    vnoremap <leader>ee      :"(*repl)Run me        "<c-U>:'<,'>w! /tmp/vim.out<cr> \| :call <sid>compile_run(1)<cr>
     nnoremap        ;ee      :"(diag)Make buffer    "<c-U>make <C-R>=expand('%:t:r')<cr><cr><cr> \| :copen<cr> \| :wincmd p<cr>
 endif
 
