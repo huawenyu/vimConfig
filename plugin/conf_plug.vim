@@ -120,9 +120,13 @@ if HasPlug('vim-floaterm') | " {{{1
 
         " (&ft=='c' || &ft=='cpp')
         if &ft=='c'
-            let l:command = l:command. printf("  gcc -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s", expand('%:r'), expand('%'), expand('%:r'))
+            " If from outside of dir, should use absolute path, otherwise use relative path
+            "   so here if bin-path fail, then try absolute path
+            let l:command = l:command. printf("  gcc -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s || %s", expand('%:r'), expand('%'), expand('%:r'), expand('%:r') )
         elseif &ft=='cpp'
-            let l:command = l:command. printf("  g++ -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s", expand('%:r'), expand('%'), expand('%:r'))
+            " If from outside of dir, should use absolute path, otherwise use relative path
+            "   so here if bin-path fail, then try absolute path
+            let l:command = l:command. printf("  g++ -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s || %s", expand('%:r'), expand('%'), expand('%:r'), expand('%:r') )
         elseif &ft=='javascript'
             let l:command = l:command. printf("  node %s", l:fname)
         elseif &ft=='python'
@@ -138,7 +142,7 @@ if HasPlug('vim-floaterm') | " {{{1
             return
         endif
 
-        "echomsg "Debug: ". l:command
+        echomsg "Debug: ". l:command
         silent execute l:command
         " Avoid terminal-window exit when enter-any-key
         "stopinsert
