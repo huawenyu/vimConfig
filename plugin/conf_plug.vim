@@ -167,6 +167,8 @@ elseif HasPlug('vim-eval') | " {{{1
     autocmd FileType vim    nmap <buffer> <leader>ee <Plug>eval_viml
     autocmd FileType vim    vmap <buffer> <leader>ee <Plug>eval_viml_region
 elseif HasPlug('vim-basic') | " {{{1
+    let g:vim_basic_map = get(g:, 'vim_basic_map', 1)
+
     " Don't why the this map cause VimL execute '10new' error, and VimL get Select not correct
     "autocmd FileType vim    vmap <buffer> <leader>ee <Plug>(EvalVim)
     "
@@ -183,6 +185,10 @@ if HasPlug('vim-pencil') | " {{{1
     nnoremap <silent>   ;vp     :"(mode)Pencil              "<c-U>TogglePencil<CR>
 endif
 
+if HasPlug('vim-browser-search') | " {{{1
+    nmap <silent> <Leader>sw <Plug>SearchNormal
+    vmap <silent> <Leader>sw <Plug>SearchVisual
+endif
 
 " Pencil draw
 if HasPlug('venn.nvim') | " {{{1
@@ -722,8 +728,6 @@ if HasPlug('w3m.vim') | " {{{1
     let g:w3m#lang = 'en_US'
     let g:w3m#disable_vimproc = 1
     "let g:w3m#disable_default_keymap = 1
-
-    nnoremap <leader>fo     :"(tool)WebBrowser terminal       "<c-U>W3m <c-r>=hw#misc#GetWord('http')<cr><cr>
 endif
 
 
