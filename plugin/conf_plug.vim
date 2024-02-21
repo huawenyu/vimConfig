@@ -877,7 +877,7 @@ if HasPlug('wiki.vim') | " {{{1
     nnoremap    <leader>wJ      :"WikiLinkToggle    "<c-U>WikiLinkToggle<cr>
     nnoremap    <leader>wn      :"WikiOpen          "<c-U>WikiOpen<cr>
     nnoremap    <leader>wr      :"WikiPageRename    "<c-U>WikiPageRename<cr>
-    nnoremap    <leader>wt      :"CurPageListToc    "<c-U>WikiFzfToc<cr>
+    nnoremap    <leader>wt      :"WikiTags          "<c-U>FzfTagHomeCacheTag<cr>
     nnoremap    <leader>wT      :"CurPageCreateToc  "<c-U>WikiPageToc<cr>
     nnoremap    <leader>ww      :"WikiEnable        "<c-U>WikiEnable<cr>
 endif
@@ -892,6 +892,7 @@ if HasPlug('fzf-cscope.vim') | " {{{1
     nnoremap    <leader>wf      :"WikiFzfFiles      "<c-U>WikiFzfFiles<cr>
 
     nnoremap    <leader>ft      :"(fzf)Tag          "<c-U>FzfTagFilter<cr>
+    nnoremap    <leader>fT      :"(fzf)WikiTag      "<c-U>FzfTagHomeCacheTag<cr>
     nnoremap    <leader>fj      :"(fzf)Jumps        "<c-U>FZFJump<cr>
     nnoremap    <leader>fe      :"(fzf)Edit/changes "<c-U>FZFChange<cr>
     nnoremap    <leader>fm      :"(fzf)Marks        "<c-U>FZFMarks<cr>
