@@ -108,17 +108,18 @@ endif
 
 if HasPlug('vim-floaterm') | " {{{1
     let g:floaterm_autoinsert = 1
+    let g:floaterm_shell = '/bin/bash'
+
 
     fun! s:compile_run(mode)
         let l:command=':FloatermNew --name=repl --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'..&filetype
 
-        if a:mode == 1
+        if a:mode == 'v'
             let l:fname = "/tmp/vim.out"
         else
             let l:fname = expand('%')
         endif
 
-        " (&ft=='c' || &ft=='cpp')
         if &ft=='c'
             " If from outside of dir, should use absolute path, otherwise use relative path
             "   so here if bin-path fail, then try absolute path
@@ -144,14 +145,32 @@ if HasPlug('vim-floaterm') | " {{{1
 
         echomsg "Debug: ". l:command
         silent execute l:command
-        " Avoid terminal-window exit when enter-any-key
-        "stopinsert
+    endfun
+
+
+    fun! s:man_show(mode)
+        let l:command=':FloatermNew --name=Help --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Man-'..&filetype
+        let l:text = hw#misc#GetWord(a:mode)
+
+        if &ft=='vim' || &ft=='sh'
+            let l:command = l:command. printf("  tldr -p linux common -L en %s -e", l:text)
+        else
+            echomsg "Not support filetype, but can reference 'vim.config::man_show()' to append it."
+            return
+        endif
+
+        echomsg "Debug: ". l:command
+        silent execute l:command
     endfun
 
     "autocmd FileType * nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run()<cr>
-    nnoremap <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run(0)<cr>
-    vnoremap <leader>ee      :"(*repl)Run me        "<c-U>:'<,'>w! /tmp/vim.out<cr> \| :call <sid>compile_run(1)<cr>
+    nnoremap <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run('n')<cr>
+    vnoremap <leader>ee      :"(*repl)Run me        "<c-U>:'<,'>w! /tmp/vim.out<cr> \| :call <sid>compile_run('v')<cr>
     nnoremap        ;ee      :"(diag)Make buffer    "<c-U>make <C-R>=expand('%:t:r')<cr><cr><cr> \| :copen<cr> \| :wincmd p<cr>
+
+    " Man (tldr)
+    nnoremap <leader>K      :"(Man)Tldr        ":<c-U>call <sid>man_show('n')<cr>
+    vnoremap <leader>K      :"(Man)Tldr        ":<c-U>call <sid>man_show('v')<cr>
 endif
 
 
@@ -2101,6 +2120,12 @@ if HasPlug('asynctasks.vim')
     endif
 endif
 
+if HasPlug('vim-visual-multi')
+    " https://github.com/mg979/vim-visual-multi/wiki/Quick-start#cursor-mode-vs-extend-mode
+    let g:VM_maps = {}
+    let g:VM_maps['Find Under']         = '<C-d>'
+    let g:VM_maps['Find Subword Under'] = '<C-d>'
+endif
 
 if HasPlug('auto-session')
 
