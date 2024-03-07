@@ -37,7 +37,7 @@ silent! Shortcut! g…          [Jump]•••■ gi★Last-insert  ■ gv★Re
 silent! Shortcut! K           [Help]•••■ K★Man  ■ gf★Openfile  ■ <A-#>★Tmux_WinTab  ■ ;#★VimTab  ■ <c-q><cr>★Sink-fzf-preview-to-quickfix
 silent! Shortcut! ;;          [••••]•••■ Leader★<space>  ■ 2nd-leader★;  ■ <space><space>★Preview Tag  ■ ;q★Smartclose  ■ <leader>q★Exit
 silent! Shortcut! ;…          [••••]•••■ ;#★Count  ■ ;^★Popup pattern  ■ ;*★Quickfix-pattern
-silent! Shortcut! …           [Misc]•••■ <space>ee★REPL(md-Code, C-repl),  ■ GitGutter-patch-diff(ENV $VimGitRange),  ■ ^M(Windows-newline) SpeedUp(`:e ++ff=dos`) Convert2Unix(`:set ff=unix`)
+silent! Shortcut! …           [Misc]•••■ <space>ee★REPL(md-Code, C-repl),  ■ GitGutter-patch-diff(ENV $VimGit),  ■ ^M(Windows-newline) SpeedUp(`:e ++ff=dos`) Convert2Unix(`:set ff=unix`)
 
 
 if HasPlug('syntastic') | " {{{1
@@ -159,18 +159,41 @@ if HasPlug('vim-floaterm') | " {{{1
             return
         endif
 
-        echomsg "Debug: ". l:command
+        "echomsg "Debug: ". l:command
+        silent execute l:command
+    endfun
+
+    fun! s:toggle_terminal(mode)
+        let l:command=':FloatermNew --name=Shell --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Shell bash'
         silent execute l:command
     endfun
 
     "autocmd FileType * nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run()<cr>
-    nnoremap <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run('n')<cr>
-    vnoremap <leader>ee      :"(*repl)Run me        "<c-U>:'<,'>w! /tmp/vim.out<cr> \| :call <sid>compile_run('v')<cr>
-    nnoremap        ;ee      :"(diag)Make buffer    "<c-U>make <C-R>=expand('%:t:r')<cr><cr><cr> \| :copen<cr> \| :wincmd p<cr>
+    nnoremap <silent> <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run('n')<cr>
+    vnoremap <silent> <leader>ee      :"(*repl)Run me        "<c-U>:'<,'>w! /tmp/vim.out<cr> \| :call <sid>compile_run('v')<cr>
+    nnoremap <silent>        ;ee      :"(diag)Make buffer    "<c-U>make <C-R>=expand('%:t:r')<cr><cr><cr> \| :copen<cr> \| :wincmd p<cr>
 
     " Man (tldr)
-    nnoremap <leader>K      :"(Man)Tldr        ":<c-U>call <sid>man_show('n')<cr>
-    vnoremap <leader>K      :"(Man)Tldr        ":<c-U>call <sid>man_show('v')<cr>
+    nnoremap <silent> <leader>K      :"(Man)Tldr             ":<c-U>call <sid>man_show('n')<cr>
+    vnoremap <silent> <leader>K      :"(Man)Tldr             ":<c-U>call <sid>man_show('v')<cr>
+
+    if HasNoPlug('vim-floaterm-repl') && HasNoPlug('toggleterm.nvim')    | " {{{1
+        nnoremap <silent> <C-\>          :"(Tool)Terminal        ":<c-U>call <sid>toggle_terminal('n')<cr>
+        vnoremap <silent> <C-\>          :"(Tool)Terminal        ":<c-U>call <sid>toggle_terminal('v')<cr>
+        inoremap <silent> <C-\>     <esc>:"(Tool)Terminal        ":<c-U>call <sid>toggle_terminal('v')<cr>
+    endif
+endif
+
+
+if HasPlug('vim-slime') | " {{{1
+    " for all buffers
+    if executable('tmux')
+        let g:slime_target = "tmux"
+    endif
+
+    if executable('nvr')
+        nnoremap <silent> <leader>fo      :"(Terminal)RemoteOpen     ":<c-U>echomsg "Please execute 'nvr --remote' at other terminal first if failed!" \| !nvr -s --nostart --remote-tab %<cr>
+    endif
 endif
 
 
@@ -1672,6 +1695,12 @@ if HasPlug('vim-multiple-cursors') | " {{{1
     let g:multi_cursor_use_default_mapping=0
 endif
 
+if HasPlug('vim-visual-multi')
+    " https://github.com/mg979/vim-visual-multi/wiki/Quick-start#cursor-mode-vs-extend-mode
+    let g:VM_maps = {}
+    let g:VM_maps['Find Under']         = '<C-d>'
+    let g:VM_maps['Find Subword Under'] = '<C-d>'
+endif
 
 if HasPlug('delimitMate') | " {{{1
     let delimitMate_expand_space = 1
@@ -1873,7 +1902,7 @@ endif
 if HasPlug('vim-signify') | " {{{1
     " Diff by commit SHA: 76748de92fa
     "             OR SHA..HEAD:
-    let g:signify_sha_range = $VimGitRange
+    let g:signify_sha_range = $VimGit
 
     if len(g:signify_sha_range) > 8
         echomsg "GitGutter by "..g:signify_sha_range
@@ -1916,9 +1945,70 @@ if HasPlug('vim-windowswap')
 endif
 
 
+if HasPlug('vim-terminal-help')
+    let g:terminal_key = "<C-\\>"
+    let g:terminal_cwd = 0
+    let g:terminal_shell = "/bin/bash"
+    let g:terminal_kill = "term"
+    let g:terminal_list = 0
+    let g:terminal_close = 1
+endif
+
+
 if HasPlug('fidget.nvim')
     lua << EOF
     require('fidget').setup {}
+EOF
+endif
+
+
+if HasPlug('hydra.nvim')
+    lua << EOF
+    require('hydra').setup {
+        debug = false,
+        exit = false,
+        foreign_keys = nil,
+        color = "red",
+        timeout = false,
+        invoke_on_body = false,
+        hint = {
+            show_name = true,
+            position = { "bottom" },
+            offset = 0,
+            float_opts = { },
+        },
+        on_enter = nil,
+        on_exit = nil,
+        on_key = nil,
+    }
+EOF
+endif
+
+
+if HasPlug('multicursors.nvim')
+    lua << EOF
+    require('multicursors').setup {
+        normal_keys = {
+            -- to change default lhs of key mapping change the key
+            [','] = {
+                -- assigning nil to method exits from multi cursor mode
+                -- assigning false to method removes the binding
+                method = N.clear_others,
+                -- you can pass :map-arguments here
+                opts = { desc = 'Clear others' },
+            },
+            ['<C-d>'] = {
+                method = function()
+                    require('multicursors.utils').call_on_selections(function(selection)
+                        vim.api.nvim_win_set_cursor(0, { selection.row + 1, selection.col + 1 })
+                        local line_count = selection.end_row - selection.row + 1
+                        vim.cmd('normal ' .. line_count .. 'gcc')
+                    end)
+                end,
+                opts = { desc = 'comment selections' },
+            },
+        },
+    }
 EOF
 endif
 
@@ -2095,25 +2185,39 @@ endif
 
 if HasPlug('toggleterm.nvim')
     lua << EOF
+    -- require("toggleterm").setup{}
     require("toggleterm").setup{
-        open_mapping = [[<c-\>]],
-        hide_numbers = true, -- hide the number column in toggleterm buffers
-        shade_filetypes = {},
-        autochdir = false, -- when neovim changes it current directory the terminal will change it's own when next it's opened
-        shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
-        start_in_insert = true,
-        insert_mappings = true, -- whether or not the open mapping applies in insert mode
-        terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
-        persist_size = true,
-        persist_mode = true, -- if set to true (default) the previous terminal mode will be remembered
         close_on_exit = true, -- close the terminal window when the process exits
          -- Change the default shell. Can be a string or a function returning a string
         shell = '/bin/bash',
         auto_scroll = true, -- automatically scroll to the bottom on terminal output
-        winbar = {
-          enabled = false,
-        },
+        start_in_insert = true,
+        open_mapping = [[<c-\>]],
+        terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
+        persist_size = false,
+        persist_mode = false, -- if set to true (default) the previous terminal mode will be remembered
+        close_on_exit = true, -- close the terminal window when the process exits
+        shell = '/bin/bash',
     }
+    -- require("toggleterm").setup{
+    --     open_mapping = [[<c-\>]],
+    --     hide_numbers = true, -- hide the number column in toggleterm buffers
+    --     shade_filetypes = {},
+    --     autochdir = false, -- when neovim changes it current directory the terminal will change it's own when next it's opened
+    --     shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
+    --     start_in_insert = true,
+    --     insert_mappings = true, -- whether or not the open mapping applies in insert mode
+    --     terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
+    --     persist_size = true,
+    --     persist_mode = true, -- if set to true (default) the previous terminal mode will be remembered
+    --     close_on_exit = true, -- close the terminal window when the process exits
+    --      -- Change the default shell. Can be a string or a function returning a string
+    --     shell = '/bin/bash',
+    --     auto_scroll = true, -- automatically scroll to the bottom on terminal output
+    --     winbar = {
+    --       enabled = false,
+    --     },
+    -- }
 EOF
 endif
 
@@ -2138,12 +2242,6 @@ if HasPlug('asynctasks.vim')
     endif
 endif
 
-if HasPlug('vim-visual-multi')
-    " https://github.com/mg979/vim-visual-multi/wiki/Quick-start#cursor-mode-vs-extend-mode
-    let g:VM_maps = {}
-    let g:VM_maps['Find Under']         = '<C-d>'
-    let g:VM_maps['Find Subword Under'] = '<C-d>'
-endif
 
 if HasPlug('auto-session')
 
