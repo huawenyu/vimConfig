@@ -194,6 +194,17 @@ if HasPlug('vim-slime') | " {{{1
     if executable('nvr')
         nnoremap <silent> <leader>fo      :"(Terminal)RemoteOpen     ":<c-U>echomsg "Please execute 'nvr --remote' at other terminal first if failed!" \| !nvr -s --nostart --remote-tab %<cr>
     endif
+elseif HasPlug('vimux') | " {{{1
+    "let g:VimuxUseNearest = v:true
+    let g:VimuxOrientation = "v"
+    let g:VimuxHeight = "40"
+    let g:VimuxCloseOnExit = 1
+
+    nnoremap <silent> <leader>fo      :"(Terminal)RemoteOpen     ":<c-U>VimuxOpenRunner <cr> \| :call VimuxRunCommandInDir('vi', 1)<cr>
+endif
+
+if HasPlug('vim-dispatch') | " {{{1
+    let g:dispatch_tmux_height = '50% -h'
 endif
 
 
