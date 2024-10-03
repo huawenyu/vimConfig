@@ -115,19 +115,23 @@ if HasPlug('vim-floaterm') | " {{{1
         let l:command=':FloatermNew --name=repl --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'..&filetype
 
         if a:mode == 'v'
-            let l:fname = "/tmp/vim.out"
-        else
             let l:fname = expand('%')
+            let l:fname_bin = expand('%:r')
+            let l:fpath_bin = "./" .. expand('%:r')
+        else
+            let l:fname = "/tmp/vim.out"
+            let l:fname_bin = "/tmp/vim.out"
+            let l:fpath_bin = "/tmp/vim.out"
         endif
 
         if &ft=='c'
             " If from outside of dir, should use absolute path, otherwise use relative path
             "   so here if bin-path fail, then try absolute path
-            let l:command = l:command. printf("  gcc -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s || %s", expand('%:r'), expand('%'), expand('%:r'), expand('%:r') )
+            let l:command = l:command. printf("  gcc -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && %s", l:fname_bin, expand('%'), l:fpath_bin )
         elseif &ft=='cpp'
             " If from outside of dir, should use absolute path, otherwise use relative path
             "   so here if bin-path fail, then try absolute path
-            let l:command = l:command. printf("  g++ -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && ./%s || %s", expand('%:r'), expand('%'), expand('%:r'), expand('%:r') )
+            let l:command = l:command. printf("  g++ -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && %s", l:fname_bin, expand('%'), l:fpath_bin )
         elseif &ft=='javascript'
             let l:command = l:command. printf("  node %s", l:fname)
         elseif &ft=='python'
@@ -174,8 +178,9 @@ if HasPlug('vim-floaterm') | " {{{1
     nnoremap <silent>        ;ee      :"(diag)Make buffer    "<c-U>make <C-R>=expand('%:t:r')<cr><cr><cr> \| :copen<cr> \| :wincmd p<cr>
 
     " Man (tldr)
-    nnoremap <silent> <leader>K      :"(Man)Tldr             ":<c-U>call <sid>man_show('n')<cr>
-    vnoremap <silent> <leader>K      :"(Man)Tldr             ":<c-U>call <sid>man_show('v')<cr>
+    nnoremap <silent>         K      :"(Man)Linux            "<c-U>echoerr "" \| :execute "Man " . expand("<cword>")<cr>
+    nnoremap <silent> <leader>K      :"(Man)Tldr             "<c-U>call <sid>man_show('n')<cr>
+    vnoremap <silent> <leader>K      :"(Man)Tldr             "<c-U>call <sid>man_show('v')<cr>
 
     if HasNoPlug('vim-floaterm-repl') && HasNoPlug('toggleterm.nvim')    | " {{{1
         nnoremap <silent> <C-\>          :"(Tool)Terminal        ":<c-U>call <sid>toggle_terminal('n')<cr>
