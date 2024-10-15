@@ -2482,6 +2482,7 @@ if HasPlug('which-key.nvim') | " {{{1
                 g = true, -- bindings for prefixed with g
             },
             },
+        delay = 700,
         key_labels = {
             -- override the label used to display some keys. It doesn't effect WK in any other way.
             -- For example:
