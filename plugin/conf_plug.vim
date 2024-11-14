@@ -2261,8 +2261,8 @@ endif
 
 if HasPlug('auto-session')
 
-    nnoremap <a-s>      :SessionRestore<cr>
-    nnoremap <c-s>      :SessionSave<cr>
+    nnoremap <a-r>      :SessionRestore<cr>
+    nnoremap <a-s>      :SessionSave<cr>
 
     let g:auto_session_root_dir = expand('~/.vim/tmp-sessions')
     if !isdirectory(g:auto_session_root_dir)
@@ -2273,8 +2273,12 @@ if HasPlug('auto-session')
     lua << EOF
     local opts = {
         log_level = 'error', -- info
-        auto_session_enabled = false,
-        auto_session_suppress_dirs = { "/" }
+        auto_save = true,
+        auto_create = true,
+        auto_restore = false, -- Enables/disables auto restoring session on start
+        auto_restore_last_session = false, -- On startup, loads the last saved session if session for cwd does not existallowed_dirs = nil, -- Allow session restore/create in certain directories
+        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+        allowed_dirs = { "~/work", "~/workref" }, -- Allow session restore/create in certain directories
     }
 
     vim.o.sessionoptions="blank,buffers,curdir,folds,tabpages,winsize,winpos,terminal,localoptions"
@@ -2461,6 +2465,8 @@ endif
 
 
 if HasPlug('which-key.nvim') | " {{{1
+    let g:which_key_preferred_mappings = 1
+
     lua << EOF
     require("which-key").setup {
         plugins = {
@@ -2508,5 +2514,7 @@ if HasPlug('which-key.nvim') | " {{{1
             },
         }
 EOF
+
+    let g:which_key_preferred_mappings = 1
 endif
 
