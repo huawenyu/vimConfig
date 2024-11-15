@@ -531,16 +531,6 @@ if HasPlug('asyncrun.vim') | " {{{1
 endif
 
 
-if CheckPlug('tagbar', 1) | " {{{1
-    "let g:tagbar_vertical = 25
-    "let g:tagbar_show_linenumbers = 1
-    "let NERDTreeWinPos = 'left'
-    let g:tagbar_autofocus = 0
-    let g:tagbar_sort = 0
-    let g:tagbar_position = 'left'
-endif
-
-
 if CheckPlug('vista.vim', 1) | " {{{1
     let g:vista_icon_indent = ["▸ ", ""]
     let g:vista_ctags_cmd = {
@@ -806,8 +796,13 @@ if CheckPlug('command-t', 1) | " {{{1
 endif
 
 
-if CheckPlug('tagbar', 1) | " {{{1
+if HasPlug('tagbar') | " {{{1
+    "let g:tagbar_vertical = 25
+    "let g:tagbar_show_linenumbers = 1
+    "let NERDTreeWinPos = 'left'
+    let g:tagbar_autofocus = 0
     "let g:tagbar_autoclose = 1
+    let g:tagbar_position = 'left'
     let g:tagbar_sort = 0
     let g:tagbar_width = 40
     let g:tagbar_compact = 1
@@ -856,8 +851,27 @@ if CheckPlug('tagbar', 1) | " {{{1
                     \   },
                     \ }
     endif
-endif
 
+    " Add support for markdown files in tagbar.
+    if executable('markdown2ctags.py')
+        let path_mdctags = systemlist("which markdown2ctags.py")[0]
+        let g:markdown_use_custom_ctags_defs = 1
+        let g:tagbar_type_markdown = {
+                    \   'ctagsbin' : path_mdctags,
+                    \   'ctagstype' : 'markdown',
+                    \   'ctagsargs' : '-f - --sort=yes --sro=»',
+                    \   'kinds' : [
+                    \       's:sections',
+                    \       'i:images'
+                    \    ],
+                    \    'sro' : '»',
+                    \    'kind2scope' : {
+                    \       's' : 'section',
+                    \     },
+                    \     'sort': 0,
+                    \ }
+    endif
+endif
 
 if CheckPlug('taglist.vim', 1) | " {{{1
     "let Tlist_GainFocus_On_ToggleOpen = 1
