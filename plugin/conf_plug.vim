@@ -135,7 +135,7 @@ if HasPlug('vim-floaterm') | " {{{1
         elseif &ft=='rust'
             " cargo test --test test_filename_without_extension
             let l:fname_bin = fnamemodify(l:fname_bin, ':t')
-            let l:command = l:command. printf("  cargo test --test %s", l:fname_bin)
+            let l:command = l:command. printf("  cargo test %s::test::", l:fname_bin)
         elseif &ft=='javascript'
             let l:command = l:command. printf("  node %s", l:fname)
         elseif &ft=='python'
