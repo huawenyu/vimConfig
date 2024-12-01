@@ -132,6 +132,9 @@ if HasPlug('vim-floaterm') | " {{{1
             " If from outside of dir, should use absolute path, otherwise use relative path
             "   so here if bin-path fail, then try absolute path
             let l:command = l:command. printf("  g++ -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && %s", l:fname_bin, expand('%'), l:fpath_bin )
+        elseif &ft=='rust'
+            " cargo test --test test_filename_without_extension
+            let l:command = l:command. printf("  cargo test --test %s", l:fname_bin)
         elseif &ft=='javascript'
             let l:command = l:command. printf("  node %s", l:fname)
         elseif &ft=='python'
