@@ -133,9 +133,13 @@ if HasPlug('vim-floaterm') | " {{{1
             "   so here if bin-path fail, then try absolute path
             let l:command = l:command. printf("  g++ -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && %s", l:fname_bin, expand('%'), l:fpath_bin )
         elseif &ft=='rust'
-            " cargo test --test test_filename_without_extension
-            let l:fname_bin = fnamemodify(l:fname_bin, ':t')
-            let l:command = l:command. printf("  cargo test '%s::test::' -- --nocapture", l:fname_bin)
+            if a:mode == 'v'
+                " cargo test --test test_filename_without_extension
+                let l:fname_bin = fnamemodify(l:fname_bin, ':t')
+                let l:command = l:command. printf("  cargo test '%s::test::' -- --nocapture", l:fname_bin)
+            else
+                let l:command = l:command. printf("  rust-script %s", expand('%'))
+            endif
         elseif &ft=='javascript'
             let l:command = l:command. printf("  node %s", l:fname)
         elseif &ft=='python'
