@@ -1058,7 +1058,9 @@ if HasPlug('vim-markdown') | " {{{1
     let g:vim_markdown_frontmatter = 1
     let g:vim_markdown_json_frontmatter = 1
     let g:vim_markdown_fenced_languages = ['C=c', 'c=c', 'Shell=sh', 'Java=java'
-          \ , 'Csharp=cs', 'c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini']
+          \ , 'Csharp=cs', 'c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini'
+          \ , 'rust-script=rust', 'Rust=rust', 'RUST=rust'
+          \ ]
     let g:markdown_fenced_languages = g:vim_markdown_fenced_languages
     let g:vim_markdown_autowrite = 1       | " automatically save before jump
     let g:vim_markdown_follow_anchor = 1   | " `ge` command to follow anchors: file#anchor or #anchor
