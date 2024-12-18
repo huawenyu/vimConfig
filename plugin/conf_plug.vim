@@ -4,6 +4,7 @@ if exists('g:loaded_local_config') || &compatible
     finish
 else
     let g:loaded_local_config = 'yes'
+    let s:base_dir = resolve(expand("<sfile>:p:h"))
     silent! let s:log = logger#getLogger(expand('<sfile>:t'))
 endif
 
@@ -14,30 +15,6 @@ if g:vim_confi_option.auto_install_plugs
         \ |     PlugInstall --sync | q
         \ | endif
 endif
-
-
-silent! Shortcut! […_OR_]…    [Misc]•••■ o★enable option  ■ <space>★add blank lines  ■ e★exchange lines  ■ n★conflict
-silent! Shortcut! <space>w…   [Wiki]•••■ ;★Win/Buf-Swap  ■ w★Enable  ■ l/h/H★Tldr.File/Header/Text  ■ s★fzfText  ■ f★fzfFiles  ■ i★Index  ■ n★new page
-silent! Shortcut! <space>s…   [Save]•••■ <C-s>/<A-s>★Save/Restore workspace/session/vim  ■ s••★SecreenJump
-silent! Shortcut! <space>y…   [Copy]•••■ yy★CopyAsTmpfile  ■ yp★Paste-from-tmpfile
-silent! Shortcut! <space>c…   [Text]•••■ w★Wrap/format paragraph  ■ e★Narror Edit  ■ d★Right Trim  ■ u★Uppercase  ■ c★Capitalize  ■ l★Lowercase
-silent! Shortcut! <space>f…   [Find](cscope)  ■ f(F)★Files(all)  ■ s(S)★Symbol(references)  ■ c(C)★Caller(callee)  ■ w★Assign  ■ t★tags  ■ b★buffers  ■ e★changes  ■ j★Jumps  ■ m★Marks  ■ <c-q><cr>★Sink-to-quickfix
-silent! Shortcut! <space>m…   [Mark]•••■ mm★colorize word  ■ ma★Make all  ■ mk★Make wad  ■ <space>ee-execute  ■ ;ee-make buffer  ■ mf★quickfix filter  ■ mc★quickfix show caller  ■ Macro record/play
-silent! Shortcut! <space>d…   [Help]•••■ t★Right trim all  ■ d★Remove search lines
-silent! Shortcut! <space>g…   [Git]••••■ b★Blame  ■ s★Status  ■ d★Diff  ■ l★Log  ■ f★Preview file  ■ a★EasyAlign
-silent! Shortcut! <space>v…   [Views]••■ Same as <A-…>
-silent! Shortcut! <C-…>       [Motion]•■ <C-h,j,k,l>★Vim/Tmux-panel  ■ <C-]>★tags  ■ g<C-]>★select tags  ■ <C-i,o>★history  ■ <C-n,p>★quickfix  ■ <C-/>★Comment  ■ <C-w#>★Sel-window
-silent! Shortcut! <A-…>       [Views]••■ <A-e>★Explore<>  ■ <A-'>★Outline  ■ <A-;>★Quickfix  ■ <A-/>★Taglist  ■ <A-w>★Maximize
-silent! Shortcut! ;f…         [Mode](clangd)  ■ f★Files  ■ s★Symbol  ■ s★References  ■ c★Caller  ■ h/H★Info/Macro-expand  ■ •★Diagnostics
-silent! Shortcut! ;v…         [Mode]•••■ •★(Goyo_Column,Pencil)
-silent! Shortcut! ;s…         [Mode]•••■ sx★terminal(<esc><esc>-EditMode)  ■ sv★term-vert  ■ sh★term-horizon
-silent! Shortcut! <F…>        [gdb]••••■ F4★Continue  ■ F5★Next(S-Skip)  ■ F6★StepIn(S-Finish)  ■ F7★RunToHere  ■ F8★Evaluate(S-Watch)  ■ F9★ToggleBreak
-silent! Shortcut! v…          [Object]•■ vie★whole buffer  ■ vi`★Code-fence  ■ vif★Function  ■ viu★URL  ■ vij★Brace  ■ vic★Comment  ■ vib★Block  ■ vi'★Quota
-silent! Shortcut! g…          [Jump]•••■ gi★Last-insert  ■ gv★Reselect  ■ gd★Definition  ■ g;★Changelist-older  ■ g,★Changelist-newer  ■ gg/G★begin/end   ■ zt/zz/zb★Top/Middle/Bottom
-silent! Shortcut! K           [Help]•••■ K★Man  ■ gf★Openfile  ■ <A-#>★Tmux_WinTab  ■ ;#★VimTab  ■ <c-q><cr>★Sink-fzf-preview-to-quickfix
-silent! Shortcut! ;;          [••••]•••■ Leader★<space>  ■ 2nd-leader★;  ■ <space><space>★Preview Tag  ■ ;q★Smartclose  ■ <leader>q★Exit
-silent! Shortcut! ;…          [••••]•••■ ;#★Count  ■ ;^★Popup pattern  ■ ;*★Quickfix-pattern
-silent! Shortcut! …           [Misc]•••■ <space>ee★REPL(md-Code, C-repl),  ■ GitGutter-patch-diff(ENV $VimGit),  ■ ^M(Windows-newline) SpeedUp(`:e ++ff=dos`) Convert2Unix(`:set ff=unix`)
 
 
 if HasPlug('syntastic') | " {{{1
@@ -78,6 +55,20 @@ endif
 if HasPlug('vim-oscyank') | " {{{1
     "let g:oscyank_term = 'default'
 endif
+
+
+if HasPlug('vim-template') | " {{{1
+    let g:username = "Wilson"
+    let g:email = "wilson.yuu@gmail.com"
+    let g:templates_user_variables = [
+                \   ['FULLPATH', 'GetFullPath'],
+                \ ]
+
+    function! GetFullPath()
+        return expand('%:p')
+    endfunction
+endif
+
 
 if HasPlug('goyo.vim') | " {{{1
     let g:goyo_width = 120
@@ -159,12 +150,31 @@ if HasPlug('vim-floaterm') | " {{{1
         silent execute l:command
     endfun
 
+    " Function to check if the current word under the cursor is a word
+    fun! s:isCurrentWordAWord(word)
+        let word_pattern = '^\w\+$'
+        if match(a:word, word_pattern) != -1
+            return 1
+        endif
+        return 0
+    endfun
+
 
     fun! s:man_show(mode)
+        if a:mode == 'k'
+            let word = expand("<cword>")
+            if s:isCurrentWordAWord(word) == 1
+                execute "Man ".. word
+                return
+            endif
+        endif
+
         let l:command=':FloatermNew --name=Help --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Man-'..&filetype
         let l:text = hw#misc#GetWord(a:mode)
 
-        if &ft=='vim' || &ft=='sh'
+        if a:mode == 'k'
+            let l:command = l:command. printf("  moar -colors 256 '%s/../docs/help.md'", s:base_dir)
+        elseif &ft=='vim' || &ft=='sh'
             let l:command = l:command. printf("  tldr -p linux common -L en %s -e", l:text)
         else
             echomsg "Not support filetype, but can reference 'vim.config::man_show()' to append it."
@@ -186,7 +196,7 @@ if HasPlug('vim-floaterm') | " {{{1
     nnoremap <silent>        ;ee      :"(diag)Make buffer    "<c-U>make <C-R>=expand('%:t:r')<cr><cr><cr> \| :copen<cr> \| :wincmd p<cr>
 
     " Man (tldr)
-    nnoremap <silent>         K      :"(Man)Linux            "<c-U>echoerr "" \| :execute "Man " . expand("<cword>")<cr>
+    nnoremap <silent>         K      :"(Man)                 "<c-U>call <sid>man_show('k')<cr>
     nnoremap <silent> <leader>K      :"(Man)Tldr             "<c-U>call <sid>man_show('n')<cr>
     vnoremap <silent> <leader>K      :"(Man)Tldr             "<c-U>call <sid>man_show('v')<cr>
 
@@ -1073,6 +1083,11 @@ if HasPlug('vim-markdown') | " {{{1
             au! BufNewFile,BufFilePre,BufRead *.md,*.wiki set filetype=markdown
         augroup END
     endif
+endif
+
+
+if HasPlug('context.vim') | " {{{1
+    let g:context_enabled = 1
 endif
 
 
