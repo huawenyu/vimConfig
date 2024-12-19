@@ -1107,6 +1107,7 @@ if HasPlug('context.vim') | " {{{1
     " let g:context_highlight_normal = 'Normal'
     " let g:context_highlight_border = 'Comment'
     let g:context_highlight_tag    = '<hide>'
+    let g:context_buftype_blacklist = ['floaterm', 'Quickfix List']
 endif
 
 if HasPlug('lightline.vim') | " {{{1
