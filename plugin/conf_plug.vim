@@ -2526,14 +2526,14 @@ if HasPlug('lualine.nvim') | " {{{1
 EOF
 endif
 
-if HasPlug('which-key.nvim') | " {{{1
+if HasPlug('which-key.nvim')
     let g:which_key_preferred_mappings = 1
 
     lua << EOF
     require("which-key").setup {
         plugins = {
-            marks = false, -- shows a list of your marks on ' and `
-            registers = false, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+            marks = false,
+            registers = false,
             spelling = {
                 enabled = false, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
                 suggestions = 20, -- how many suggestions should be shown in the list?
@@ -2549,24 +2549,12 @@ if HasPlug('which-key.nvim') | " {{{1
                 z = true, -- bindings for folds, spelling and others prefixed with z
                 g = true, -- bindings for prefixed with g
             },
-            },
+        },
         delay = 700,
-        key_labels = {
-            -- override the label used to display some keys. It doesn't effect WK in any other way.
-            -- For example:
-            -- ["<space>"] = "SPC",
-            -- ["<cr>"] = "↲",
-            -- ["<tab>"] = "TAB",
-            -- ["<C-U>"] = "┊",
-            },
         icons = {
-            breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-            separator = "░", -- symbol used between a key and it's label
-            group = "▶", -- symbol prepended to a group
-            },
-        popup_mappings = {
-            -- scroll_down = '<c-n>', -- binding to scroll down inside the popup
-            -- scroll_up = '<c-p>', -- binding to scroll up inside the popup
+            -- breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
+            -- separator = "░", -- symbol used between a key and it's label
+            -- group = "▶", -- symbol prepended to a group
             },
         layout = {
             height = { min = 4, max = 25 }, -- min and max height of the columns
