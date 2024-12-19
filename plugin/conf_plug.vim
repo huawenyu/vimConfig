@@ -159,11 +159,22 @@ if HasPlug('vim-floaterm') | " {{{1
         return 0
     endfun
 
+    fun! s:getCurrentWord()
+        " Check if the cursor is on a word character (alphanumeric or underscore)
+        if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\w'
+            " If it is, return the word under the cursor
+            return expand('<cword>')
+        else
+            " If it is not, return an empty string
+            return ''
+        endif
+    endfun
+
 
     fun! s:man_show(mode)
         if a:mode == 'k'
-            let word = expand("<cword>")
-            if s:isCurrentWordAWord(word) == 1
+            let word = s:getCurrentWord()
+            if !empty(word)
                 execute "Man ".. word
                 return
             endif
@@ -174,7 +185,7 @@ if HasPlug('vim-floaterm') | " {{{1
 
         if a:mode == 'k'
             let l:command = l:command. printf("  moar -colors 256 '%s/../docs/help.md'", s:base_dir)
-        elseif &ft=='vim' || &ft=='sh'
+        elseif &ft=='vim' || &ft=='sh' || &ft=='markdown'
             let l:command = l:command. printf("  tldr -p linux common -L en %s -e", l:text)
         else
             echomsg "Not support filetype, but can reference 'vim.config::man_show()' to append it."
