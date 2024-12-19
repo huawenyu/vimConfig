@@ -150,8 +150,17 @@ if HasPlug('vim-floaterm') | " {{{1
             return
         endif
 
+
+        if exists(':ContextDisable')
+            silent execute ':ContextDisable'
+        endif
+
         echomsg "Debug: ". l:command
         silent execute l:command
+
+        if exists(':ContextEnable')
+            silent execute ':ContextEnable'
+        endif
     endfun
 
     " Function to check if the current word under the cursor is a word
@@ -1107,7 +1116,7 @@ if HasPlug('context.vim') | " {{{1
     " let g:context_highlight_normal = 'Normal'
     " let g:context_highlight_border = 'Comment'
     let g:context_highlight_tag    = '<hide>'
-    let g:context_buftype_blacklist = ['floaterm', 'Quickfix List']
+    let g:context_buftype_blacklist = ['floaterm', 'quickfix']
     let g:context_filetype_blacklist = ['floaterm', 'Quickfix List']
 endif
 
