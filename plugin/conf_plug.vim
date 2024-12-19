@@ -105,6 +105,8 @@ if HasPlug('vim-floaterm') | " {{{1
     fun! s:compile_run(mode)
         let l:command=':FloatermNew --name=repl --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'..&filetype
 
+        " Script like code, don't need compile, then we can run it directly
+        let l:fname_org = expand('%')
         if a:mode == 'v'
             let l:fname = expand('%')
             let l:fname_bin = expand('%:r')
@@ -118,29 +120,31 @@ if HasPlug('vim-floaterm') | " {{{1
         if &ft=='c'
             " If from outside of dir, should use absolute path, otherwise use relative path
             "   so here if bin-path fail, then try absolute path
-            let l:command = l:command. printf("  gcc -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && %s", l:fname_bin, expand('%'), l:fpath_bin )
+            let l:command = l:command. printf("  gcc -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && %s", l:fname_bin, l:fname_org, l:fpath_bin )
         elseif &ft=='cpp'
             " If from outside of dir, should use absolute path, otherwise use relative path
             "   so here if bin-path fail, then try absolute path
-            let l:command = l:command. printf("  g++ -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && %s", l:fname_bin, expand('%'), l:fpath_bin )
+            let l:command = l:command. printf("  g++ -pthread -lrt -g -O0 -finstrument-functions -fms-extensions -o %s %s && %s", l:fname_bin, l:fname_org, l:fpath_bin )
         elseif &ft=='rust'
             if a:mode == 'v'
                 " cargo test --test test_filename_without_extension
                 let l:fname_bin = fnamemodify(l:fname_bin, ':t')
                 let l:command = l:command. printf("  cargo test '%s::test::' -- --nocapture", l:fname_bin)
             else
-                let l:command = l:command. printf("  rust-script %s", expand('%'))
+                let l:command = l:command. printf("  rust-script %s", l:fname_org)
             endif
+        elseif &ft=='java'
+            let l:command = l:command. printf("  java %s", l:fname_org)
         elseif &ft=='javascript'
-            let l:command = l:command. printf("  node %s", l:fname)
+            let l:command = l:command. printf("  node %s", l:fname_org)
         elseif &ft=='python'
-            let l:command = l:command. printf("  python %s", l:fname)
+            let l:command = l:command. printf("  python %s", l:fname_org)
         elseif &ft=='tcl'
-            let l:command = l:command. printf("  expect %s", l:fname)
+            let l:command = l:command. printf("  expect %s", l:fname_org)
         elseif &ft=='awk'
-            let l:command = l:command. printf("  LC_ALL=C awk -f %s", l:fname)
+            let l:command = l:command. printf("  LC_ALL=C awk -f %s", l:fname_org)
         elseif &ft=='sh'
-            let l:command = l:command. printf("  LC_ALL=C bash %s", l:fname)
+            let l:command = l:command. printf("  LC_ALL=C bash %s", l:fname_org)
         else
             echomsg "Not support filetype, but can reference 'vim.config::compile_run()' to append it."
             return
