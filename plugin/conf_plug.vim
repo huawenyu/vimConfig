@@ -1088,8 +1088,24 @@ endif
 
 if HasPlug('context.vim') | " {{{1
     let g:context_enabled = 1
+    " let g:context_presenter = 'nvim-float'
+    " let g:context_highlight_normal = 'Normal'
+    " let g:context_highlight_border = 'Comment'
+    let g:context_highlight_tag    = '<hide>'
 endif
 
+if HasPlug('lightline.vim') | " {{{1
+   let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
+endif
 
 if CheckPlug('mkdx', 1) | " {{{1
     "let g:mkdx#settings = { 'map': { 'prefix': ';' } }
@@ -2502,6 +2518,13 @@ if HasPlug('glow.nvim') | " {{{1
 EOF
 endif
 
+
+if HasPlug('lualine.nvim') | " {{{1
+
+    lua << EOF
+    require('lualine').setup()
+EOF
+endif
 
 if HasPlug('which-key.nvim') | " {{{1
     let g:which_key_preferred_mappings = 1
