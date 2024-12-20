@@ -705,7 +705,7 @@ endif
 
 if CheckPlug('VOoM', 1) | " {{{1
     let g:voom_tree_width = 45
-    let g:voom_tree_placement = 'right'
+    let g:voom_tree_placement = 'left'
 endif
 
 
