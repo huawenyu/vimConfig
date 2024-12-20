@@ -197,11 +197,11 @@ if HasPlug('vim-floaterm') | " {{{1
         let l:text = hw#misc#GetWord(a:mode)
 
         if a:mode == 'k'
-            if !executable('moar')
+            if !executable('bat')
                 echoerr "Ubuntu: sudo apt install bat    ### Can't find bat-tool `moar`"
                 return
             endif
-            let l:command = l:command. printf("  moar -colors 256 '%s/../docs/help.md'", s:base_dir)
+            let l:command = l:command. printf("  bat -Pp '%s/../docs/help.md'", s:base_dir)
         elseif &ft=='vim' || &ft=='sh' || &ft=='markdown'
             let l:command = l:command. printf("  tldr -p linux common -L en %s -e", l:text)
         else
