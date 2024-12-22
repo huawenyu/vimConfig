@@ -1,12 +1,14 @@
 " Version:      1.0
 
-if exists('g:loaded_local_config') || &compatible
+if exists('g:loaded_conf_plug') || &compatible
     finish
 else
-    let g:loaded_local_config = 'yes'
+    let g:loaded_conf_plug = 'yes'
     let s:base_dir = resolve(expand("<sfile>:p:h"))
     silent! let s:log = logger#getLogger(expand('<sfile>:t'))
 endif
+
+lua require('vimConfig').setup()
 
 
 if g:vim_confi_option.auto_install_plugs
@@ -150,7 +152,7 @@ if HasPlug('vim-floaterm') | " {{{1
         elseif &ft=='nroff'
             let l:command = printf("  Snman %s", l:fname_org)
         else
-            echomsg "Not support filetype, but can reference 'vim.config::compile_run()' to append it."
+            echomsg "Not support filetype, but can reference 'vimConfig::compile_run()' to append it."
             return
         endif
 
@@ -191,7 +193,10 @@ if HasPlug('vim-floaterm') | " {{{1
     fun! s:man_show(mode)
         if a:mode == 'k'
             let word = s:getCurrentWord()
-            if !empty(word)
+            if empty(word)
+                execute "Man vim_cheat"
+                return
+            else
                 execute "Man ".. word
                 return
             endif
@@ -200,16 +205,10 @@ if HasPlug('vim-floaterm') | " {{{1
         let l:command=':FloatermNew --name=Help --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Man-'..&filetype
         let l:text = hw#misc#GetWord(a:mode)
 
-        if a:mode == 'k'
-            if !executable('bat')
-                echoerr "Ubuntu: sudo apt install bat    ### Can't find bat-tool `moar`"
-                return
-            endif
-            let l:command = l:command. printf("  bat -Pp '%s/../docs/help.md'", s:base_dir)
-        elseif &ft=='vim' || &ft=='sh' || &ft=='markdown'
+        if &ft=='vim' || &ft=='sh' || &ft=='markdown'
             let l:command = l:command. printf("  tldr -p linux common -L en %s -e", l:text)
         else
-            echomsg "Not support filetype, but can reference 'vim.config::man_show()' to append it."
+            echomsg "Not support filetype, but can reference 'vimConfig::man_show()' to append it."
             return
         endif
 
@@ -2060,81 +2059,8 @@ if HasPlug('vim-terminal-help')
 endif
 
 
-if HasPlug('fidget.nvim')
-    lua << EOF
-    require('fidget').setup {}
-EOF
-endif
-
-
-if HasPlug('hydra.nvim')
-    lua << EOF
-    require('hydra').setup {
-        debug = false,
-        exit = false,
-        foreign_keys = nil,
-        color = "red",
-        timeout = false,
-        invoke_on_body = false,
-        hint = {
-            show_name = true,
-            position = { "bottom" },
-            offset = 0,
-            float_opts = { },
-        },
-        on_enter = nil,
-        on_exit = nil,
-        on_key = nil,
-    }
-EOF
-endif
-
-
-if HasPlug('multicursors.nvim')
-    lua << EOF
-    require('multicursors').setup {
-        normal_keys = {
-            -- to change default lhs of key mapping change the key
-            [','] = {
-                -- assigning nil to method exits from multi cursor mode
-                -- assigning false to method removes the binding
-                method = N.clear_others,
-                -- you can pass :map-arguments here
-                opts = { desc = 'Clear others' },
-            },
-            ['<C-d>'] = {
-                method = function()
-                    require('multicursors.utils').call_on_selections(function(selection)
-                        vim.api.nvim_win_set_cursor(0, { selection.row + 1, selection.col + 1 })
-                        local line_count = selection.end_row - selection.row + 1
-                        vim.cmd('normal ' .. line_count .. 'gcc')
-                    end)
-                end,
-                opts = { desc = 'comment selections' },
-            },
-        },
-    }
-EOF
-endif
-
-
 if HasPlug('nvim-lspconfig')
     if HasPlug('fzf-lsp.nvim')
-        lua <<EOF
-        local nvim_lsp = require('lspconfig')
-
-        -- nvim-cmp supports additional completion capabilities
-        local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-        -- Enable the following language servers
-        -- local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
-        local servers = { 'clangd', 'rust_analyzer' }
-        for _, lsp in ipairs(servers) do
-            nvim_lsp[lsp].setup {
-                capabilities = capabilities,
-            }
-        end
-EOF
         nnoremap <silent>        ;fD    :Declarations <cr>
         nnoremap <silent>        ;fd    :Definitions <cr>
         nnoremap <silent>        ;fi    :Implementations <cr>
@@ -2144,200 +2070,16 @@ EOF
         nnoremap <silent>        ;f2    :OutgoingCalls <cr>
         nnoremap <silent>        ;f3    :Diagnostics <cr>
         nnoremap <silent>        ;f4    :DiagnosticsAll <cr>
-
-    elseif HasPlug('cmp-nvim-lsp')
-        lua <<EOF
-        local nvim_lsp = require('lspconfig')
-        local on_attach = function(_, bufnr)
-            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-            local opts = { noremap = true, silent = true }
-            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fH', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fs', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>ca', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
-            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fw', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fn', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fp', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-            -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-            -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
-
-            vim.api.nvim_set_keymap('n', ';fD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-            vim.api.nvim_set_keymap('n', ';fd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-            vim.api.nvim_set_keymap('n', ';fh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-            vim.api.nvim_set_keymap('n', ';fH', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-            vim.api.nvim_set_keymap('n', ';fi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-            vim.api.nvim_set_keymap('n', ';fr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-            vim.api.nvim_set_keymap('n', ';fs', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-            vim.api.nvim_set_keymap('n', ';fn', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-            vim.api.nvim_set_keymap('n', ';fp', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-            vim.api.nvim_set_keymap('n', ';fq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-
-            vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
-        end
-        -- nvim-cmp supports additional completion capabilities
-        local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-        -- Enable the following language servers
-        -- local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
-        local servers = { 'clangd', 'rust_analyzer' }
-        for _, lsp in ipairs(servers) do
-            nvim_lsp[lsp].setup {
-                on_attach = on_attach,
-                capabilities = capabilities,
-            }
-        end
-EOF
-    else
-        lua << EOF
-        require'lspconfig'.clangd.setup{}
-        require'lspconfig'.rust_analyzer.setup{}
-
-        -- Plug 'glepnir/lspsaga.nvim'
-        -- require 'lspsaga'.init_lsp_saga()
-
-        -- Plug 'ojroques/nvim-lspfuzzy'
-        require('lspfuzzy').setup{}
-
-        local opts = { noremap = true, silent = true }
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fH', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-        -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-        -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-        -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-        -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fs', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-        -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-        -- -- vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>ca', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
-        -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fw', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fn', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fp', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', ';fq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-        -- -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
-
-        opts.desc = "(lsp)Goto Declaration";     vim.api.nvim_set_keymap('n', ';fD', '<cmd>lua vim.lsp.buf.declaration()<CR>',        opts)
-        opts.desc = "(lsp)Goto Definition";      vim.api.nvim_set_keymap('n', ';fd', '<cmd>lua vim.lsp.buf.definition()<CR>',         opts)
-        opts.desc = "(lsp)Goto Implement";       vim.api.nvim_set_keymap('n', ';fi', '<cmd>lua vim.lsp.buf.implementation()<CR>',     opts)
-        opts.desc = "(lsp)Show Info";            vim.api.nvim_set_keymap('n', ';fh', '<cmd>lua vim.lsp.buf.hover()<CR>',              opts)
-        opts.desc = "(lsp)Action";               vim.api.nvim_set_keymap('n', ';fH', '<cmd>lua vim.lsp.buf.code_action()<CR>',        opts)
-        opts.desc = "(lsp)Refactor rename)";     vim.api.nvim_set_keymap('n', ';fr', '<cmd>lua vim.lsp.buf.rename()<CR>',             opts)
-        opts.desc = "(lsp)References";           vim.api.nvim_set_keymap('n', ';fs', '<cmd>lua vim.lsp.buf.references()<CR>',         opts)
-        opts.desc = "(lsp)Diag prev";            vim.api.nvim_set_keymap('n', ';fn', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>',   opts)
-        opts.desc = "(lsp)Diag next";            vim.api.nvim_set_keymap('n', ';fp', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>',   opts)
-        opts.desc = "(lsp)Diag sink local list"; vim.api.nvim_set_keymap('n', ';fq', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-        -- opts.desc = "(lsp)Show Signature";       vim.api.nvim_set_keymap('n', ';fH', '<cmd>lua vim.lsp.buf.signature_help()<CR>',     opts)
-
-        -- Disable diagnostics globally
-        vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
-        -- vim.lsp.callbacks["textDocument/publishDiagnostics"] = function() end
-
-        vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
-EOF
-    endif
-endif
-
-
-if HasPlug('cheatsheet.nvim') | " {{{1
-    if HasPlug('telescope.nvim') | " {{{2
-    lua <<EOF
-    require("cheatsheet").setup({
-        -- Whether to show bundled cheatsheets
-
-        -- For generic cheatsheets like default, unicode, nerd-fonts, etc
-        -- bundled_cheatsheets = {
-        --     enabled = {},
-        --     disabled = {},
-        -- },
-        bundled_cheatsheets = true,
-
-        -- For plugin specific cheatsheets
-        -- bundled_plugin_cheatsheets = {
-        --     enabled = {},
-        --     disabled = {},
-        -- }
-        bundled_plugin_cheatsheets = true,
-
-        -- For bundled plugin cheatsheets, do not show a sheet if you
-        -- don't have the plugin installed (searches runtimepath for
-        -- same directory name)
-        include_only_installed_plugins = true,
-
-        -- Key mappings bound inside the telescope window
-        telescope_mappings = {
-            ['<CR>'] = require('cheatsheet.telescope.actions').select_or_fill_commandline,
-            ['<A-CR>'] = require('cheatsheet.telescope.actions').select_or_execute,
-            ['<C-Y>'] = require('cheatsheet.telescope.actions').copy_cheat_value,
-            ['<C-E>'] = require('cheatsheet.telescope.actions').edit_user_cheatsheet,
-        }
-    })
-EOF
     endif
 endif
 
 
 if HasPlug('toggleterm.nvim')
-    lua << EOF
-    -- require("toggleterm").setup{}
-    require("toggleterm").setup{
-        close_on_exit = true, -- close the terminal window when the process exits
-         -- Change the default shell. Can be a string or a function returning a string
-        shell = '/bin/bash',
-        auto_scroll = true, -- automatically scroll to the bottom on terminal output
-        start_in_insert = true,
-        open_mapping = [[<c-\>]],
-        terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
-        persist_size = false,
-        persist_mode = false, -- if set to true (default) the previous terminal mode will be remembered
-        close_on_exit = true, -- close the terminal window when the process exits
-        shell = '/bin/bash',
-    }
-    -- require("toggleterm").setup{
-    --     open_mapping = [[<c-\>]],
-    --     hide_numbers = true, -- hide the number column in toggleterm buffers
-    --     shade_filetypes = {},
-    --     autochdir = false, -- when neovim changes it current directory the terminal will change it's own when next it's opened
-    --     shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
-    --     start_in_insert = true,
-    --     insert_mappings = true, -- whether or not the open mapping applies in insert mode
-    --     terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
-    --     persist_size = true,
-    --     persist_mode = true, -- if set to true (default) the previous terminal mode will be remembered
-    --     close_on_exit = true, -- close the terminal window when the process exits
-    --      -- Change the default shell. Can be a string or a function returning a string
-    --     shell = '/bin/bash',
-    --     auto_scroll = true, -- automatically scroll to the bottom on terminal output
-    --     winbar = {
-    --       enabled = false,
-    --     },
-    -- }
-EOF
-endif
-
-
-if HasPlug('neoscroll.nvim')
-    lua << EOF
-    require("neoscroll").setup{}
-EOF
 endif
 
 
 if HasPlug('todo-comments.nvim')
-    lua << EOF
-    require("todo-comments.config").setup{}
-EOF
+    nnoremap <silent>  <leader>vt     :"(view)Todolist          "<c-U>exec 'silent! TodoLocList' \| exec 'LoadTodo' \| TodoLocList<cr>
 endif
 
 
@@ -2349,515 +2091,18 @@ endif
 
 
 if HasPlug('auto-session')
-
-    nnoremap <a-r>      :SessionRestore<cr>
-    nnoremap <a-s>      :SessionSave<cr>
+    nnoremap <a-r>      :exec 'LoadAutoSession' \| SessionRestore<cr>
+    nnoremap <a-s>      :exec 'LoadAutoSession' \| SessionSave<cr>
 
     let g:auto_session_root_dir = expand('~/.vim/tmp-sessions')
     if !isdirectory(g:auto_session_root_dir)
         call mkdir(g:auto_session_root_dir, 'p')
     endif
     let g:auto_session_pre_save_cmds = ['if exists(":NERDTreeClose") | exe "tabdo NERDTreeClose\<CR>" | endif']
-
-    lua << EOF
-    local opts = {
-        log_level = 'error', -- info
-        auto_save = true,
-        auto_create = true,
-        auto_restore = false, -- Enables/disables auto restoring session on start
-        auto_restore_last_session = false, -- On startup, loads the last saved session if session for cwd does not existallowed_dirs = nil, -- Allow session restore/create in certain directories
-        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-        allowed_dirs = { "~/work", "~/workref" }, -- Allow session restore/create in certain directories
-    }
-
-    vim.o.sessionoptions="blank,buffers,curdir,folds,tabpages,winsize,winpos,terminal,localoptions"
-    require('auto-session').setup(opts)
-EOF
 endif
 
 
-if HasPlug('hop.nvim')
-    lua << EOF
-    local opts = {
-        keys = 'etovxqpdygfblzhckisuran'
-    }
-
-    require'hop'.setup(opts)
-    local hop = require('hop')
-    local directions = require('hop.hint').HintDirection
-    vim.keymap.set('', 's', function()
-        hop.hint_char1({ current_line_only = true })
-        end, {remap=true})
-    vim.keymap.set('', 'S', function()
-        hop.hint_char1({})
-        end, {remap=true})
-EOF
-endif
-
-
-if HasPlug('nvim-treesitter')
-"
-" :TSInstall diff
-"
-
-for _ in ['once']
-    lua << EOF
-    if (isModuleAvailable('nvim-treesitter.configs'))
-    then
-    require'nvim-treesitter.configs'.setup {
-      -- A list of parser names, or "all" (the five listed parsers should always be installed)
-      ensure_installed = { "c", "lua", "vim", "vimdoc", "query",
-        -- "markdown",
-        "markdown_inline",
-        "cmake", "comment", "cpp", "css", "diff", "dockerfile", "bash", "awk",
-        "git_config", "gitignore", "go", "gowork", "haskell", "java", "python", "http", "html",
-        "julia", "latex", "llvm", "make", "matlab", "meson", "nix",
-        "pascal", "perl", "php", "phpdoc", "objc", "ninja", "rust", "sql",
-        "todotxt", "toml", "yaml", "typescript", "javascript", },
-
-      -- Install parsers synchronously (only applied to `ensure_installed`)
-      sync_install = false,
-
-      -- Automatically install missing parsers when entering buffer
-      -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-      auto_install = true,
-
-      -- List of parsers to ignore installing (for "all")
-      ignore_install = { "javascript" },
-
-      ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-      -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
-      highlight = {
-        enable = true,
-
-        -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-        -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-        -- the name of the parser)
-        -- list of language that will be disabled
-        disable = { "javascript" },
-        -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-        disable = function(lang, buf)
-            local max_filesize = 100 * 1024 -- 100 KB
-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-            if ok and stats and stats.size > max_filesize then
-                return true
-            end
-        end,
-
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false,
-      },
-    }
-    end
-EOF
-
-    lua << EOF
-    if (isModuleAvailable('nvim-treesitter.configs'))
-    then
-    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-    parser_config.tcl = {
-      install_info = {
-        --  Issues:
-        --    Compile error: can't find <tree-sitter/parser.h>
-        --  :checkhealth nvim-treesitter
-        --  Ubuntu 22.04
-        --    sudo apt install libtree-sitter-dev
-        --  Ubuntu 20.04 (Install pkg manually: search package at https://ubuntu.pkgs.org)
-        --    wget http://archive.ubuntu.com/ubuntu/pool/universe/t/tree-sitter/libtree-sitter0_0.20.3-1_amd64.deb
-        --    wget http://archive.ubuntu.com/ubuntu/pool/universe/t/tree-sitter/libtree-sitter-dev_0.20.3-1_amd64.deb
-        --    sudo dpkg -i libtree-sitter0_0.20.3-1_amd64.deb
-        --    sudo dpkg -i libtree-sitter-dev_0.20.3-1_amd64.deb
-        --
-        url = "https://github.com/nawordar/tree-sitter-tcl.git", -- local path or git repo
-        files = {"tcl/src/parser.c", "tcl/src/scanner.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
-        -- optional entries:
-        branch = "main", -- default branch in case of git repo if different from master
-        generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-        requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
-      },
-      filetype = "tcl", -- if filetype does not match the parser name
-    }
-    end
-EOF
-
-    lua << EOF
-    if (isModuleAvailable('nvim-treesitter.configs'))
-    then
-    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-    parser_config.markdown = {
-      install_info = {
-        url = "https://github.com/MDeiml/tree-sitter-markdown.git", -- local path or git repo
-        files = {"tree-sitter-markdown/src/parser.c", "tree-sitter-markdown/src/scanner.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
-        -- optional entries:
-        branch = "main", -- default branch in case of git repo if different from master
-        generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-        requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
-      },
-      filetype = "markdown", -- if filetype does not match the parser name
-    }
-    end
-EOF
-
-    lua << EOF
-    if (isModuleAvailable('nvim-treesitter.configs'))
-    then
-    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-    parser_config.diff = {
-      install_info = {
-        url = "https://github.com/the-mikedavis/tree-sitter-diff.git", -- local path or git repo
-        files = {"src/parser.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
-        -- optional entries:
-        branch = "main", -- default branch in case of git repo if different from master
-        generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-        requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
-      },
-      filetype = "diff", -- if filetype does not match the parser name
-    }
-    end
-EOF
-
-    lua << EOF
-    if (isModuleAvailable('nvim-treesitter.configs'))
-    then
-    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-    parser_config.hush = {
-      install_info = {
-        url = "https://github.com/MikaelElkiaer/tree-sitter-hush", -- local path or git repo
-        files = {"src/parser.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
-        -- optional entries:
-        branch = "main", -- default branch in case of git repo if different from master
-        generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-        requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
-      },
-      filetype = "hush", -- if filetype does not match the parser name
-    }
-    end
-EOF
-
-endfor
-endif
-
-
-if HasPlug('glow.nvim') | "
-    nnoremap <silent>   <leader>vi         :"(mode)Glow reader/present         "<c-U>Glow<CR>
-
-    lua << EOF
-    require('glow').setup {
-        style = "dark",
-        width = 120,
-    }
-EOF
-endif
-
-
-if HasPlug('lualine.nvim')
-    lua << EOF
-    require('lualine').setup()
-EOF
-endif
-
-
-if HasPlug('neo-tree.nvim')
-    lua << EOF
-    require('neo-tree').setup {
-        renderer = {
-            icons = true,
-        },
-    }
-
-	-- init.lua or your custom Lua configuration file
-
--- Function to open a file in a popup window
-function OpenFileInPopup(file)
-  local buf = vim.api.nvim_create_buf(false, true) -- Create a new buffer
-  vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
-  local win = vim.api.nvim_open_win(buf, true, win_config)
-  vim.api.nvim_win_set_option(win, 'syntax', 'Comment')
-
-
-  -- Set the buffer content to the contents of the file
-  local lines = vim.fn.readfile(file)
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-
-  -- Define the window configuration
-  local win_config = {
-    relative = 'editor',
-    width = 80,
-    height = 20,
-    row = 10,
-    col = 10,
-    style = 'minimal',
-    border = 'rounded',
-  }
-
-  -- Create the popup window with the buffer
-  vim.api.nvim_open_win(buf, true, win_config)
-end
-
--- Map the function to a command for easy use
-vim.cmd([[
-  command! -nargs=1 OpenFileInPopup lua OpenFileInPopup(<f-args>)
-]])
-
-EOF
-endif
-
-
-if HasPlug('edgy.nvim')
-    lua << EOF
-    require('edgy').setup {
-      left = {}, ---@type (Edgy.View.Opts|string)[]
-      bottom = {}, ---@type (Edgy.View.Opts|string)[]
-      right = {}, ---@type (Edgy.View.Opts|string)[]
-      top = {}, ---@type (Edgy.View.Opts|string)[]
-
-      ---@type table<Edgy.Pos, {size:integer | fun():integer, wo?:vim.wo}>
-      options = {
-        -- left = { size = 30 },
-        -- bottom = { size = 10 },
-        -- right = { size = 30 },
-        -- top = { size = 10 },
-
-        bottom = {
-          -- toggleterm / lazyterm at the bottom with a height of 40% of the screen
-          {
-            ft = "toggleterm",
-            size = { height = 0.4 },
-            -- exclude floating windows
-            filter = function(buf, win)
-              return vim.api.nvim_win_get_config(win).relative == ""
-            end,
-          },
-          {
-            ft = "lazyterm",
-            title = "LazyTerm",
-            size = { height = 0.4 },
-            filter = function(buf)
-              return not vim.b[buf].lazyterm_cmd
-            end,
-          },
-          "Trouble",
-          { ft = "qf", title = "QuickFix" },
-          {
-            ft = "help",
-            size = { height = 20 },
-            -- only show help buffers
-            filter = function(buf)
-              return vim.bo[buf].buftype == "help"
-            end,
-          },
-          { ft = "spectre_panel", size = { height = 0.4 } },
-        },
-        left = {
-          -- Neo-tree filesystem always takes half the screen height
-          {
-            title = "Neo-Tree",
-            ft = "neo-tree",
-            filter = function(buf)
-              return vim.b[buf].neo_tree_source == "filesystem"
-            end,
-            size = { height = 0.5 },
-          },
-          {
-            title = "Neo-Tree Git",
-            ft = "neo-tree",
-            filter = function(buf)
-              return vim.b[buf].neo_tree_source == "git_status"
-            end,
-            pinned = true,
-            collapsed = true, -- show window as closed/collapsed on start
-            open = "Neotree position=right git_status",
-          },
-          {
-            title = "Neo-Tree Buffers",
-            ft = "neo-tree",
-            filter = function(buf)
-              return vim.b[buf].neo_tree_source == "buffers"
-            end,
-            pinned = true,
-            collapsed = true, -- show window as closed/collapsed on start
-            open = "Neotree position=top buffers",
-          },
-          {
-            title = function()
-              local buf_name = vim.api.nvim_buf_get_name(0) or "[No Name]"
-              return vim.fn.fnamemodify(buf_name, ":t")
-            end,
-            ft = "Outline",
-            pinned = true,
-            open = "SymbolsOutlineOpen",
-          },
-          {
-            title = function()
-              local buf_name = vim.api.nvim_buf_get_name(0) or "[No Name]"
-              return vim.fn.fnamemodify(buf_name, ":t")
-            end,
-            ft = "voomtree",
-            pinned = true,
-            open = "SymbolsOutlineOpen",
-          },
-          -- any other neo-tree windows
-          "neo-tree",
-        },
-
-        open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "edgy" },
-      },
-      -- edgebar animations
-      animate = {
-        enabled = true,
-        fps = 100, -- frames per second
-        cps = 120, -- cells per second
-        on_begin = function()
-          vim.g.minianimate_disable = true
-        end,
-        on_end = function()
-          vim.g.minianimate_disable = false
-        end,
-        -- Spinner for pinned views that are loading.
-        -- if you have noice.nvim installed, you can use any spinner from it, like:
-        -- spinner = require("noice.util.spinners").spinners.circleFull,
-        spinner = {
-          frames = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
-          interval = 80,
-        },
-      },
-      -- enable this to exit Neovim when only edgy windows are left
-      exit_when_last = false,
-      -- close edgy when all windows are hidden instead of opening one of them
-      -- disable to always keep at least one edgy split visible in each open section
-      close_when_all_hidden = true,
-      -- global window options for edgebar windows
-      ---@type vim.wo
-      wo = {
-        -- Setting to `true`, will add an edgy winbar.
-        -- Setting to `false`, won't set any winbar.
-        -- Setting to a string, will set the winbar to that string.
-        winbar = true,
-        winfixwidth = true,
-        winfixheight = false,
-        winhighlight = "WinBar:EdgyWinBar,Normal:EdgyNormal",
-        spell = false,
-        signcolumn = "no",
-      },
-      -- buffer-local keymaps to be added to edgebar buffers.
-      -- Existing buffer-local keymaps will never be overridden.
-      -- Set to false to disable a builtin.
-      ---@type table<string, fun(win:Edgy.Window)|false>
-      keys = {
-        -- close window
-        ["q"] = function(win)
-          win:close()
-        end,
-        -- hide window
-        ["<c-q>"] = function(win)
-          win:hide()
-        end,
-        -- close sidebar
-        ["Q"] = function(win)
-          win.view.edgebar:close()
-        end,
-        -- next open window
-        ["]w"] = function(win)
-          win:next({ visible = true, focus = true })
-        end,
-        -- previous open window
-        ["[w"] = function(win)
-          win:prev({ visible = true, focus = true })
-        end,
-        -- next loaded window
-        ["]W"] = function(win)
-          win:next({ pinned = false, focus = true })
-        end,
-        -- prev loaded window
-        ["[W"] = function(win)
-          win:prev({ pinned = false, focus = true })
-        end,
-        -- increase width
-        ["<c-w>>"] = function(win)
-          win:resize("width", 2)
-        end,
-        -- decrease width
-        ["<c-w><lt>"] = function(win)
-          win:resize("width", -2)
-        end,
-        -- increase height
-        ["<c-w>+"] = function(win)
-          win:resize("height", 2)
-        end,
-        -- decrease height
-        ["<c-w>-"] = function(win)
-          win:resize("height", -2)
-        end,
-        -- reset all custom sizing
-        ["<c-w>="] = function(win)
-          win.view.edgebar:equalize()
-        end,
-      },
-      icons = {
-        closed = " ",
-        open = " ",
-      },
-      -- enable this on Neovim <= 0.10.0 to properly fold edgebar windows.
-      -- Not needed on a nightly build >= June 5, 2023.
-      fix_win_height = vim.fn.has("nvim-0.10.0") == 0,
-    }
-EOF
-endif
-
-
-if HasPlug('nvim-web-devicons')
-    lua << EOF
-    require("nvim-web-devicons").setup {
-        opts = {
-            default = true, -- Enable default icons
-        },
-    }
-EOF
-endif
-
-
-if HasPlug('which-key.nvim')
-    let g:which_key_preferred_mappings = 1
-
-    lua << EOF
-    require("which-key").setup {
-        plugins = {
-            marks = false,
-            registers = false,
-            spelling = {
-                enabled = false, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-                suggestions = 20, -- how many suggestions should be shown in the list?
-            },
-            -- the presets plugin, adds help for a bunch of default keybindings in Neovim
-            -- No actual key bindings are created
-            presets = {
-                operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
-                motions = false, -- adds help for motions
-                text_objects = false, -- help for text objects triggered after entering an operator
-                windows = true, -- default bindings on <c-w>
-                nav = true, -- misc bindings to work with windows
-                z = true, -- bindings for folds, spelling and others prefixed with z
-                g = true, -- bindings for prefixed with g
-            },
-        },
-        delay = 700,
-        icons = {
-            -- breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-            -- separator = "░", -- symbol used between a key and it's label
-            -- group = "▶", -- symbol prepended to a group
-            },
-        layout = {
-            height = { min = 4, max = 25 }, -- min and max height of the columns
-            width = { min = 20, max = 40 }, -- min and max width of the columns
-            spacing = 4, -- spacing between columns
-            align = "left", -- align columns left, center or right
-            },
-        }
-EOF
-
-    let g:which_key_preferred_mappings = 1
+if HasPlug('glow.nvim')
+    nnoremap <silent>        <leader>vi    :"(mode)Glow reader/present         "<c-U>exec 'LoadGlow' \| Glow<CR> <cr>
 endif
 
