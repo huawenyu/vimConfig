@@ -58,6 +58,8 @@ endif
 
 
 if HasPlug('vim-template') | " {{{1
+    let tDir = fnamemodify(expand('<sfile>:p'), ':h') .. '/../templates'
+    let g:templates_directory = tDir
     let g:username = "Wilson"
     let g:email = "wilson.yuu@gmail.com"
     let g:templates_user_variables = [
@@ -145,6 +147,8 @@ if HasPlug('vim-floaterm') | " {{{1
             let l:command = l:command. printf("  LC_ALL=C awk -f %s", l:fname_org)
         elseif &ft=='sh'
             let l:command = l:command. printf("  LC_ALL=C bash %s", l:fname_org)
+        elseif &ft=='nroff'
+            let l:command = printf("  Snman %s", l:fname_org)
         else
             echomsg "Not support filetype, but can reference 'vim.config::compile_run()' to append it."
             return
@@ -2550,7 +2554,6 @@ endif
 
 
 if HasPlug('lualine.nvim')
-
     lua << EOF
     require('lualine').setup()
 EOF
@@ -2559,14 +2562,53 @@ endif
 
 if HasPlug('neo-tree.nvim')
     lua << EOF
-    require("neo-tree").setup({})
+    require('neo-tree').setup {
+        renderer = {
+            icons = true,
+        },
+    }
+
+	-- init.lua or your custom Lua configuration file
+
+-- Function to open a file in a popup window
+function OpenFileInPopup(file)
+  local buf = vim.api.nvim_create_buf(false, true) -- Create a new buffer
+  vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
+  local win = vim.api.nvim_open_win(buf, true, win_config)
+  vim.api.nvim_win_set_option(win, 'syntax', 'Comment')
+
+
+  -- Set the buffer content to the contents of the file
+  local lines = vim.fn.readfile(file)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+  -- Define the window configuration
+  local win_config = {
+    relative = 'editor',
+    width = 80,
+    height = 20,
+    row = 10,
+    col = 10,
+    style = 'minimal',
+    border = 'rounded',
+  }
+
+  -- Create the popup window with the buffer
+  vim.api.nvim_open_win(buf, true, win_config)
+end
+
+-- Map the function to a command for easy use
+vim.cmd([[
+  command! -nargs=1 OpenFileInPopup lua OpenFileInPopup(<f-args>)
+]])
+
 EOF
 endif
 
 
 if HasPlug('edgy.nvim')
     lua << EOF
-    require("edgy").setup {
+    require('edgy').setup {
       left = {}, ---@type (Edgy.View.Opts|string)[]
       bottom = {}, ---@type (Edgy.View.Opts|string)[]
       right = {}, ---@type (Edgy.View.Opts|string)[]
@@ -2768,7 +2810,11 @@ endif
 
 if HasPlug('nvim-web-devicons')
     lua << EOF
-    require("nvim-web-devicons").setup({})
+    require("nvim-web-devicons").setup {
+        opts = {
+            default = true, -- Enable default icons
+        },
+    }
 EOF
 endif
 

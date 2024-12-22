@@ -17,3 +17,78 @@
                     : `:verbose map|function *`|
                     : `1G`-file path|
 
+
+- Debug log/troubleshooting:
+-------------
+  1. Enable log from global config:
+        "let g:vim_confi_option.debug = 1
+        # <or> specify from command line
+        debug=1 vim <file>
+  2. Ensure the log instance existed:
+        " Insert this line to the front of our vimscript:
+        silent! let s:log = logger#getLogger(expand('<sfile>:t'))
+  3. Debug/print:
+        silent! call s:log.info(l:__func__, 'enter')
+  4. Check log:    (LinuxPC) $ tail -f /tmp/vim.log
+
+Install:  help 'H' on the topic
+- [Windows]
+    ### Install
+       - Doc: https://jdhao.github.io/2018/11/15/neovim_configuration_windows/
+       - Install neovim, https://github.com/neovim/neovim/wiki/Installing-Neovim
+       - Install Git (available at https://git-scm.com/downloads)
+       - Copy the plug.vim and place it in "autoload" directory of vim.
+       - In your .vimrc, include the plugins that you need to install.
+       - Save and source the .vimrc.
+       - Run ":PlugInstall"
+
+- [Debian]
+    ### Auto setup/install env
+        wget --no-check-certificate -O ~/chk-ubuntu  https://raw.githubusercontent.com/huawenyu/zsh-local/master/bin/chk-ubuntu
+        chmod +x ~/chk-ubuntu
+        ~/chk-ubuntu
+
+    ### Install neovim:
+        sudo apt-get install neovim
+        sudo update-alternatives --config vi
+        sudo update-alternatives --config vim
+
+    ### 1. Update latest vim config:
+        wget --no-check-certificate -O ~/.vimrc  https://raw.githubusercontent.com/huawenyu/dotfiles/master/.vimrc
+        curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+           https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    ### 2.1 Update vim from repo:
+        #sudo add-apt-repository ppa:neovim-ppa/unstable -y
+        sudo add-apt-repository ppa:neovim-ppa/stable -y
+        sudo apt-get install neovim
+    ### 2.2 [OR] Update vim from binary:
+        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+        chmod u+x nvim.appimage
+        sudo mv /usr/bin/nvim /usr/bin/nvim.old
+        sudo mv nvim.appimage /usr/bin/nvim
+    ### 3. Take `.vimrc` as Config [Reference: vi -c 'help nvim-from-vim']
+        ### oneline version
+        $ mkdir -p ~/.vim && rm -fr ~/.vim/init.vim && ln -s ~/.vimrc ~/.vim/init.vim && mkdir -p ~/.config && rm -fr ~/.config/nvim && ln -s ~/.vim ~/.config/nvim
+
+        ### Split into multiple lines
+        $ mkdir ~/.vim
+        $ ln -s ~/.vimrc ~/.vim/init.vim
+        $ mkdir ~/.config
+        $ ln -s ~/.vim ~/.config/nvim
+
+    $ vi -c 'PlugInstall'
+
+- [Optional] - other config/tool
+    + zshrc -- Simpler zshrc for oh-my-zsh
+      $ sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+      $ wget --no-check-certificate -O ~/.zshrc https://raw.githubusercontent.com/huawenyu/dotfiles/master/.zshrc
+    + oh-my-bash
+      $ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+        OSH_THEME="robbyrussell"
+        DISABLE_AUTO_UPDATE="true"
+    + tmux.conf -- Simpler zshrc for oh-my-zsh
+      $ wget --no-check-certificate -O ~/.tmux.conf https://raw.githubusercontent.com/huawenyu/dotfiles/master/.tmux.conf
+    + [neovim-remote](https://github.com/mhinz/neovim-remote)
+- [QuickStart]
+    - checkhealth
+
