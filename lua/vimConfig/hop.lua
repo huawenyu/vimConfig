@@ -13,9 +13,8 @@ function M.load()
 
     local map = vim.api.nvim_set_keymap
     local opts = { noremap = true, silent = true }
-    map('n', ';s', ':"(motion)JumpLine          theCommand"<c-U>HopChar1CurrentLine<cr>', opts)
+    map('n', ';s', ':"(motion)JumpLine         theCommand"<c-U>HopChar1CurrentLine<cr>', opts)
     map('n', ';a', ':"(motion)JumpAll          theCommand"<c-U>HopChar2<cr>', opts)
-
 end
 
 
