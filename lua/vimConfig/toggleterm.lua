@@ -1,15 +1,29 @@
 local M = { loaded = false }
 
+-- Map, cmd-for-lazy-setup
 function M.load()
+    local plugExist = vim.fn['HasPlug']('toggleterm.nvim') ~= 0
+    if not plugExist then
+        M.loaded = true
+        return
+    end
+
+    -- If the lua-plugin MUST call setup (itself lazy load), here expose a command to trigger the setup.
+    vim.api.nvim_create_user_command('LoadToggleTerm', M.setup, {nargs=0})
+
+    local map = vim.api.nvim_set_keymap
+    local opts = { noremap = true, silent = true }
+    map('n', '<c-\\>', ':"(view)Terminal          theCommand"<c-U>TermToggle<cr>', opts)
+
+end
+
+
+-- lazy-setup, some plugin don't need it, for it auto-setup when vim-plug lazy load it by triggered 'on'-event.
+function M.setup()
     if M.loaded then
         return
     end
     M.loaded = true
-    local plugExist = vim.fn['HasPlug']('toggleterm.nvim') ~= 0
-    if not plugExist then
-        return
-    end
-
 
     require("toggleterm").setup {
         close_on_exit = true, -- close the terminal window when the process exits
@@ -24,6 +38,7 @@ function M.load()
         close_on_exit = true, -- close the terminal window when the process exits
         shell = '/bin/bash',
     }
+
     -- require("toggleterm").setup{
     --     open_mapping = [[<c-\>]],
     --     hide_numbers = true, -- hide the number column in toggleterm buffers
@@ -45,6 +60,6 @@ function M.load()
     -- }
 end
 
-return M
 
+return M
 

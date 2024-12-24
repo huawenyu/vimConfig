@@ -71,6 +71,8 @@ if HasPlug('vim-template') | " {{{1
     function! GetFullPath()
         return expand('%:p')
     endfunction
+
+    nnoremap <leader>wp      :"(Snippet)Template        theCommand"<c-U>TemplateHere *.
 endif
 
 
@@ -178,21 +180,45 @@ if HasPlug('vim-floaterm') | " {{{1
         return 0
     endfun
 
-    fun! s:getCurrentWord()
-        " Check if the cursor is on a word character (alphanumeric or underscore)
+    " Check if the cursor is on a word character
+    fun! s:getManWord()
+        " Check a loose word character mode: alphanumeric or underscore or . or -
+        if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\v\w|[.-]'
+            let saved_iskeyword = &iskeyword
+            for key in [2, 1, 0]
+                let &iskeyword = saved_iskeyword
+                if key == 2
+                    set iskeyword+=.,-
+                elseif key == 1
+                    set iskeyword+=-
+                endif
+
+                let theWord = expand('<cword>')
+                let checkExist = "man -w ".. theWord
+                call system(checkExist)
+                if v:shell_error == 0
+                    break
+                else
+                    let theWord = ''
+                endif
+            endfor
+            let &iskeyword = saved_iskeyword
+        endif
+
+        " Back to strict word mode: alphanumeric or underscore
         if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\w'
-            " If it is, return the word under the cursor
-            return expand('<cword>')
+            let theWord = expand('<cword>')
         else
             " If it is not, return an empty string
-            return ''
+            let theWord = ''
         endif
+        return theWord
     endfun
 
 
     fun! s:man_show(mode)
         if a:mode == 'k'
-            let word = s:getCurrentWord()
+            let word = s:getManWord()
             if empty(word)
                 execute "Man vim_cheat"
                 return
@@ -494,7 +520,7 @@ endif
 
 if HasPlug('vim-easy-align') | " {{{1
     let g:easy_align_ignore_comment = 0 " align comments
-    vnoremap <leader>ga      :"(edit)EasyAlign    "<c-U>'<,'>EasyAlign -1/\\$/
+    vnoremap <leader>ga      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign<CR>
 
     let g:easy_align_delimiters = {
         \ '>': { 'pattern': '>>\|=>\|>' },
@@ -706,7 +732,7 @@ if CheckPlug('vim-buffergator', 1) | " {{{1
 endif
 
 
-if CheckPlug('VOoM', 1) | " {{{1
+if HasPlug('VOoM') | " {{{1
     let g:voom_tree_width = 45
     let g:voom_tree_placement = 'left'
 endif
@@ -1785,19 +1811,11 @@ if CheckPlug('nvim-libmodal', 1) | " {{{1
         endfunction
 endif
 
-if HasPlug('vim-shortcut') | " {{{1
-    " silent! Shortcut! keys description
-    " Must source it directly to make it works
-    "source ~/.config/nvim/bundle/vim-shortcut/plugin/shortcut.vim
-    let g:shortcuts_overwrite_warning = 1
-    nnoremap <silent> ;;     :Shortcuts<cr>
-    vnoremap <silent> ;;     :<c-u>let g:my_selstr=utils#GetSelected('v') <bar> Shortcuts<cr>
-endif
-
 
 if HasPlug('vim-multiple-cursors') | " {{{1
     let g:multi_cursor_use_default_mapping=0
 endif
+
 
 if HasPlug('vim-visual-multi')
     " https://github.com/mg979/vim-visual-multi/wiki/Quick-start#cursor-mode-vs-extend-mode
@@ -1805,6 +1823,7 @@ if HasPlug('vim-visual-multi')
     let g:VM_maps['Find Under']         = '<C-d>'
     let g:VM_maps['Find Subword Under'] = '<C-d>'
 endif
+
 
 if HasPlug('delimitMate') | " {{{1
     let delimitMate_expand_space = 1
@@ -2074,35 +2093,10 @@ if HasPlug('nvim-lspconfig')
 endif
 
 
-if HasPlug('toggleterm.nvim')
-endif
-
-
-if HasPlug('todo-comments.nvim')
-    nnoremap <silent>  <leader>vt     :"(view)Todolist          "<c-U>exec 'silent! TodoLocList' \| exec 'LoadTodo' \| TodoLocList<cr>
-endif
-
-
 if HasPlug('asynctasks.vim')
     if filereadable(expand('~/.vim_tasks.ini')) && !filereadable(expand('~/.vim/tasks.ini'))
         call system(expand('ln -s ~/.vim_tasks.ini ~/.vim/tasks.ini'))
     endif
 endif
 
-
-if HasPlug('auto-session')
-    nnoremap <a-r>      :exec 'LoadAutoSession' \| SessionRestore<cr>
-    nnoremap <a-s>      :exec 'LoadAutoSession' \| SessionSave<cr>
-
-    let g:auto_session_root_dir = expand('~/.vim/tmp-sessions')
-    if !isdirectory(g:auto_session_root_dir)
-        call mkdir(g:auto_session_root_dir, 'p')
-    endif
-    let g:auto_session_pre_save_cmds = ['if exists(":NERDTreeClose") | exe "tabdo NERDTreeClose\<CR>" | endif']
-endif
-
-
-if HasPlug('glow.nvim')
-    nnoremap <silent>        <leader>vi    :"(mode)Glow reader/present         "<c-U>exec 'LoadGlow' \| Glow<CR> <cr>
-endif
 

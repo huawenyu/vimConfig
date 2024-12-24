@@ -31,6 +31,9 @@ function M.load()
                 g = true, -- bindings for prefixed with g
             },
         },
+        replace = {
+            ["<leader>"] = "SPC",   -- Label <leader> as SPC for clarity
+        },
         delay = 700,
         icons = {
             -- breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
@@ -39,7 +42,7 @@ function M.load()
         },
         layout = {
             height = { min = 4, max = 25 }, -- min and max height of the columns
-            width = { min = 20, max = 40 }, -- min and max width of the columns
+            width = { min = 20, max = 30 }, -- min and max width of the columns
             spacing = 4, -- spacing between columns
             align = "left", -- align columns left, center or right
         },

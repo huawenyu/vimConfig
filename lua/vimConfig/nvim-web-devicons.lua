@@ -9,8 +9,9 @@ function M.load()
     if not plugExist then
         return
     end
+end
 
-
+function M.setup()
     require("nvim-web-devicons").setup {
         opts = {
             default = true, -- Enable default icons
