@@ -13,8 +13,8 @@ function M.load()
 
     local map = vim.api.nvim_set_keymap
     local opts = { noremap = true, silent = true }
-    map('n', ';s', ':HopChar1CurrentLine<cr>', opts)
-    map('n', ';a', ':HopChar2<cr>', opts)
+    -- map('n', ';s', ':HopChar1CurrentLine<cr>', opts)
+    map('n', ';;', ':HopChar2<cr>', opts)
 end
 
 

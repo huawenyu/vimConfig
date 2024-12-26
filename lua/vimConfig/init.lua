@@ -16,7 +16,8 @@ M.lspfuzzy = require('vimConfig.lspfuzzy')
 M.multicursors = require('vimConfig.multicursors')
 M.hydra = require('vimConfig.hydra')
 M.fidget = require('vimConfig.fidget')
-
+M.outline = require('vimConfig.symbols-outline')
+M.picker = require('vimConfig.nvim-window-picker')
 
 function M.setup()
 	M.whicyKey.load()
@@ -38,8 +39,12 @@ function M.setup()
 	M.multicursors.load()
 	M.hydra.load()
 	M.fidget.load()
-end
+	M.outline.load()
+	M.picker.load()
 
+	-- vim.opt.termguicolors = true
+	-- require("bufferline").setup{}
+end
 
 return M
 

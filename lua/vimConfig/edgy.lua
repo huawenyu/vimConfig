@@ -11,18 +11,6 @@ function M.load()
     end
 
     require('edgy').setup {
-      left = {}, ---@type (Edgy.View.Opts|string)[]
-      bottom = {}, ---@type (Edgy.View.Opts|string)[]
-      right = {}, ---@type (Edgy.View.Opts|string)[]
-      top = {}, ---@type (Edgy.View.Opts|string)[]
-
-      ---@type table<Edgy.Pos, {size:integer | fun():integer, wo?:vim.wo}>
-      options = {
-        -- left = { size = 30 },
-        -- bottom = { size = 10 },
-        -- right = { size = 30 },
-        -- top = { size = 10 },
-
         bottom = {
           -- toggleterm / lazyterm at the bottom with a height of 40% of the screen
           {
@@ -42,7 +30,12 @@ function M.load()
             end,
           },
           "Trouble",
-          { ft = "qf", title = "QuickFix" },
+          {
+              ft = "qf",
+              buftype = 'quickfix',
+              title = 'QuickFix',
+              pinned = true,
+          },
           {
             ft = "help",
             size = { height = 20 },
@@ -56,7 +49,7 @@ function M.load()
         left = {
           -- Neo-tree filesystem always takes half the screen height
           {
-            title = "Neo-Tree",
+            title = "Explore",
             ft = "neo-tree",
             filter = function(buf)
               return vim.b[buf].neo_tree_source == "filesystem"
@@ -64,24 +57,30 @@ function M.load()
             size = { height = 0.5 },
           },
           {
-            title = "Neo-Tree Git",
+            title = "Git",
             ft = "neo-tree",
             filter = function(buf)
               return vim.b[buf].neo_tree_source == "git_status"
             end,
-            pinned = true,
+            pinned = false,
             collapsed = true, -- show window as closed/collapsed on start
-            open = "Neotree position=right git_status",
+            open = "Neotree git_status",
           },
           {
-            title = "Neo-Tree Buffers",
+            title = "Buffers",
             ft = "neo-tree",
             filter = function(buf)
               return vim.b[buf].neo_tree_source == "buffers"
             end,
-            pinned = true,
+            pinned = false,
             collapsed = true, -- show window as closed/collapsed on start
             open = "Neotree position=top buffers",
+          },
+          {
+            title = "Tag",
+            ft = "tagbar",
+            open = "TagbarToggle",
+            size = { height = 0.5 },
           },
           {
             title = function()
@@ -89,27 +88,24 @@ function M.load()
               return vim.fn.fnamemodify(buf_name, ":t")
             end,
             ft = "Outline",
-            pinned = true,
+            pinned = false,
             open = "SymbolsOutlineOpen",
           },
           {
-            title = function()
-              local buf_name = vim.api.nvim_buf_get_name(0) or "[No Name]"
-              return vim.fn.fnamemodify(buf_name, ":t")
-            end,
+            title = "Outline",
             ft = "voomtree",
-            pinned = true,
-            open = "SymbolsOutlineOpen",
+            pinned = false,
+            open = "VoomToggle",
+            size = { height = 0.5 },
           },
           -- any other neo-tree windows
           "neo-tree",
         },
 
-        open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "edgy" },
-      },
+      open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "edgy" },
       -- edgebar animations
       animate = {
-        enabled = true,
+        enabled = false,
         fps = 100, -- frames per second
         cps = 120, -- cells per second
         on_begin = function()

@@ -72,7 +72,7 @@ if HasPlug('vim-template') | " {{{1
         return expand('%:p')
     endfunction
 
-    nnoremap <leader>wp      :"(Snippet)Template        theCommand"<c-U>TemplateHere *.
+    nnoremap <leader>ep      :"(Snippet)Template        theCommand"<c-U>TemplateHere *.
 endif
 
 
@@ -103,13 +103,45 @@ if HasPlug('presenting.vim') | " {{{1
 endif
 
 
+if HasPlug('vim-floaterm-repl') | " {{{1
+    autocmd FileType markdown    nnoremap <buffer>  ;ee :"(repl)Run me        "<c-U>FloatermRepl<cr>
+endif
+
+
+if HasPlug('vim-evalvim') | " {{{1
+    autocmd FileType vim    nmap <buffer> <leader>ee <Plug>(EvalVimLine)
+    autocmd FileType vim    vmap <buffer> <leader>ee <Plug>(EvalVim)
+elseif HasPlug('vim-eval') | " {{{1
+    autocmd FileType vim    nmap <buffer> <leader>ee <Plug>eval_viml
+    autocmd FileType vim    vmap <buffer> <leader>ee <Plug>eval_viml_region
+elseif HasPlug('vim-basic') | " {{{1
+    let g:vim_basic_map = get(g:, 'vim_basic_map', 1)
+
+    " Don't why the this map cause VimL execute '10new' error, and VimL get Select not correct
+    "autocmd FileType vim    vmap <buffer> <leader>ee <Plug>(EvalVim)
+    "
+    autocmd FileType vim    nnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call hw#eval#repl('n')<cr>
+    autocmd FileType vim    vnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call hw#eval#repl('v')<cr>
+    autocmd FileType log    nnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call vimuxscript#CallRegion(1)<cr>
+
+    "nnoremap <silent> ;ee     :"(repl)Run me        "<c-U>call vimuxscript#CallRegion(1)<cr>
+    "nnoremap <silent> ;ss     :"(repl)Run me        "<c-U>call vimuxscript#Stop()<cr>
+endif
+
+
 if HasPlug('vim-floaterm') | " {{{1
     let g:floaterm_autoinsert = 1
     let g:floaterm_shell = '/bin/bash'
 
-
+    let s:compile_run_swap = ''
     fun! s:compile_run(mode)
         let l:command=':FloatermNew --name=repl --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Repl-'..&filetype
+
+        " if s:compile_run_swap == 1
+        "     let s:compile_run_swap = 0
+        " else
+        "     let s:compile_run_swap = 1
+        " endif
 
         " Script like code, don't need compile, then we can run it directly
         let l:fname_org = expand('%')
@@ -118,9 +150,9 @@ if HasPlug('vim-floaterm') | " {{{1
             let l:fname_bin = expand('%:r')
             let l:fpath_bin = "./" .. expand('%:r')
         else
-            let l:fname = "/tmp/vim.out"
-            let l:fname_bin = "/tmp/vim.out"
-            let l:fpath_bin = "/tmp/vim.out"
+            let l:fname = "/tmp/vim.out".. s:compile_run_swap
+            let l:fname_bin = "/tmp/vim.out".. s:compile_run_swap
+            let l:fpath_bin = "/tmp/vim.out".. s:compile_run_swap
         endif
 
         if &ft=='c'
@@ -151,6 +183,13 @@ if HasPlug('vim-floaterm') | " {{{1
             let l:command = l:command. printf("  LC_ALL=C awk -f %s", l:fname_org)
         elseif &ft=='sh'
             let l:command = l:command. printf("  LC_ALL=C bash %s", l:fname_org)
+        elseif &ft=='markdown'
+            silent! execute "!rm rm -fr ".. l:fname_bin
+            silent! execute "AsyncStop!"
+            let l:command = printf("!pandoc -f markdown --standalone --to man %s -o %s", l:fname_org, l:fname_bin)
+            silent! execute l:command
+
+            let l:command = printf("  Snman %s", l:fname_bin)
         elseif &ft=='nroff'
             let l:command = printf("  Snman %s", l:fname_org)
         else
@@ -158,17 +197,8 @@ if HasPlug('vim-floaterm') | " {{{1
             return
         endif
 
-
-        if exists(':ContextDisable')
-            silent execute ':ContextDisable'
-        endif
-
         echomsg "Debug: ". l:command
         silent execute l:command
-
-        if exists(':ContextEnable')
-            silent execute ':ContextEnable'
-        endif
     endfun
 
     " Function to check if the current word under the cursor is a word
@@ -250,7 +280,7 @@ if HasPlug('vim-floaterm') | " {{{1
     "autocmd FileType * nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run()<cr>
     nnoremap <silent> <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run('n')<cr>
     vnoremap <silent> <leader>ee      :"(*repl)Run me        "<c-U>:'<,'>w! /tmp/vim.out<cr> \| :call <sid>compile_run('v')<cr>
-    nnoremap <silent>        ;ee      :"(diag)Make buffer    "<c-U>make <C-R>=expand('%:t:r')<cr><cr><cr> \| :copen<cr> \| :wincmd p<cr>
+    vnoremap <silent>        ;ee      :"(diag)Make buffer    "<c-U>make <C-R>=expand('%:t:r')<cr><cr><cr> \| :copen<cr> \| :wincmd p<cr>
 
     " Man (tldr)
     nnoremap <silent>         K      :"(Man)                 "<c-U>call <sid>man_show('k')<cr>
@@ -285,32 +315,6 @@ endif
 
 if HasPlug('vim-dispatch') | " {{{1
     let g:dispatch_tmux_height = '50% -h'
-endif
-
-
-if HasPlug('vim-floaterm-repl') | " {{{1
-    autocmd FileType markdown    nnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>FloatermRepl<cr>
-endif
-
-
-if HasPlug('vim-evalvim') | " {{{1
-    autocmd FileType vim    nmap <buffer> <leader>ee <Plug>(EvalVimLine)
-    autocmd FileType vim    vmap <buffer> <leader>ee <Plug>(EvalVim)
-elseif HasPlug('vim-eval') | " {{{1
-    autocmd FileType vim    nmap <buffer> <leader>ee <Plug>eval_viml
-    autocmd FileType vim    vmap <buffer> <leader>ee <Plug>eval_viml_region
-elseif HasPlug('vim-basic') | " {{{1
-    let g:vim_basic_map = get(g:, 'vim_basic_map', 1)
-
-    " Don't why the this map cause VimL execute '10new' error, and VimL get Select not correct
-    "autocmd FileType vim    vmap <buffer> <leader>ee <Plug>(EvalVim)
-    "
-    autocmd FileType vim    nnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call hw#eval#repl('n')<cr>
-    autocmd FileType vim    vnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call hw#eval#repl('v')<cr>
-    autocmd FileType log    nnoremap <buffer> <leader>ee :"(repl)Run me        "<c-U>call vimuxscript#CallRegion(1)<cr>
-
-    "nnoremap <silent> ;ee     :"(repl)Run me        "<c-U>call vimuxscript#CallRegion(1)<cr>
-    "nnoremap <silent> ;ss     :"(repl)Run me        "<c-U>call vimuxscript#Stop()<cr>
 endif
 
 
@@ -732,12 +736,6 @@ if CheckPlug('vim-buffergator', 1) | " {{{1
 endif
 
 
-if HasPlug('VOoM') | " {{{1
-    let g:voom_tree_width = 45
-    let g:voom_tree_placement = 'left'
-endif
-
-
 if HasPlug('fzf-folds.vim') | " {{{1
     " tpope/vim-markdown Fold:  zR openAll, zM closeAll, zr +foldLevel, zm -foldLevel, zo opencurr,
     nnoremap zs :Folds<CR>
@@ -847,10 +845,14 @@ endif
 
 
 if HasPlug('w3m.vim') | " {{{1
-    let g:w3m#command = '/usr/bin/w3m'
-    let g:w3m#lang = 'en_US'
-    let g:w3m#disable_vimproc = 1
-    "let g:w3m#disable_default_keymap = 1
+    command! LoadW3m call s:loadW3m()
+
+    fun s:loadW3m()
+        let g:w3m#command = '/usr/bin/w3m'
+        let g:w3m#lang = 'en_US'
+        let g:w3m#disable_vimproc = 1
+        "let g:w3m#disable_default_keymap = 1
+    endfun
 endif
 
 
@@ -871,7 +873,38 @@ if CheckPlug('command-t', 1) | " {{{1
 endif
 
 
+if HasPlug('quickfix-reflector.vim') | " {{{1
+    " toggles the quickfix window.
+    command! -bang -nargs=? QFix call QFixToggle(<bang>0)
+    function! QFixToggle(forced)
+        if exists("g:qfix_win") && a:forced == 0
+            cclose
+            unlet g:qfix_win
+        else
+            botright copen
+            let g:qfix_win = bufnr("$")
+        endif
+    endfunction
+
+    nnoremap <silent>  <leader>vq     :"(view)Quickfix         theCommand"<c-U>QFix<cr>
+endif
+
+
+if HasPlug('VOoM') | " {{{1
+    nnoremap <silent>  <leader>vo     :"(view)Outline          theCommand"<c-U>VoomToggle<cr>
+    nnoremap <silent>  <leader>v1     :"(view)Outline fmr1     theCommand"<c-U>VoomToggle fmr<cr>
+
+    nnoremap <silent>   ;vi         :"(helper)Insert outline header     theCommand"<c-U>call utils#VoomInsert(0) <CR>
+    vnoremap <silent>   ;vi         :"(helper)Insert outline header     theCommand"<c-U>call utils#VoomInsert(1) <CR>
+endif
+
+
 if HasPlug('tagbar') | " {{{1
+    nnoremap <silent>  <leader>vt   :TagbarToggle<cr>
+    command! LoadTagbar call s:loadTagbar()
+    "call s:loadTagbar()
+
+fun s:loadTagbar()
     "let g:tagbar_vertical = 25
     "let g:tagbar_show_linenumbers = 1
     "let NERDTreeWinPos = 'left'
@@ -946,6 +979,8 @@ if HasPlug('tagbar') | " {{{1
                     \     'sort': 0,
                     \ }
     endif
+endfun
+
 endif
 
 if CheckPlug('taglist.vim', 1) | " {{{1
@@ -1052,33 +1087,6 @@ if HasPlug('vim-tldr') | " {{{1
 endif
 
 
-if HasPlug('notational-fzf-vim') | " {{{1
-    let g:nv_search_paths = []
-    let g:nv_default_extension = '.md'
-    "let g:nv_ignore_pattern = ['*.log', '*.conf']
-
-    " Load dirs from global config
-    if !empty(g:vim_confi_option.fzf_notes)
-        for dir in g:vim_confi_option.fzf_notes
-            if !empty(glob(dir))
-                call add(g:nv_search_paths, dir)
-            endif
-        endfor
-    endif
-
-    if g:vim_confi_option.verbose && empty(g:nv_search_paths)
-        echomsg "Plug:notational-fzf-vim require a wiki directory, like ~/wiki"
-    endif
-
-    " let g:nv_keymap = {
-    "                 \ 'ctrl-s': 'split ',
-    "                 \ 'ctrl-v': 'vertical split ',
-    "                 \ 'ctrl-t': 'tabedit ',
-    "                 \ })
-    " let g:nv_create_note_key = 'ctrl-x'
-endif
-
-
 if HasPlug('vim-mark') | " {{{1
     let g:mw_no_mappings = 1
     let g:mwDefaultHighlightingPalette = 'extended'
@@ -1143,15 +1151,35 @@ if HasPlug('vim-markdown') | " {{{1
 endif
 
 
+if HasPlug('c-utils.vim')
+    function! s:JumpComma(mode)
+        if v:count == 0
+            call utils#Declaration()
+        else
+        endif
+    endfunction
+
+    nnoremap <silent> <leader><leader>  :"(*)Preview Tag at right-side-window         theCommand"<c-U>call VimMotionPreview()<cr>
+    vnoremap          <leader><leader>  :"(*)Preview Tag at right-side-window         theCommand"<c-U>call VimMotionPreview()<cr>
+endif
+
+
 if HasPlug('context.vim') | " {{{1
-    let g:context_enabled = 1
+    nnoremap <silent>   ;a      :"(*)Context         theCommand"<c-U>ContextToggle<cr>
+    command! LoadContextVim call s:loadContextVim()
+
+fun s:loadContextVim()
+    let g:context_add_mappings = 0
+    let g:context_enabled = 0
     " let g:context_presenter = 'nvim-float'
     " let g:context_highlight_normal = 'Normal'
     " let g:context_highlight_border = 'Comment'
     let g:context_highlight_tag    = '<hide>'
-    let g:context_buftype_blacklist = ['floaterm', 'quickfix']
-    let g:context_filetype_blacklist = ['floaterm', 'Quickfix List']
+    let g:context_buftype_blacklist = ['floaterm', 'terminal', 'quickfix']
+    let g:context_filetype_blacklist = ['floaterm', 'qt']
+endfun
 endif
+
 
 if HasPlug('lightline.vim') | " {{{1
    let g:lightline = {
@@ -1657,7 +1685,21 @@ if CheckPlug('ctrlp.vim', 1) | " {{{1
 endif
 
 
-if CheckPlug('fzf.vim', 1) | " {{{1
+if HasPlug('fzf.vim') | " {{{1
+    nnoremap           <leader>s1   :"Search in 'wad'         theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "daemon/wad", 1)<cr>
+    nnoremap           <leader>s2   :"Search in 'cmf'         theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "cmf/plugin", 1)<cr>
+    nnoremap           <leader>s3   :"Search in              theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "", 1)<cr>
+
+    nnoremap           <leader>sg   :"(list)git-status          theCommand"<c-U>GFiles?<cr>
+    nnoremap           <leader>sc   :"(list)Changes             theCommand"<c-U>Changes<cr>
+    nnoremap           <leader>sm   :"(list)Marks               theCommand"<c-U>Marks<cr>
+    nnoremap           <leader>sj   :"(list)Jumps               theCommand"<c-U>Jumps<cr>
+    nnoremap           <leader>sw   :"(list)Windows             theCommand"<c-U>Windows<cr>
+    nnoremap           <leader>s:   :"(list)History:             theCommand"<c-U>History:<cr>
+    nnoremap           <leader>s/   :"(list)History/             theCommand"<c-U>History/<cr>
+    nnoremap           <leader>s;   :"(list)Commands             theCommand"<c-U>Commands<cr>
+
+
     let g:fzf_prefer_tmux = 1
 
     " Customize fzf colors to match your color scheme
@@ -2064,7 +2106,7 @@ if HasPlug('vim-windowswap')
     let g:windowswap_map_keys = 0
     "nnoremap <silent> <leader>wy :call WindowSwap#MarkWindowSwap()<CR>
     "nnoremap <silent> <leader>wp :call WindowSwap#DoWindowSwap()<CR>
-    nnoremap <silent> <leader>w; :call WindowSwap#EasyWindowSwap()<CR>
+    nnoremap <silent> <leader>va :"(view)BufferWindowSwap              theCommand"<c-U>call WindowSwap#EasyWindowSwap()<CR>
 endif
 
 

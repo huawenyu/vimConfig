@@ -12,9 +12,9 @@ function M.load()
     vim.api.nvim_create_user_command('LoadAutoSession', M.setup, {nargs=0})
 
     local map = vim.api.nvim_set_keymap
-    local opts = { noremap = true, silent = true }
-    map('n', '<a-r>', ':"(Workspace)Restore          theCommand"<c-U>SessionRestore<cr>', opts)
-    map('n', '<a-s>', ':"(Workspace)Save             theCommand"<c-U>SessionSave<cr>', opts)
+    local opts = { noremap = true, silent = false }
+    map('n', '<leader>sr', ':"(Workspace)Restore          theCommand"<c-U>SessionRestore<cr>', opts)
+    map('n', '<leader>ss', ':"(Workspace)Save             theCommand"<c-U>SessionSave<cr>', opts)
 end
 
 

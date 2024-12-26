@@ -13,10 +13,10 @@ function M.load()
 
     local map = vim.api.nvim_set_keymap
     local opts = { noremap = true, silent = true }
-    map('n', '<a-e><a-e>', ':"(view)Explore File           theCommand"<c-U>Neotree toggle<CR>', opts)
-    map('n', '<a-e><a-f>', ':"(view)Explore Focus          theCommand"<c-U>Neotree reveal<CR>', opts)
-    map('n', '<a-e><a-b>', ':"(view)Explore buffer         theCommand"<c-U>Neotree buffers<CR>', opts)
-    map('n', '<a-e><a-g>', ':"(view)Explore git            theCommand"<c-U>Neotree git<CR>', opts)
+    map('n', '<leader>ve', ':"(view)Explore File           theCommand"<c-U>Neotree toggle<CR>', opts)
+    map('n', '<leader>vf', ':"(view)Explore Focus          theCommand"<c-U>Neotree reveal<CR>', opts)
+    map('n', '<leader>vb', ':"(view)Explore buffer         theCommand"<c-U>Neotree buffers<CR>', opts)
+    map('n', '<leader>vg', ':"(view)Explore git            theCommand"<c-U>Neotree git<CR>', opts)
 end
 
 
@@ -31,25 +31,66 @@ function M.setup()
     require("neo-tree").setup{
         default_component_configs = {
             indent = {
-                indent_size = 2,
-                padding = 1, -- Padding around file/directory names
+                indent_size = 2, -- Indentation size
+                padding = 1, -- Extra padding on the left
+                with_expanders = true, -- Add expanders near folders
             },
-            name = {
-                trailing_slash = false,
-                use_git_status_colors = true,
+            icon = {
+                folder_closed = "", -- Icon for closed folders
+                folder_open = "", -- Icon for open folders
+                folder_empty = "", -- Icon for empty folders
+                default = "", -- Default file icon
+            },
+            git_status = {
+                symbols = {
+                    added = "✚", -- Added file
+                    modified = "", -- Modified file
+                    deleted = "", -- Deleted file
+                    renamed = "➜", -- Renamed file
+                    untracked = "★", -- Untracked file
+                    ignored = "◌", -- Ignored file
+                    unstaged = "✗", -- Unstaged changes
+                    staged = "✓", -- Staged changes
+                },
             },
         },
         filesystem = {
+            auto_open = false,  -- Don't auto-close directories when opening files
+            follow_current_file = true,
+            close_folders_on_open = false,
+            hijack_netrw = true,
+            use_libuv_file_watcher = true,
+            group_empty_dirs = true,
+            default_component_configs = {},
+
             filtered_items = {
-                visible = true, -- Show hidden files
+                visible = false, -- Toggle visibility of dotfiles with "H"
+                hide_dotfiles = true, -- Hide dotfiles by default
+                hide_gitignored = true, -- Hide files ignored by Git
+                hide_by_name = { -- Hide specific files or folders
+                    ".DS_Store", "thumbs.db",
+                    "tags", '.tags', '.tagx', '.cscope.files', 'cscope.in.out','cscope.out','cscope.po.out',
+                    '.jshintrc', '.jscsrc', '.eslintignore', '.eslintrc.json',
+                    '.gitattributes', '.git',
+                    '.ccls-cache', '.devops','.arcconfig','.vscode',
+                },
             },
             follow_current_file = {
                 enabled = true,
-                leave_dirs_opsn = false, -- Close other dirs when following curr-file
+                leave_dirs_open = true,
             },
         },
-        filtered_items = {
-            visible = true, -- Show hidden files
+        window = {
+            mappings = {
+                ["<TAB>"] = "toggle_node",
+                ["z"] = "collapse_all", -- Use 'z' to collapse all nodes
+                ["o"] = "open",
+                ["O"] = function(state)
+                    print("Pls expand_all by search: /*") -- Debug message
+                end,
+                ["<C-f>"] = "scroll_down", -- Scroll down by a page
+                ["<C-b>"] = "scroll_up",   -- Scroll up by a page
+            },
         },
     }
 end
