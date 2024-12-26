@@ -524,7 +524,8 @@ endif
 
 if HasPlug('vim-easy-align') | " {{{1
     let g:easy_align_ignore_comment = 0 " align comments
-    vnoremap <leader>ga      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign<CR>
+    vnoremap <leader>cc      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign *\|<cr>
+    nnoremap <leader>cc      gv:"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign *\|<cr>
 
     let g:easy_align_delimiters = {
         \ '>': { 'pattern': '>>\|=>\|>' },
@@ -659,41 +660,54 @@ if CheckPlug('netrw', 1) | " {{{1, But not work like side-tree
 endif
 
 
-if CheckPlug('nerdtree', 1)  | " {{{1
-    " Conflicts with NERDTree menu ('m' key): And the only reason to create and remove maps is because of the conflicting m map in NERDTree.
-    " https://github.com/kshenoy/vim-signature/issues/3
-    let NERDTreeMapMenu='M'
+if HasPlug('nerdtree')  | " {{{1
+    nnoremap <leader>vE      :"(view)Explore(legacy)    theCommand"<c-U>NERDTreeToggle<CR>
 
-    let NERDTreeMouseMode = 3
-    "let NERDTreeAutoDeleteBuffer = 1
-    let NERDTreeMinimalUI = 1
-    let NERDTreeDirArrows = 1
-    let NERDTreeRespectWildIgnore = 1
-    "let NERDTreeShowBookmarks = 1
-    let NERDTreeWinSize = 25
+    command! LoadNerdtree call s:loadNerdtree()
 
-    let g:NERDTreeIgnore = ['null']
-    " dir
-    call extend(g:NERDTreeIgnore, ['__pycache__', 'CMakeFiles', 'htmlcov', 'node_modules', '.idea', '.git', '^build$', '^target$', 'obj', ])
-    " file
-    call extend(g:NERDTreeIgnore, ['rusty-tags.vi', '\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', 'tags', '^cscope\.', '\.obj$', '\.o$', '\.lib$', '\.a$', '\.dll$', '\.pyc$'])
+    fun s:loadNerdtree()
+        " Conflicts with NERDTree menu ('m' key): And the only reason to create and remove maps is because of the conflicting m map in NERDTree.
+        " https://github.com/kshenoy/vim-signature/issues/3
+        let NERDTreeMapMenu='M'
 
-    let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
+        let NERDTreeMouseMode = 3
+        "let NERDTreeAutoDeleteBuffer = 1
+        let NERDTreeMinimalUI = 1
+        let NERDTreeDirArrows = 1
+        let NERDTreeRespectWildIgnore = 1
+        "let NERDTreeShowBookmarks = 1
+        let NERDTreeWinSize = 25
 
-    " Add spaces after comment delimiters by default
-    let g:NERDSpaceDelims = 1
-    " Use compact syntax for prettified multi-line comments
-    let g:NERDCompactSexyComs = 1
-    " Align line-wise comment delimiters flush left instead of following code indentation
-    let g:NERDDefaultAlign = 'left'
-    " Set a language to use its alternate delimiters by default
-    let g:NERDAltDelims_java = 1
-    " Add your own custom formats or override the defaults
-    let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
-    " Allow commenting and inverting empty lines (useful when commenting a region)
-    let g:NERDCommentEmptyLines = 1
-    " Enable trimming of trailing whitespace when uncommenting
-    "let g:NERDTrimTrailingWhitespace = 1
+        let g:NERDTreeIgnore = [ 'null', ".DS_Store", "thumbs.db",
+                    \ "tags", '.tags', '.tagx', '.cscope.files', 'cscope.in.out', 'cscope.out','cscope.po.out',
+                    \ '.jshintrc', '.jscsrc', '.eslintignore', '.eslintrc.json',
+                    \ '.gitattributes', '.git',
+                    \ '.ccls-cache', '.devops','.arcconfig','.vscode',
+                    \ ]
+        " dir
+        call extend(g:NERDTreeIgnore, ['__pycache__', 'CMakeFiles', 'htmlcov', 'node_modules', '.idea', '.git', '^build$', '^target$', 'obj', ])
+        " file
+        call extend(g:NERDTreeIgnore, ['rusty-tags.vi', '\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', 'tags', '^cscope\.', '\.obj$', '\.o$', '\.lib$', '\.a$', '\.dll$', '\.pyc$'])
+
+        let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
+
+        " Add spaces after comment delimiters by default
+        let g:NERDSpaceDelims = 1
+        " Use compact syntax for prettified multi-line comments
+        let g:NERDCompactSexyComs = 1
+        " Align line-wise comment delimiters flush left instead of following code indentation
+        let g:NERDDefaultAlign = 'left'
+        " Set a language to use its alternate delimiters by default
+        let g:NERDAltDelims_java = 1
+        " Add your own custom formats or override the defaults
+        let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+        " Allow commenting and inverting empty lines (useful when commenting a region)
+        let g:NERDCommentEmptyLines = 1
+        " Enable trimming of trailing whitespace when uncommenting
+        "let g:NERDTrimTrailingWhitespace = 1
+    endfun
+
+    "call s:loadNerdtree()
 endif
 
 
@@ -904,83 +918,82 @@ if HasPlug('tagbar') | " {{{1
     command! LoadTagbar call s:loadTagbar()
     "call s:loadTagbar()
 
-fun s:loadTagbar()
-    "let g:tagbar_vertical = 25
-    "let g:tagbar_show_linenumbers = 1
-    "let NERDTreeWinPos = 'left'
-    let g:tagbar_autofocus = 0
-    "let g:tagbar_autoclose = 1
-    let g:tagbar_position = 'left'
-    let g:tagbar_sort = 0
-    let g:tagbar_width = 40
-    let g:tagbar_compact = 1
-    let g:tagbar_silent = 1
-    let g:tagbar_indent = 2
-    let g:tagbar_foldlevel = 4
-    let g:tagbar_iconchars = ['+', '-']
-    let g:tagbar_map_hidenonpublic = "`"
-    let g:tagbar_map_close = "q"
+    fun s:loadTagbar()
+        "let g:tagbar_vertical = 25
+        "let g:tagbar_show_linenumbers = 1
+        "let NERDTreeWinPos = 'left'
+        let g:tagbar_autofocus = 0
+        "let g:tagbar_autoclose = 1
+        let g:tagbar_position = 'left'
+        let g:tagbar_sort = 0
+        let g:tagbar_width = 40
+        let g:tagbar_compact = 1
+        let g:tagbar_silent = 1
+        let g:tagbar_indent = 2
+        let g:tagbar_foldlevel = 4
+        let g:tagbar_iconchars = ['+', '-']
+        let g:tagbar_map_hidenonpublic = "`"
+        let g:tagbar_map_close = "q"
 
-    " Support Rust tag list
-    if executable('ctags')
-        let path_ctags = systemlist("which ctags")[0]
-        let g:rust_use_custom_ctags_defs = 1
-        let g:tagbar_type_rust = {
-                    \   'ctagsbin' : path_ctags,
-                    \   'ctagstype' : 'rust',
-                    \   'kinds' : [
-                    \     'n:modules',
-                    \     's:structures:1',
-                    \     'i:interfaces',
-                    \     'c:implementations',
-                    \     'f:functions:1',
-                    \     'g:enumerations:1',
-                    \     't:type aliases:1:0',
-                    \     'v:constants:1:0',
-                    \     'M:macros:1',
-                    \     'm:fields:1:0',
-                    \     'e:enum variants:1:0',
-                    \     'P:methods:1',
-                    \   ],
-                    \   'sro': '::',
-                    \   'kind2scope' : {
-                    \     'n': 'module',
-                    \     's': 'struct',
-                    \     'i': 'interface',
-                    \     'c': 'implementation',
-                    \     'f': 'function',
-                    \     'g': 'enum',
-                    \     't': 'typedef',
-                    \     'v': 'variable',
-                    \     'M': 'macro',
-                    \     'm': 'field',
-                    \     'e': 'enumerator',
-                    \     'P': 'method',
-                    \   },
-                    \ }
-    endif
+        " Support Rust tag list
+        if executable('ctags')
+            let path_ctags = systemlist("which ctags")[0]
+            let g:rust_use_custom_ctags_defs = 1
+            let g:tagbar_type_rust = {
+                        \   'ctagsbin' : path_ctags,
+                        \   'ctagstype' : 'rust',
+                        \   'kinds' : [
+                        \     'n:modules',
+                        \     's:structures:1',
+                        \     'i:interfaces',
+                        \     'c:implementations',
+                        \     'f:functions:1',
+                        \     'g:enumerations:1',
+                        \     't:type aliases:1:0',
+                        \     'v:constants:1:0',
+                        \     'M:macros:1',
+                        \     'm:fields:1:0',
+                        \     'e:enum variants:1:0',
+                        \     'P:methods:1',
+                        \   ],
+                        \   'sro': '::',
+                        \   'kind2scope' : {
+                        \     'n': 'module',
+                        \     's': 'struct',
+                        \     'i': 'interface',
+                        \     'c': 'implementation',
+                        \     'f': 'function',
+                        \     'g': 'enum',
+                        \     't': 'typedef',
+                        \     'v': 'variable',
+                        \     'M': 'macro',
+                        \     'm': 'field',
+                        \     'e': 'enumerator',
+                        \     'P': 'method',
+                        \   },
+                        \ }
+        endif
 
-    " Add support for markdown files in tagbar.
-    if executable('markdown2ctags.py')
-        let path_mdctags = systemlist("which markdown2ctags.py")[0]
-        let g:markdown_use_custom_ctags_defs = 1
-        let g:tagbar_type_markdown = {
-                    \   'ctagsbin' : path_mdctags,
-                    \   'ctagstype' : 'markdown',
-                    \   'ctagsargs' : '-f - --sort=yes --sro=»',
-                    \   'kinds' : [
-                    \       's:sections',
-                    \       'i:images'
-                    \    ],
-                    \    'sro' : '»',
-                    \    'kind2scope' : {
-                    \       's' : 'section',
-                    \     },
-                    \     'sort': 0,
-                    \ }
-    endif
-endfun
-
+        " Add support for markdown files in tagbar.
+        if executable('markdown2ctags.py')
+            let path_mdctags = systemlist("which markdown2ctags.py")[0]
+            let g:markdown_use_custom_ctags_defs = 1
+            let g:tagbar_type_markdown = {
+                        \   'ctagsbin' : path_mdctags,
+                        \   'ctagstype' : 'markdown',
+                        \   'ctagsargs' : '-f - --sort=yes --sro=»',
+                        \   'kinds' : [
+                        \       's:sections',
+                        \       'i:images'
+                        \    ],
+                        \    'sro' : '»',
+                        \    'kind2scope' : {
+                        \       's' : 'section',
+                        \     },
+                        \     'sort': 0,
+                        \ }
+        endif
+    endfun
 endif
 
 if CheckPlug('taglist.vim', 1) | " {{{1
@@ -1168,16 +1181,16 @@ if HasPlug('context.vim') | " {{{1
     nnoremap <silent>   ;a      :"(*)Context         theCommand"<c-U>ContextToggle<cr>
     command! LoadContextVim call s:loadContextVim()
 
-fun s:loadContextVim()
-    let g:context_add_mappings = 0
-    let g:context_enabled = 0
-    " let g:context_presenter = 'nvim-float'
-    " let g:context_highlight_normal = 'Normal'
-    " let g:context_highlight_border = 'Comment'
-    let g:context_highlight_tag    = '<hide>'
-    let g:context_buftype_blacklist = ['floaterm', 'terminal', 'quickfix']
-    let g:context_filetype_blacklist = ['floaterm', 'qt']
-endfun
+    fun s:loadContextVim()
+        let g:context_add_mappings = 0
+        let g:context_enabled = 0
+        " let g:context_presenter = 'nvim-float'
+        " let g:context_highlight_normal = 'Normal'
+        " let g:context_highlight_border = 'Comment'
+        let g:context_highlight_tag    = '<hide>'
+        let g:context_buftype_blacklist = ['floaterm', 'terminal', 'quickfix']
+        let g:context_filetype_blacklist = ['floaterm', 'qt']
+    endfun
 endif
 
 
@@ -1692,6 +1705,7 @@ if HasPlug('fzf.vim') | " {{{1
 
     nnoremap           <leader>sg   :"(list)git-status          theCommand"<c-U>GFiles?<cr>
     nnoremap           <leader>sc   :"(list)Changes             theCommand"<c-U>Changes<cr>
+    nnoremap           <leader>sb   :"(list)Buffers             theCommand"<c-U>Buffers<cr>
     nnoremap           <leader>sm   :"(list)Marks               theCommand"<c-U>Marks<cr>
     nnoremap           <leader>sj   :"(list)Jumps               theCommand"<c-U>Jumps<cr>
     nnoremap           <leader>sw   :"(list)Windows             theCommand"<c-U>Windows<cr>

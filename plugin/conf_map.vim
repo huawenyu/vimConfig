@@ -786,7 +786,7 @@ endif
 
 
     " Text/Motion {{{2
-        nnoremap <leader>cc :"Text Capitalize word          theCommand"<c-U>CapitalizeWord<CR>
+        nnoremap <leader>ci :"Text Capitalize word          theCommand"<c-U>CapitalizeWord<CR>
         nnoremap <leader>cu :"Text UPPERCASE word           theCommand"<c-U>UppercaseWord<CR>
         nnoremap <leader>cl :"Text lowercase word           theCommand"<c-U>LowercaseWord<CR>
         nnoremap <leader>c<space> :"Text Just one space     theCommand"<c-U>JustOneInnerSpace<CR>
