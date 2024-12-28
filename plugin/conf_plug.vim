@@ -1,5 +1,3 @@
-" Version:      1.0
-
 if exists('g:loaded_conf_plug') || &compatible
     finish
 else
@@ -508,24 +506,10 @@ if CheckPlug('neoterm', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-easymotion', 1) | " {{{1
-    let g:EasyMotion_do_mapping = 0 " Disable default mappings
-
-    " Jump to anywhere you want with minimal keystrokes, trigger by 1 key.
-    " `s{char}{label}`
-    "nmap s <Plug>(easymotion-overwin-f)
-
-    " <or> trigger by 2 keys
-    " `s{char}{char}{label}`
-    " Need one more keystroke, but on average, it may be more comfortable.
-    nmap s <Plug>(easymotion-overwin-f2)
-endif
-
-
 if HasPlug('vim-easy-align') | " {{{1
     let g:easy_align_ignore_comment = 0 " align comments
     vnoremap <leader>cc      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign *\|<cr>
-    nnoremap <leader>cc      gv:"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign *\|<cr>
+    nmap     <leader>cc      mzvic:"(edit)EasyAlign theCommand"<c-U>'<,'>EasyAlign *\|<cr> \| 'zzz
 
     let g:easy_align_delimiters = {
         \ '>': { 'pattern': '>>\|=>\|>' },
@@ -641,10 +625,10 @@ if CheckPlug('vim-tmux-navigator', 1) | " {{{1
     let g:tmux_navigator_disable_when_zoomed = 1
 
     let g:tmux_navigator_no_mappings = 1
-    noremap <silent> <c-h> :<C-U>TmuxNavigateLeft<cr>
-    noremap <silent> <c-j> :<C-U>TmuxNavigateDown<cr>
-    noremap <silent> <c-k> :<C-U>TmuxNavigateUp<cr>
-    noremap <silent> <c-l> :<C-U>TmuxNavigateRight<cr>
+    noremap <silent> <c-h>     :<c-U>TmuxNavigateLeft<cr>
+    noremap <silent> <c-j>     :<c-U>TmuxNavigateDown<cr>
+    noremap <silent> <c-k>     :<c-U>TmuxNavigateUp<cr>
+    noremap <silent> <c-l>     :<c-U>TmuxNavigateRight<cr>
     " Conflict with fzf: cause fzf jump to another tmux-panel, since fzf will feedkeys(<c-\>)
     "noremap <silent> <c-\> :<C-U>TmuxNavigatePrevious<cr>
 endif
@@ -660,23 +644,28 @@ if CheckPlug('netrw', 1) | " {{{1, But not work like side-tree
 endif
 
 
-if HasPlug('nerdtree')  | " {{{1
-    nnoremap <leader>vE      :"(view)Explore(legacy)    theCommand"<c-U>NERDTreeToggle<CR>
-
+if HasPlug('nerdtree')
+    nnoremap <leader>ve      :"(view)Explore(legacy)    theCommand"<c-U>NERDTreeToggle<CR>
+    nnoremap <a-e>           :"(view)Explore(legacy)    theCommand"<c-U>NERDTreeToggle<CR>
     command! LoadNerdtree call s:loadNerdtree()
 
     fun s:loadNerdtree()
         " Conflicts with NERDTree menu ('m' key): And the only reason to create and remove maps is because of the conflicting m map in NERDTree.
         " https://github.com/kshenoy/vim-signature/issues/3
-        let NERDTreeMapMenu='M'
+        let g:NERDTreeMapMenu='M'
+        " Dicard this two key maps, avoid conflict <C-j/k>
+        let g:NERDTreeMapJumpNextSibling = 'gJ'
+        let g:NERDTreeMapJumpPrevSibling = 'gK'
+        let g:NERDTreeMapOpenInTab = 'gT'
 
-        let NERDTreeMouseMode = 3
-        "let NERDTreeAutoDeleteBuffer = 1
-        let NERDTreeMinimalUI = 1
-        let NERDTreeDirArrows = 1
-        let NERDTreeRespectWildIgnore = 1
-        "let NERDTreeShowBookmarks = 1
-        let NERDTreeWinSize = 25
+        let g:NERDTreeMouseMode = 3
+        "let g:NERDTreeAutoDeleteBuffer = 1
+        let g:NERDTreeMinimalUI = 1
+        let g:NERDTreeDirArrows = 1
+        let g:NERDTreeRespectWildIgnore = 1
+        let g:NERDTreeShowBookmarks = 1
+        let g:NERDTreeFileLines = 1
+        let g:NERDTreeWinSize = 25
 
         let g:NERDTreeIgnore = [ 'null', ".DS_Store", "thumbs.db",
                     \ "tags", '.tags', '.tagx', '.cscope.files', 'cscope.in.out', 'cscope.out','cscope.po.out',
@@ -707,7 +696,7 @@ if HasPlug('nerdtree')  | " {{{1
         "let g:NERDTrimTrailingWhitespace = 1
     endfun
 
-    "call s:loadNerdtree()
+    call s:loadNerdtree()
 endif
 
 
@@ -913,8 +902,44 @@ if HasPlug('VOoM') | " {{{1
 endif
 
 
+if HasPlug('neo-tree.nvim')
+    let s:viewBuff = 0
+    fun s:toggleBuffers()
+        if s:viewBuff == 0
+            let s:viewBuff = 1
+            exec 'Neotree buffers'
+        else
+            let s:viewBuff = 0
+            exec 'Neotree close buffers'
+        endif
+    endfunc
+
+
+    let s:viewGit = 0
+    fun s:toggleGitStatus()
+        if s:viewGit == 0
+            let s:viewGit = 1
+            exec 'Neotree git_status'
+        else
+            let s:viewGit = 0
+            exec 'Neotree close git_status'
+        endif
+    endfunc
+
+    nnoremap <a-b>     :call <sid>toggleBuffers()<cr>
+    nnoremap <a-g>     :call <sid>toggleGitStatus()<cr>
+endif
+
+
+if HasPlug('c-utils.vim')
+    nnoremap  <a-s>    :<C-\>e utilgrep#Grep(0, 0, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
+    vnoremap  <a-s>    :<C-\>e utilgrep#Grep(0, 1, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
+endif
+
+
 if HasPlug('tagbar') | " {{{1
     nnoremap <silent>  <leader>vt   :TagbarToggle<cr>
+    nnoremap <a-t>                  :TagbarToggle<CR>
     command! LoadTagbar call s:loadTagbar()
     "call s:loadTagbar()
 
@@ -1088,10 +1113,6 @@ if HasPlug('fzf-cscope.vim') | " {{{1
 
     nnoremap    <leader>ft      :"(fzf)Tag          "<c-U>FzfTagFilter<cr>
     nnoremap    <leader>fT      :"(fzf)WikiTag      "<c-U>FzfTagHomeCacheTag<cr>
-    nnoremap    <leader>fj      :"(fzf)Jumps        "<c-U>FZFJump<cr>
-    nnoremap    <leader>fe      :"(fzf)Edit/changes "<c-U>FZFChange<cr>
-    nnoremap    <leader>fm      :"(fzf)Marks        "<c-U>FZFMarks<cr>
-
 endif
 
 
@@ -1315,17 +1336,21 @@ endif
 
 
 if CheckPlug('NrrwRgn', 1) | " {{{1
-    let g:nrrw_rgn_nomap_nr = 1
-    let g:nrrw_rgn_nomap_Nr = 1
+    vnoremap    <leader>ei  :"(edit)Narrow edit    theCommand"<c-U>NRV<cr>
+    nmap        <a-w>       vic:<c-U>NRV<cr>
+    command! LoadNrrwRgn call s:loadNrrwRgn()
 
-    let g:nrrw_topbot_leftright = 'botright'
-    let g:nrrw_rgn_resize_window = 'relative'
-    let g:nrrw_rgn_wdth = 50
-    "let g:nrrw_rgn_vert = 1
-    let g:nrrw_rgn_rel_min = 30
-    "let g:nrrw_rgn_rel_max = 80
+    "fun s:loadNrrwRgn()
+        let g:nrrw_rgn_nomap_nr = 1
+        let g:nrrw_rgn_nomap_Nr = 1
 
-    vnoremap    <leader>ce      :"(edit)Narrow edit    "<c-U>NRV<cr>
+        let g:nrrw_topbot_leftright = 'botright'
+        let g:nrrw_rgn_resize_window = 'relative'
+        let g:nrrw_rgn_wdth = 50
+        "let g:nrrw_rgn_vert = 1
+        let g:nrrw_rgn_rel_min = 30
+        "let g:nrrw_rgn_rel_max = 80
+    "endfun
 endif
 
 
@@ -1608,7 +1633,7 @@ if CheckPlug('vim-cpp-enhanced-highlight', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-grepper', 1) | " {{{1
+if HasPlug('vim-grepper')
     let g:grepper = {}
     let g:grepper.highlight = 0
     let g:grepper.open = 1
@@ -1618,7 +1643,7 @@ if CheckPlug('vim-grepper', 1) | " {{{1
 endif
 
 
-if HasPlug('vim-motion') | " {{{1
+if HasPlug('vim-motion')
     "let g:vim_motion_maps = 1
     nnoremap <silent> <a-p>     <Plug>_JumpPrevIndent
     nnoremap <silent> <a-n>     <Plug>_JumpNextIndent
@@ -1698,20 +1723,30 @@ if CheckPlug('ctrlp.vim', 1) | " {{{1
 endif
 
 
+if HasPlug('fzf-preview.vim')
+    nnoremap <Space>fF      :"(fzf)All files            theCommand"<c-U>FZFFiles<cr>
+    nnoremap <Space>fg      :"(fzf)Grep                 theCommand"<c-U>FZFRg <c-r>=utils#GetSelected('n')<cr><cr>
+    vnoremap <Space>fg      :"(fzf)Grep                 theCommand"<c-U>FZFRg <c-r>=utils#GetSelected('v')<cr>
+endif
+
+
 if HasPlug('fzf.vim') | " {{{1
     nnoremap           <leader>s1   :"Search in 'wad'         theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "daemon/wad", 1)<cr>
     nnoremap           <leader>s2   :"Search in 'cmf'         theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "cmf/plugin", 1)<cr>
-    nnoremap           <leader>s3   :"Search in              theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "", 1)<cr>
+    nnoremap           <leader>s3   :"Search in               theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "", 1)<cr>
 
-    nnoremap           <leader>sg   :"(list)git-status          theCommand"<c-U>GFiles?<cr>
-    nnoremap           <leader>sc   :"(list)Changes             theCommand"<c-U>Changes<cr>
-    nnoremap           <leader>sb   :"(list)Buffers             theCommand"<c-U>Buffers<cr>
-    nnoremap           <leader>sm   :"(list)Marks               theCommand"<c-U>Marks<cr>
-    nnoremap           <leader>sj   :"(list)Jumps               theCommand"<c-U>Jumps<cr>
-    nnoremap           <leader>sw   :"(list)Windows             theCommand"<c-U>Windows<cr>
-    nnoremap           <leader>s:   :"(list)History:             theCommand"<c-U>History:<cr>
-    nnoremap           <leader>s/   :"(list)History/             theCommand"<c-U>History/<cr>
-    nnoremap           <leader>s;   :"(list)Commands             theCommand"<c-U>Commands<cr>
+    nnoremap           <leader>sg   :"(fzf)git-status          theCommand"<c-U>GFiles?<cr>
+    nnoremap           <leader>sc   :"(fzf)Changes             theCommand"<c-U>FZFChange<cr>
+    nnoremap           <leader>sb   :"(fzf)Buffers             theCommand"<c-U>Buffers<cr>
+    nnoremap           <leader>sm   :"(fzf)Marks               theCommand"<c-U>FZFMarks<cr>
+    nnoremap           <leader>sj   :"(fzf)Jumps               theCommand"<c-U>FZFJump<cr>
+    nnoremap           <leader>sl   :"(fzf)Lines               theCommand"<c-U>FZFBLines<cr>
+    nnoremap           <leader>sw   :"(fzf)Windows             theCommand"<c-U>FZFWindows<cr>
+    nnoremap           <leader>sh   :"(fzf)History             theCommand"<c-U>FZFHistory<cr>
+    nnoremap           <leader>sq   :"(fzf)Quickfix            theCommand"<c-U>FZFQuickFix<cr>
+    nnoremap           <leader>s:   :"(fzf)History:            theCommand"<c-U>History:<cr>
+    nnoremap           <leader>s/   :"(fzf)History/            theCommand"<c-U>History/<cr>
+    nnoremap           <leader>s;   :"(fzf)Commands            theCommand"<c-U>Commands<cr>
 
 
     let g:fzf_prefer_tmux = 1
@@ -2155,4 +2190,8 @@ if HasPlug('asynctasks.vim')
     endif
 endif
 
+
+if HasPlug('vim-tpipeline')
+    let &laststatus = 1
+endif
 

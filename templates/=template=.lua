@@ -1,3 +1,5 @@
+-- vim: :C0:
+
 local M = { loaded = false }
 
 -- Map, cmd-for-lazy-setup

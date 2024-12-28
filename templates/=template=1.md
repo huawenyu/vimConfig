@@ -5,6 +5,7 @@
 NAME
 ===
 **%CLASS%** - A man page written in Markdown
+**ls(1)**, **cp(1)**
 
 SYNOPSIS
 ===

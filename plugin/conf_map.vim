@@ -261,45 +261,6 @@ if HasPlug('vim-table-mode')
 endif
 
 
-" Buffer & lines
-if HasPlug('fzf.vim')
-    nnoremap <silent> <leader>fb    :"(fzf)Buffers          theCommand"<c-U>Buffers<cr>
-    vnoremap <silent> <leader>fb    :"(fzf)Buffers          theCommand"<c-U>Buffers<cr>
-    nnoremap <silent> <leader>fl    :"(fzf)Lines            theCommand"<c-U>BLines<cr>
-    vnoremap <silent> <leader>fl    :"(fzf)Lines            theCommand"<c-U>BLines<cr>
-endif
-
-
-if HasPlug('fzf-preview.vim')
-    nnoremap <Space>fF      :"(fzf)All files            theCommand"<c-U>FZFFiles<cr>
-    nnoremap <Space>fq      :"(fzf)Quickfix             theCommand"<c-U>FZFQuickFix<cr>
-    nnoremap <Space>fh      :"(fzf)History              theCommand"<c-U>FZFHistory<cr>
-    if HasPlug('fzf-filemru')
-    nnoremap <Space>fH      :"(fzf)MRU                  theCommand"<c-U>FilesMru --tiebreak=end<cr>
-    endif
-    nnoremap <Space>fg      :"(fzf)Grep                 theCommand"<c-U>FZFRg <c-r>=utils#GetSelected('n')<cr><cr>
-    vnoremap <Space>fg      :"(fzf)Grep                 theCommand"<c-U>FZFRg <c-r>=utils#GetSelected('v')<cr>
-endif
-
-
-if CheckPlug('vim-tmux-navigator', 1)
-    "let g:tmux_navigator_no_mappings = 1
-    "nnoremap <silent> <a-h> :TmuxNavigateLeft<cr>
-    "nnoremap <silent> <a-j> :TmuxNavigateDown<cr>
-    "nnoremap <silent> <a-k> :TmuxNavigateUp<cr>
-    "nnoremap <silent> <a-l> :TmuxNavigateRight<cr>
-    "nnoremap <silent> <a-\> :TmuxNavigatePrevious<cr>
-endif
-
-
-if CheckPlug('vim-easy-align', 1)
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
-    xmap ga <Plug>(EasyAlign)
-    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nnoremap ga <Plug>(EasyAlign)
-endif
-
-
 if CheckPlug('deoplete.nvim', 1)
     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
     smap <C-k>     <Plug>(neosnippet_expand_or_jump)

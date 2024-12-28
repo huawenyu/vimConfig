@@ -13,10 +13,10 @@ function M.load()
 
     local map = vim.api.nvim_set_keymap
     local opts = { noremap = true, silent = true }
-    map('n', '<leader>ve', ':"(view)Explore File           theCommand"<c-U>Neotree toggle<CR>', opts)
+    map('n', '<leader>vE', ':"(view)Explore File           theCommand"<c-U>Neotree toggle<CR>', opts)
     map('n', '<leader>vf', ':"(view)Explore Focus          theCommand"<c-U>Neotree reveal<CR>', opts)
     map('n', '<leader>vb', ':"(view)Explore buffer         theCommand"<c-U>Neotree buffers<CR>', opts)
-    map('n', '<leader>vg', ':"(view)Explore git            theCommand"<c-U>Neotree git<CR>', opts)
+    map('n', '<leader>vg', ':"(view)Explore git            theCommand"<c-U>Neotree git_status<CR>', opts)
 end
 
 

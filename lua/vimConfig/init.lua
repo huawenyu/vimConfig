@@ -18,6 +18,9 @@ M.hydra = require('vimConfig.hydra')
 M.fidget = require('vimConfig.fidget')
 M.outline = require('vimConfig.symbols-outline')
 M.picker = require('vimConfig.nvim-window-picker')
+M.indent = require('vimConfig.guess-indent')
+M.indentLine = require('vimConfig.indent-blankline')
+M.feMaco = require('vimConfig.nvim-FeMaco')
 
 function M.setup()
 	M.whicyKey.load()
@@ -41,6 +44,9 @@ function M.setup()
 	M.fidget.load()
 	M.outline.load()
 	M.picker.load()
+	M.indent.load()
+	M.indentLine.load()
+	M.feMaco.load()
 
 	-- vim.opt.termguicolors = true
 	-- require("bufferline").setup{}
