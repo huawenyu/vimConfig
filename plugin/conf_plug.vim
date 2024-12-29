@@ -1,7 +1,7 @@
 if exists('g:loaded_conf_plug') || &compatible
     finish
 else
-    let g:loaded_conf_plug = 'yes'
+    let g:loaded_conf_plug = 1
     let s:base_dir = resolve(expand("<sfile>:p:h"))
     silent! let s:log = logger#getLogger(expand('<sfile>:t'))
 endif
@@ -2188,10 +2188,5 @@ if HasPlug('asynctasks.vim')
     if filereadable(expand('~/.vim_tasks.ini')) && !filereadable(expand('~/.vim/tasks.ini'))
         call system(expand('ln -s ~/.vim_tasks.ini ~/.vim/tasks.ini'))
     endif
-endif
-
-
-if HasPlug('vim-tpipeline')
-    let &laststatus = 1
 endif
 

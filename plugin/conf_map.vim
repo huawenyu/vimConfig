@@ -38,16 +38,16 @@ if g:vim_confi_option.enable_map_basic
     "vnoremap <a-CR> <Esc>
 
     " Adjust viewports to the same size
-    map <leader>= <C-w>=
+    "map <leader>= <C-w>=
 
     inoremap <S-Tab> <C-V><Tab>
 
-    noremap  <silent> j  gj
-    vnoremap <silent> j  gj
-    noremap  <silent> k  gk
-    vnoremap <silent> k  gk
-    vnoremap <silent> >  >gv
-    vnoremap <silent> <  <gv
+    " noremap  <silent> j  gj
+    " vnoremap <silent> j  gj
+    " noremap  <silent> k  gk
+    " vnoremap <silent> k  gk
+    " vnoremap <silent> >  >gv
+    " vnoremap <silent> <  <gv
 
     " " H/L - jump to start/end of line (^/$)
     " " J/K - jump down/up half a screen (C-d/C-u)
