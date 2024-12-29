@@ -103,6 +103,7 @@ function M.load()
                 buftype = 'quickfix',
                 title = 'QuickFix',
                 pinned = true,
+                open = "copen",
             },
             {
                 ft = "help",

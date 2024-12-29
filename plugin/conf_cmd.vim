@@ -20,21 +20,6 @@ if g:vim_confi_option.auto_restore_cursor
 endif
 
 
-let g:previous_window = -1
-" function SmartInsert()
-"   if &buftype == 'terminal'
-"     if g:previous_window != winnr()
-"       startinsert
-"     endif
-"     let g:previous_window = winnr()
-"   else
-"     let g:previous_window = -1
-"   endif
-" endfunction
-" au BufEnter * call SmartInsert()
-
-
-
 " Autocmd {{{2
     augroup filetype_auto
         " Voom/VOom:

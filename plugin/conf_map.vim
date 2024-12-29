@@ -666,7 +666,7 @@ endif
 
         " Toggle source/header
         "nnoremap <silent> <leader>a  :<c-u>FuzzyOpen <C-R>=printf("%s\\.", expand('%:t:r'))<cr><cr>
-        nnoremap <silent> <leader>a  :"(*)Toggle source/header   theCommand"<c-U>call CurtineIncSw()<cr>
+        nnoremap <silent>  ;a   :"(info)Toggle source/header   theCommand"<c-U>call CurtineIncSw()<cr>
 
         if HasPlug('vim-sleuth')
             nnoremap <leader>fd :"Auto detect indent   theCommand"<c-U>Sleuth<cr>
@@ -756,10 +756,9 @@ endif
 
     " Info {{{2
         " Show current color's name: iS show syntax[vim-scriptease]
-        nnoremap <leader>iS  :"(info)Show syntax             theCommand"<c-U>echomsg synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")<cr>
-        nnoremap <leader>is  :"(info)Show syntax(scriptease) theCommand"<c-U>echomsg synIDattr(synIDtrans(synID(line("."), col("."), 1)), "fg")<cr>
-        nnoremap <silent>if  :"(info)File                    theCommand"<c-U>echo expand('%:p')<cr> \| call setreg('+', expand('%:p'))<cr>
-        nnoremap <silent>ic  :"(info)File code               theCommand"<c-U>SourceCounter<cr>
+        nnoremap <leader>aS  :"(info)Show syntax             theCommand"<c-U>echomsg synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")<cr>
+        nnoremap <leader>as  :"(info)Show syntax(scriptease) theCommand"<c-U>echomsg synIDattr(synIDtrans(synID(line("."), col("."), 1)), "fg")<cr>
+        nnoremap <leader>af  :"(info)File                    theCommand"<c-U>echo expand('%:p')<cr> \| call setreg('+', expand('%:p'))<cr>
 
     " Git/grep {{{2
         " Search {{{3

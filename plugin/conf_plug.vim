@@ -1148,7 +1148,7 @@ endif
 
 
 if HasPlug('context.vim') | " {{{1
-    nnoremap <silent>   ;a      :"(*)Context         theCommand"<c-U>ContextToggle<cr>
+    nnoremap <silent>   <leader>aa      :"(*)Context         theCommand"<c-U>ContextToggle<cr>
     command! LoadContextVim call s:loadContextVim()
 
     fun s:loadContextVim()
