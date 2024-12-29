@@ -21,73 +21,21 @@ endif
 
 
 let g:previous_window = -1
-function SmartInsert()
-  if &buftype == 'terminal'
-    if g:previous_window != winnr()
-      startinsert
-    endif
-    let g:previous_window = winnr()
-  else
-    let g:previous_window = -1
-  endif
-endfunction
-au BufEnter * call SmartInsert()
+" function SmartInsert()
+"   if &buftype == 'terminal'
+"     if g:previous_window != winnr()
+"       startinsert
+"     endif
+"     let g:previous_window = winnr()
+"   else
+"     let g:previous_window = -1
+"   endif
+" endfunction
+" au BufEnter * call SmartInsert()
 
-
-if g:vim_confi_option.auto_qf_height
-    " Maximize the window after entering it, be sure to keep the quickfix window
-    " at the specified height.
-    au WinEnter * call MaximizeAndResizeQuickfix(5)
-
-    " Maximize current window and set the quickfix window to the specified height.
-    function MaximizeAndResizeQuickfix(quickfixHeight)
-        " Redraw after executing the function.
-        set lazyredraw
-        " Ignore WinEnter events for now.
-        set ei=WinEnter
-
-        "??? Maximize current window.
-        "wincmd _
-
-        " If the current window is the quickfix window
-        if (getbufvar(winbufnr(winnr()), "&buftype") == "quickfix")
-            " Maximize previous window, and resize the quickfix window to the
-            " specified height.
-
-            " ???
-            "wincmd p
-            "resize
-            "wincmd p
-
-            exe "resize " . a:quickfixHeight
-        else
-            " Current window isn't the quickfix window, loop over all windows to
-            " find it (if it exists...)
-            let i = 1
-            let currBufNr = winbufnr(i)
-            while (currBufNr != -1)
-                " If the buffer in window i is the quickfix buffer.
-                if (getbufvar(currBufNr, "&buftype") == "quickfix")
-                    " Go to the quickfix window, set height to quickfixHeight, and jump to the previous
-                    " window.
-                    exe i . "wincmd w"
-                    exe "resize " . a:quickfixHeight
-                    wincmd p
-                    break
-                endif
-                let i = i + 1
-                let currBufNr = winbufnr(i)
-            endwhile
-        endif
-        set ei-=WinEnter
-        set nolazyredraw
-    endfunction
-
-endif
 
 
 " Autocmd {{{2
-
     augroup filetype_auto
         " Voom/VOom:
         " <Enter>             selects node the cursor is on and then cycles between Tree and Body.
@@ -100,6 +48,7 @@ endif
         "autocmd VimLeavePre * cclose | lclose
         autocmd InsertEnter,InsertLeave * set cul!
         autocmd VimResized * wincmd =
+        autocmd CmdlineLeave :set cmdheight=1 | silent! copen
 
         if g:vim_confi_option.auto_save
             " Automatically write changes when the file is writable

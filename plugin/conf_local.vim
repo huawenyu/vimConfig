@@ -28,6 +28,9 @@ set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__,.idea,node_modules
 set updatetime=600
 
+" Disable showing incomplete commands
+set noshowcmd
+
 " Suppress various messages including the ENTER prompt
 set shortmess+=I  " Don't give the intro message enstarting Vim
 set shortmess+=A  " Use abbreviations for messages in the command line
@@ -39,6 +42,7 @@ set shortmess+=o  " Overwrite file-written message
 
 " Ensuring that even longer messages don't require a press
 "set cmdheight=2  " Increase command height to avoid prompt
+set cmdheight=1
 
 "hi CursorLine guibg=Grey40
 "hi CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white

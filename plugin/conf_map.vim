@@ -20,24 +20,23 @@ endif
 
 
 if g:vim_confi_option.alt_shortcut
-    nmap <silent> <a-e>    <leader>ve
-    nmap <silent> <a-w>    <leader>vw
-    nmap <silent> <a-t>    <leader>vt
-    nmap <silent> <a-b>    <leader>vb
-    nmap <silent> <a-g>    <leader>vg
-    "nmap <silent> <a-s>    <leader>ss
-    "nmap <silent> <a-r>    <leader>sr
-    nmap <silent> <a-s>    <leader>s1
+    nmap <a-e>    <leader>ve
+    nmap <a-w>    <leader>vw
+    nmap <a-t>    <leader>vt
+    nmap <a-b>    <leader>vb
+    nmap <a-g>    <leader>vg
+    nmap <a-f>    ;fs
+    nmap <a-s>    <leader>s1
 
 
     if HasPlug('vim-motion')
         "let g:vim_motion_maps = 1
-        nnoremap <silent> <a-p>     <Plug>_JumpPrevIndent
-        nnoremap <silent> <a-n>     <Plug>_JumpNextIndent
-        vnoremap <silent> <a-p>     <Plug>_JumpPrevIndent
-        vnoremap <silent> <a-n>     <Plug>_JumpNextIndent
-        onoremap <silent> <a-p>     <Plug>_JumpPrevIndent
-        onoremap <silent> <a-n>     <Plug>_JumpNextIndent
+        nnoremap <a-p>     <Plug>_JumpPrevIndent
+        nnoremap <a-n>     <Plug>_JumpNextIndent
+        vnoremap <a-p>     <Plug>_JumpPrevIndent
+        vnoremap <a-n>     <Plug>_JumpNextIndent
+        onoremap <a-p>     <Plug>_JumpPrevIndent
+        onoremap <a-n>     <Plug>_JumpNextIndent
     endif
 
 
@@ -70,12 +69,12 @@ if g:vim_confi_option.enable_map_basic
 
     inoremap <S-Tab> <C-V><Tab>
 
-    " noremap  <silent> j  gj
-    " vnoremap <silent> j  gj
-    " noremap  <silent> k  gk
-    " vnoremap <silent> k  gk
-    " vnoremap <silent> >  >gv
-    " vnoremap <silent> <  <gv
+    noremap  <silent> j  gj
+    vnoremap <silent> j  gj
+    noremap  <silent> k  gk
+    vnoremap <silent> k  gk
+    vnoremap <silent> >  >gv
+    vnoremap <silent> <  <gv
 
     " " H/L - jump to start/end of line (^/$)
     " " J/K - jump down/up half a screen (C-d/C-u)

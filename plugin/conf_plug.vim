@@ -2155,3 +2155,8 @@ if HasPlug('neo-tree.nvim')
     nnoremap  <silent> <leader>vg  :"(view)Explore git            theCommand"<c-U>call <sid>toggleGitStatus()<cr>
 endif
 
+
+if HasPlug('nvim-notify')
+    lua vim.notify = require("notify")
+endif
+
