@@ -137,20 +137,12 @@ endif
 
         autocmd BufWritePre [\,:;'"\]\)\}]* throw 'Forbidden file name: ' . expand('<afile>')
 
-        func! s:ftMarkdown()
-            nnoremap <buffer>  <a-'> :VoomToggle markdown<cr>
-        endfunc
-        autocmd filetype markdown,vimwiki   silent! call <sid>ftMarkdown()
-
-        "autocmd filetype vimwiki  nnoremap <buffer> <a-o> :VoomToggle vimwiki<CR>
-        "autocmd filetype vimwiki  nnoremap <a-n> :VimwikiMakeDiaryNote<CR>
-        "autocmd filetype vimwiki  nnoremap <a-i> :VimwikiDiaryGenerateLinks<CR>
-
         command! -nargs=* C0  setlocal autoindent cindent expandtab   tabstop=4 shiftwidth=4 softtabstop=4
-        command! -nargs=* C08 setlocal autoindent cindent expandtab   tabstop=8 shiftwidth=2 softtabstop=8
         command! -nargs=* C2  setlocal autoindent cindent expandtab   tabstop=2 shiftwidth=2 softtabstop=2
         command! -nargs=* C4  setlocal autoindent cindent noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
+        command! -nargs=* C04 setlocal autoindent cindent expandtab   tabstop=4 shiftwidth=4 softtabstop=4
         command! -nargs=* C8  setlocal autoindent cindent noexpandtab tabstop=8 shiftwidth=8 softtabstop=8
+        command! -nargs=* C08 setlocal autoindent cindent expandtab   tabstop=8 shiftwidth=8 softtabstop=8
 
         "autocmd filetype vim,tmux,txt    C0
         "autocmd filetype c,cpp,diff      C8

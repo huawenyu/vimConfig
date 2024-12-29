@@ -1,10 +1,7 @@
-" Version:      1.0
-
 if exists('g:loaded_local_myconfig') || &compatible
   finish
-else
-  let g:loaded_local_myconfig = 'yes'
 endif
+let g:loaded_local_myconfig = 1
 
 "https://vi.stackexchange.com/questions/15383/how-can-i-suppress-startup-error-e575
 "  E575: Error while reading ShaDa file:
@@ -30,6 +27,18 @@ endif
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__,.idea,node_modules
 set updatetime=600
+
+" Suppress various messages including the ENTER prompt
+set shortmess+=I  " Don't give the intro message enstarting Vim
+set shortmess+=A  " Use abbreviations for messages in the command line
+set shortmess+=F  " Use "(file 1 of 2)" instead of "(1 of 2)"
+set shortmess+=O  " Message for reading file overwrite a previous message
+set shortmess+=c  " Don't give |ins-completion-menu| messages
+set shortmess+=s  " Don't give "search hit BOTTOM" messages
+set shortmess+=o  " Overwrite file-written message
+
+" Ensuring that even longer messages don't require a press
+"set cmdheight=2  " Increase command height to avoid prompt
 
 "hi CursorLine guibg=Grey40
 "hi CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white

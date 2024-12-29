@@ -18,6 +18,34 @@ if g:vim_confi_option.upper_keyfixes
     "cmap Tabe tabe
 endif
 
+
+if g:vim_confi_option.alt_shortcut
+    nmap <silent> <a-e>    <leader>ve
+    nmap <silent> <a-w>    <leader>vw
+    nmap <silent> <a-t>    <leader>vt
+    nmap <silent> <a-b>    <leader>vb
+    nmap <silent> <a-g>    <leader>vg
+    "nmap <silent> <a-s>    <leader>ss
+    "nmap <silent> <a-r>    <leader>sr
+    nmap <silent> <a-s>    <leader>s1
+
+
+    if HasPlug('vim-motion')
+        "let g:vim_motion_maps = 1
+        nnoremap <silent> <a-p>     <Plug>_JumpPrevIndent
+        nnoremap <silent> <a-n>     <Plug>_JumpNextIndent
+        vnoremap <silent> <a-p>     <Plug>_JumpPrevIndent
+        vnoremap <silent> <a-n>     <Plug>_JumpNextIndent
+        onoremap <silent> <a-p>     <Plug>_JumpPrevIndent
+        onoremap <silent> <a-n>     <Plug>_JumpNextIndent
+    endif
+
+
+    " Paste in insert mode: don't know who reset this, set again here
+    inoremap <silent> <a-i> <c-r>"
+endif
+
+
 if g:vim_confi_option.enable_map_basic
     " https://vimways.org/2018/for-mappings-and-a-tutorial/
     "" Stop that stupid window from popping up
@@ -157,7 +185,6 @@ if g:vim_confi_option.enable_map_useful
     " Alt+HJKL   move around tmux pane
     " Ctrl+HJKL  move around vim-window/tmux-pane
     "
-    "" Move to HwbasicFtMap
     " nnoremap <silent> <a-o>   :colder<cr>
     " nnoremap <silent> <a-i>   :cnewer<cr>
 
@@ -224,11 +251,6 @@ if g:vim_confi_option.enable_map_useful
     endif
 
 
-    " Show current color's name: zS show syntax[vim-scriptease]
-    nnoremap zC :echomsg synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")<cr>
-    nnoremap zc :echomsg synIDattr(synIDtrans(synID(line("."), col("."), 1)), "fg")<cr>
-
-
     " Automatically jump to end of text you pasted
     "vnoremap <silent> y y`]
     "vnoremap <silent> p p`]
@@ -238,12 +260,6 @@ if g:vim_confi_option.enable_map_useful
     " now it is possible to paste many times over selected text
     xnoremap <expr> p 'pgv"'.v:register.'y'
 
-    " Paste in insert mode
-    inoremap <silent> <a-i> <c-r>"
-
-    nnoremap  <leader>et    :"(*)Remove the trailing spaces             "<c-U>%s/\s\+$//g
-    nnoremap  <leader>ed    :"Remove the lines with search pattern      "<c-U>g/<c-r><C-w>/ norm dd
-    vnoremap  <leader>ed                                               y:<c-U>g/<c-r>"/ norm dd
 
     " remove space from emptyline
     "nnoremap <leader>v<space> :%s/^\s\s*$//<CR>
@@ -363,31 +379,31 @@ endif
 
 if HasPlug('coc.nvim')
     " using coc.vim/ale with ccls-cache which base on clang
-    nmap <silent> <a-]> <Plug>(coc-definition)
-    nmap <silent> <a-\> <Plug>(coc-references)
-    "nmap <silent> <a-h> <Plug>(coc-type-definition)
-    "nmap <silent> <a-j> <Plug>(coc-implementation)
-    nmap <silent> <a-[> call CocAction('doHover')
-    nmap <silent> <a-r> <Plug>(coc-rename)
-    nmap <silent> <a-,> <Plug>(coc-diagnostic-prev)
-    nmap <silent> <a-.> <Plug>(coc-diagnostic-next)
+    nnoremap  <silent>  ;fd <Plug>(coc-definition)
+    nnoremap  <silent>  ;fs <Plug>(coc-references)
+    "nnoremap <silent>  ;fD <Plug>(coc-type-definition)
+    "nnoremap <silent>  ;fi <Plug>(coc-implementation)
+    nnoremap <silent>   ;fH call CocAction('doHover')
+    nnoremap <silent>   ;fr <Plug>(coc-rename)
+    nnoremap <silent>   ;fp <Plug>(coc-diagnostic-next)
+    nnoremap <silent>   ;fn <Plug>(coc-diagnostic-prev)
 
     "autocmd CursorHold * silent call CocActionAsync('highlight')
 endif
 
 
 if CheckPlug('ale.vim', 1)
-    nmap <silent> <a-]> :ALEGoToDefinition<cr>
-    nmap <silent> <a-\> :ALEFindReferences<cr>
-    "nmap <silent> <a-h> :ALESymbolSearch<cr>
-    nmap <silent> <a-[> :ALEHover<cr>
-    nmap <silent> <a-,> <Plug>(ale_previous_wrap)
-    nmap <silent> <a-.> <Plug>(ale_next_wrap)
+    nnoremap  <silent>   ;fd :ALEGoToDefinition<cr>
+    nnoremap  <silent>   ;fs :ALEFindReferences<cr>
+    "nnoremap <silent>   ;fS :ALESymbolSearch<cr>
+    nnoremap  <silent>   ;fh :ALEHover<cr>
+    nnoremap  <silent>   ;fn <Plug>(ale_next_wrap)
+    nnoremap  <silent>   ;fp <Plug>(ale_previous_wrap)
 endif
 
 
 if CheckPlug('vim-prettier', 1)
-    nmap <Leader>fm <Plug>(Prettier)
+    nnoremap <leader>cf <Plug>(Prettier)
 endif
 
 
@@ -396,7 +412,7 @@ if CheckPlug('nnn.vim', 1) | " {{{1
     let g:nnn#set_default_mappings = 0
 
     " Then set your own
-    "nnoremap <silent> <a-e> :NnnPicker<CR>
+    "nnoremap <silent> <leader>ve :NnnPicker<CR>
 
     " Or override
     " Start nnn in the current file's directory
@@ -598,13 +614,10 @@ endif
 " Key maps {{{1
     " view {{{2
         if HasPlug('vim-maximizer')
-            nnoremap <silent> <a-w>                                             :MaximizerToggle<cr>
             nnoremap <silent> <leader>vw     :"(view)maximize Windows      theCommand"<c-U>MaximizerToggle<cr>
         elseif HasPlug('maximize')
-            nnoremap <silent> <a-w>                                             :MaximizeWindow<cr>
             nnoremap <silent> <leader>vw     :"(view)maximize Windows      theCommand"<c-U>MaximizeWindow<cr>
         else
-            nnoremap <silent> <a-w>                                              :ZoomToggle<cr>
             nnoremap <silent> <leader>vw     :"(view)maximize Windows      theCommand"<c-U>ZoomToggle<cr>
 
             " Zoom / Restore window.
@@ -622,19 +635,6 @@ endif
 
             command! ZoomToggle call s:ZoomToggle()
         endif
-
-
-        " Paste in insert mode: don't know who reset this, set again here
-        inoremap <silent> <a-i> <c-r>"
-
-        nnoremap <silent>  1G             :"(info)File             theCommand"<c-U>echo expand('%:p')<cr> \| call setreg('+', expand('%:p'))<cr>
-
-        "nnoremap <silent> <a-;> :TMToggle<CR>
-        "nnoremap <silent> <a-.> :BuffergatorToggle<CR>
-        "nnoremap <silent> <a-,> :VoomToggle<CR>
-        "nnoremap <silent> <a-[> :Null<CR>
-        "nnoremap <silent> <a-]> :Null<CR>
-        "nnoremap <silent> <a-\> :Null<CR>
 
     " Sugar {{{2
         " bookmark/color
@@ -747,11 +747,20 @@ endif
 
 
     " Text/Motion {{{2
-        nnoremap <leader>ci :"Text Capitalize word          theCommand"<c-U>CapitalizeWord<CR>
-        nnoremap <leader>cu :"Text UPPERCASE word           theCommand"<c-U>UppercaseWord<CR>
-        nnoremap <leader>cl :"Text lowercase word           theCommand"<c-U>LowercaseWord<CR>
-        nnoremap <leader>c<space> :"Text Just one space     theCommand"<c-U>JustOneInnerSpace<CR>
-        nnoremap <leader>cd :"Text remove trailing spaces   theCommand"<c-U>RemoveTrailingSpaces<CR>
+        nnoremap <leader>ci :"(txt)Capitalize word          theCommand"<c-U>CapitalizeWord<CR>
+        nnoremap <leader>cu :"(txt)UPPERCASE word           theCommand"<c-U>UppercaseWord<CR>
+        nnoremap <leader>cl :"(txt)lowercase word           theCommand"<c-U>LowercaseWord<CR>
+        nnoremap <leader>c<space> :"(txt)Just one space     theCommand"<c-U>JustOneInnerSpace<CR>
+        nnoremap <leader>ct :"(txt)Trim tail space          theCommand"<c-U>RemoveTrailingSpaces<CR>
+        nnoremap <leader>cd :"(txt)Delete search-pattern    theCommand"<c-U>g/<c-r><C-w>/ norm dd
+        vnoremap <leader>cd                                          y:<c-U>g/<c-r>"/ norm dd
+
+    " Info {{{2
+        " Show current color's name: iS show syntax[vim-scriptease]
+        nnoremap <leader>iS  :"(info)Show syntax             theCommand"<c-U>echomsg synIDattr(synIDtrans(synID(line("."), col("."), 1)), "name")<cr>
+        nnoremap <leader>is  :"(info)Show syntax(scriptease) theCommand"<c-U>echomsg synIDattr(synIDtrans(synID(line("."), col("."), 1)), "fg")<cr>
+        nnoremap <silent>if  :"(info)File                    theCommand"<c-U>echo expand('%:p')<cr> \| call setreg('+', expand('%:p'))<cr>
+        nnoremap <silent>ic  :"(info)File code               theCommand"<c-U>SourceCounter<cr>
 
     " Git/grep {{{2
         " Search {{{3

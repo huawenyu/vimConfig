@@ -10,13 +10,6 @@ function M.load()
 
     -- If the lua-plugin MUST call setup (itself lazy load), here expose a command to trigger the setup.
     vim.api.nvim_create_user_command('LoadNeotree', M.setup, {nargs=0})
-
-    local map = vim.api.nvim_set_keymap
-    local opts = { noremap = true, silent = true }
-    map('n', '<leader>vE', ':"(view)Explore File           theCommand"<c-U>Neotree toggle<CR>', opts)
-    map('n', '<leader>vf', ':"(view)Explore Focus          theCommand"<c-U>Neotree reveal<CR>', opts)
-    map('n', '<leader>vb', ':"(view)Explore buffer         theCommand"<c-U>Neotree buffers<CR>', opts)
-    map('n', '<leader>vg', ':"(view)Explore git            theCommand"<c-U>Neotree git_status<CR>', opts)
 end
 
 

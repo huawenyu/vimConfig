@@ -14,7 +14,7 @@ function M.load()
     require('lualine').setup {
         options = {
             icons_enabled = true,
-            theme = 'tokyonight', -- Replace with your preferred theme
+            theme = 'auto', -- Replace with your preferred theme
             component_separators = { left = '⋮', right = '⋮'},
             section_separators = { left = '▌', right = '▐'},
             disabled_filetypes = {

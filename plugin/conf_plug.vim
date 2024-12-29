@@ -1,27 +1,14 @@
 if exists('g:loaded_conf_plug') || &compatible
     finish
-else
-    let g:loaded_conf_plug = 1
-    let s:base_dir = resolve(expand("<sfile>:p:h"))
-    silent! let s:log = logger#getLogger(expand('<sfile>:t'))
 endif
+let g:loaded_conf_plug = 1
+let s:base_dir = resolve(expand("<sfile>:p:h"))
+silent! let s:log = logger#getLogger(expand('<sfile>:t'))
 
 lua require('vimConfig').setup()
 
 
-if g:vim_confi_option.auto_install_plugs
-    autocmd VimEnter *
-        \   if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-        \ |     PlugInstall --sync | q
-        \ | endif
-endif
-
-
 if HasPlug('syntastic') | " {{{1
-    "set statusline+=%#warningmsg#
-    "set statusline+=%{SyntasticStatuslineFlag()}
-    "set statusline+=%*
-
     let g:syntastic_vim_checkers = ['vint']
     let g:syntastic_vim_vint_exe = 'LC_CTYPE=UTF-8 vint'
 
@@ -645,8 +632,7 @@ endif
 
 
 if HasPlug('nerdtree')
-    nnoremap <leader>ve      :"(view)Explore(legacy)    theCommand"<c-U>NERDTreeToggle<CR>
-    nnoremap <a-e>           :"(view)Explore(legacy)    theCommand"<c-U>NERDTreeToggle<CR>
+    nnoremap <silent> <leader>ve      :"(view)Explore(legacy)    theCommand"<c-U>NERDTreeToggle<cr><cr>
     command! LoadNerdtree call s:loadNerdtree()
 
     fun s:loadNerdtree()
@@ -663,8 +649,8 @@ if HasPlug('nerdtree')
         let g:NERDTreeMinimalUI = 1
         let g:NERDTreeDirArrows = 1
         let g:NERDTreeRespectWildIgnore = 1
-        let g:NERDTreeShowBookmarks = 1
-        let g:NERDTreeFileLines = 1
+        let g:NERDTreeShowBookmarks = 0
+        let g:NERDTreeFileLines = 0
         let g:NERDTreeWinSize = 25
 
         let g:NERDTreeIgnore = [ 'null', ".DS_Store", "thumbs.db",
@@ -902,46 +888,9 @@ if HasPlug('VOoM') | " {{{1
 endif
 
 
-if HasPlug('neo-tree.nvim')
-    let s:viewBuff = 0
-    fun s:toggleBuffers()
-        if s:viewBuff == 0
-            let s:viewBuff = 1
-            exec 'Neotree buffers'
-        else
-            let s:viewBuff = 0
-            exec 'Neotree close buffers'
-        endif
-    endfunc
-
-
-    let s:viewGit = 0
-    fun s:toggleGitStatus()
-        if s:viewGit == 0
-            let s:viewGit = 1
-            exec 'Neotree git_status'
-        else
-            let s:viewGit = 0
-            exec 'Neotree close git_status'
-        endif
-    endfunc
-
-    nnoremap <a-b>     :call <sid>toggleBuffers()<cr>
-    nnoremap <a-g>     :call <sid>toggleGitStatus()<cr>
-endif
-
-
-if HasPlug('c-utils.vim')
-    nnoremap  <a-s>    :<C-\>e utilgrep#Grep(0, 0, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
-    vnoremap  <a-s>    :<C-\>e utilgrep#Grep(0, 1, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
-endif
-
-
 if HasPlug('tagbar') | " {{{1
     nnoremap <silent>  <leader>vt   :TagbarToggle<cr>
-    nnoremap <a-t>                  :TagbarToggle<CR>
     command! LoadTagbar call s:loadTagbar()
-    "call s:loadTagbar()
 
     fun s:loadTagbar()
         "let g:tagbar_vertical = 25
@@ -1323,7 +1272,7 @@ if CheckPlug('python-mode', 1) | " {{{1
 endif
 
 
-if CheckPlug('jedi-vim', 1) | " {{{1
+if HasPlug('jedi-vim')
     " leader+t:   doctest
     let g:jedi#completions_command = "<C-Space>"
     let g:jedi#goto_command = "<leader>gg"
@@ -1335,9 +1284,8 @@ if CheckPlug('jedi-vim', 1) | " {{{1
 endif
 
 
-if CheckPlug('NrrwRgn', 1) | " {{{1
-    vnoremap    <leader>ei  :"(edit)Narrow edit    theCommand"<c-U>NRV<cr>
-    nmap        <a-w>       vic:<c-U>NRV<cr>
+if HasPlug('NrrwRgn')
+    vnoremap    <leader>ei   vic:"(edit)Narrow edit    theCommand"<c-U>NRV<cr>
     command! LoadNrrwRgn call s:loadNrrwRgn()
 
     "fun s:loadNrrwRgn()
@@ -1354,12 +1302,12 @@ if CheckPlug('NrrwRgn', 1) | " {{{1
 endif
 
 
-if CheckPlug('SingleCompile', 1) | " {{{1
+if HasPlug('SingleCompile')
     let g:SingleCompile_usequickfix=1
 endif
 
 
-if CheckPlug('vim-go', 1) | " {{{1
+if HasPlug('vim-go')
     let g:go_version_warning = 0
     let g:go_highlight_functions = 1
     let g:go_highlight_methods = 1
@@ -1643,17 +1591,6 @@ if HasPlug('vim-grepper')
 endif
 
 
-if HasPlug('vim-motion')
-    "let g:vim_motion_maps = 1
-    nnoremap <silent> <a-p>     <Plug>_JumpPrevIndent
-    nnoremap <silent> <a-n>     <Plug>_JumpNextIndent
-    vnoremap <silent> <a-p>     <Plug>_JumpPrevIndent
-    vnoremap <silent> <a-n>     <Plug>_JumpNextIndent
-    onoremap <silent> <a-p>     <Plug>_JumpPrevIndent
-    onoremap <silent> <a-n>     <Plug>_JumpNextIndent
-endif
-
-
 if CheckPlug('vim-tmux-runner', 1) | " {{{1
     let g:VtrUseVtrMaps = 0
     let g:VtrClearBeforeSend = 0
@@ -1834,12 +1771,9 @@ if CheckPlug('vim-repl', 1) | " {{{1
     let g:repl_ipython_version = '7'
 endif
 
+
 if CheckPlug('vim-sleuth', 1) | " {{{1
     let g:sleuth_automatic = 1
-endif
-
-if CheckPlug('vim-zoom', 1) | " {{{1
-    nmap <a-w>    <Plug>(zoom-toggle)
 endif
 
 
@@ -2188,5 +2122,36 @@ if HasPlug('asynctasks.vim')
     if filereadable(expand('~/.vim_tasks.ini')) && !filereadable(expand('~/.vim/tasks.ini'))
         call system(expand('ln -s ~/.vim_tasks.ini ~/.vim/tasks.ini'))
     endif
+endif
+
+
+if HasPlug('neo-tree.nvim')
+    let s:viewBuff = 0
+    fun s:toggleBuffers()
+        if s:viewBuff == 0
+            let s:viewBuff = 1
+            exec 'Neotree buffers'
+        else
+            let s:viewBuff = 0
+            exec 'Neotree close buffers'
+        endif
+    endfunc
+
+
+    let s:viewGit = 0
+    fun s:toggleGitStatus()
+        if s:viewGit == 0
+            let s:viewGit = 1
+            exec 'Neotree git_status'
+        else
+            let s:viewGit = 0
+            exec 'Neotree close git_status'
+        endif
+    endfunc
+
+    nnoremap  <silent> <leader>vE  :"(view)Explore File           theCommand"<c-U>Neotree toggle<cr>
+    nnoremap  <silent> <leader>vf  :"(view)Explore Focus          theCommand"<c-U>Neotree reveal<cr>
+    nnoremap  <silent> <leader>vb  :"(view)Explore buffer         theCommand"<c-U>call <sid>toggleBuffers()<cr>
+    nnoremap  <silent> <leader>vg  :"(view)Explore git            theCommand"<c-U>call <sid>toggleGitStatus()<cr>
 endif
 
