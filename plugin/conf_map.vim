@@ -27,7 +27,7 @@ if g:vim_confi_option.alt_shortcut
     nmap <a-g>    <leader>vg
     nmap <a-q>    <leader>vq
     nmap <a-f>    ;fs
-    nmap <a-s>    <leader>s1
+    nmap <a-s>    <leader>g1
 
 
     if HasPlug('vim-motion')
@@ -721,52 +721,6 @@ endif
             vnoremap <silent> s //e<C-r>=&selection=='exclusive'?'+1':''<CR><CR>
                   \:<C-u>call histdel('search',-1)<Bar>let @/=histget('search',-1)<CR>gv
             onoremap s :normal vs<CR>
-
-        " Git {{{3
-            if HasPlug('vim-gitgutter')
-                " " Reload all opened files
-                "     fun! PullAndRefresh()
-                "         set noconfirm
-                "         !git pull
-                "         bufdo e!
-                "         set confirm
-                "     endfun
-
-                "     nmap ;gr call PullAndRefresh()
-                " " --End
-
-                nnoremap <silent> <leader>gv   :"(git)GutterToggle          theCommand"<c-U>GitGutterToggle <cr>
-                nnoremap <silent> <leader>gr   :"(git)Gutter                theCommand"<c-U>GitGutter <cr>
-                "nnoremap <silent> <leader>gf  :"(git)Gutter sink-to QuickFix "<c-U>GitGutterQuickFix \| copen <cr>
-
-                " Jump between hunks
-                nnoremap <silent> <leader>gn   <Plug>(GitGutterNextHunk)
-                nnoremap <silent> <leader>gp   <Plug>(GitGutterPrevHunk)
-
-                " Hunk-add and hunk-revert for chunk staging
-                nnoremap <silent> <leader>ga   <Plug>(GitGutterStageHunk)
-                nnoremap <silent> <leader>gu   <Plug>(GitGutterUndoHunk)
-            endif
-
-            if HasPlug('vim-fugitive')
-                "nnoremap <leader>bb :VCBlame<cr>
-                nnoremap <leader>gl     :"(git)Log side by side    theCommand"<c-U>GV<cr>
-                nnoremap <leader>gd     :"(git)Diff review         theCommand"<c-U>Gvdiff<cr>
-                nnoremap <leader>gD     :"(git)Diff review tabs    theCommand"<c-U>DiffReview git show
-                nnoremap <leader>gb     :"(git)Blame               theCommand"<c-U>Git blame<cr>
-                nnoremap        ;bb     :"(git)Blame               theCommand"<c-U>Git blame<cr>
-                nnoremap <leader>gs     :"(git)Status              theCommand"<c-U>Gstatus<cr>
-            endif
-
-            if HasPlug('tig-explorer.vim')
-                nnoremap <leader>gL     :"(tig)Log                 theCommand"<c-U>Tig<cr>
-                nnoremap <leader>gp     :"(tig)Log --parent        theCommand"<c-U>Tig --first-parent -m<cr>
-                nnoremap <leader>gP     :"(tig)Log --parent all    theCommand"<c-U>Tig --first-parent --all<cr>
-                nnoremap <leader>gB     :"(tig)Blame               theCommand"<c-U>TigBlame<cr>
-            endif
-
-            nnoremap <leader>gc         :"(git)clean-dryrun        theCommand"<c-U>AsyncStop! <bar> AsyncTask gitclean-dryrun<cr>
-            nnoremap <leader>gx         :"(git)clean               theCommand"<c-U>AsyncStop! <bar> AsyncTask gitclean<cr>
 
 
 " Helper fucntion {{{1

@@ -303,10 +303,6 @@ if HasPlug('vim-dispatch') | " {{{1
 endif
 
 
-if HasPlug('vim-pencil') | " {{{1
-    nnoremap <silent>   ;vp     :"(mode)Pencil              "<c-U>TogglePencil<CR>
-endif
-
 if HasPlug('vim-browser-search') | " {{{1
     nmap <silent> <Leader>sw <Plug>SearchNormal
     vmap <silent> <Leader>sw <Plug>SearchVisual
@@ -314,13 +310,13 @@ endif
 
 " Pencil draw
 if HasPlug('venn.nvim') | " {{{1
-    nnoremap <silent>   ;vb     :"(mode)Draw pencil box     "<c-U>VennToggleMap<cr>
+    "nnoremap <silent>   ;vb     :"(mode)Draw pencil box     "<c-U>ToggleVennDraw<cr>
 
     " Troubleshooting:
     "   let g:venn_debug = 1
     "   tail -f ~/.local/share/nvim/venn.log
     "
-    command! VennToggleMap call s:VennToggleMap()
+    command! ToggleVennDraw call s:VennToggleMap()
     let s:vennMapState=1
     function! s:VennToggleMap()
         if s:vennMapState
@@ -739,50 +735,6 @@ if CheckPlug('gist-vim', 1) | " {{{1
 endif
 
 
-if HasPlug('fzf-cscope.vim') | " {{{1
-    let g:fzf_cscope_map = get(g:, 'fzf_cscope_map', 1)
-    let g:fzfCscopeFilter = get(g:, 'fzfCscopeFilter', "daemon/wad/")
-
-    if g:vim_confi_option.auto_install_tools
-        if LINUX()
-            if UBUNTU()
-                if !executable('cscope')
-                    echomsg "Auto installing cscope"
-                    call system("sudo apt install -y cscope")
-                endif
-                if !executable('ctags')
-                    echomsg "Auto installing ctags"
-                    call system("sudo apt install -y ctags")
-                endif
-                if !executable('bat')
-                    echomsg "Auto installing batcat"
-                    call system("sudo apt install -y bat")
-                endif
-                if !executable('bat')
-                    echomsg "Auto installing gawk"
-                    call system("sudo apt install -y gawk")
-                endif
-            elseif CENTOS() || FEDORA()
-                if !executable('cscope')
-                    call system("sudo yum install cscope")
-                endif
-                if !executable('ctags')
-                    call system("sudo yum install ctags")
-                endif
-            endif
-        endif
-    endif
-endif
-
-
-if HasPlug('c-utils.vim') | " {{{1
-    let g:tlTokenList = ["FIXME @wilson", "TODO @wilson", "XXX @wilson"]
-    let g:ctrlsf_mapping = { "next": "n", "prev": "N", }
-    let g:utilquickfix_file = $HOME."/.vim/vim.quickfix"
-    let g:c_utils_map = get(g:, 'c_utils_map', 1)
-endif
-
-
 if CheckPlug('vim-startify', 1) | " {{{1
     let g:startify_list_order = ['sessions', 'bookmarks', 'files', 'dir', 'commands']
     let g:startify_relative_path = 1
@@ -888,10 +840,10 @@ endif
 
 if HasPlug('VOoM') | " {{{1
     nnoremap <silent>  <leader>vo     :"(view)Outline          theCommand"<c-U>VoomToggle<cr>
-    nnoremap <silent>  <leader>v1     :"(view)Outline fmr1     theCommand"<c-U>VoomToggle fmr<cr>
+    nnoremap <silent>  <leader>v0     :"(view)Outline fmr1     theCommand"<c-U>VoomToggle fmr<cr>
 
-    nnoremap <silent>   ;vi         :"(helper)Insert outline header     theCommand"<c-U>call utils#VoomInsert(0) <CR>
-    vnoremap <silent>   ;vi         :"(helper)Insert outline header     theCommand"<c-U>call utils#VoomInsert(1) <CR>
+    " nnoremap <silent>   <leader>v1         :"(helper)Insert outline header     theCommand"<c-U>call utils#VoomInsert(0) <CR>
+    " vnoremap <silent>   <leader>v1         :"(helper)Insert outline header     theCommand"<c-U>call utils#VoomInsert(1) <CR>
 endif
 
 
@@ -1138,19 +1090,6 @@ if HasPlug('vim-markdown') | " {{{1
             au! BufNewFile,BufFilePre,BufRead *.md,*.wiki set filetype=markdown
         augroup END
     endif
-endif
-
-
-if HasPlug('c-utils.vim')
-    function! s:JumpComma(mode)
-        if v:count == 0
-            call utils#Declaration()
-        else
-        endif
-    endfunction
-
-    nnoremap <silent> <leader><leader>  :"(*)Preview Tag at right-side-window         theCommand"<c-U>call VimMotionPreview()<cr>
-    vnoremap          <leader><leader>  :"(*)Preview Tag at right-side-window         theCommand"<c-U>call VimMotionPreview()<cr>
 endif
 
 
@@ -1640,57 +1579,172 @@ if CheckPlug('vim-fugitive', 1) | " {{{1
 endif
 
 
-if CheckPlug('ctrlp.vim', 1) | " {{{1
-    let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-    let g:ctrlp_working_path_mode='ra'
-    let g:ctrlp_cmd = 'CtrlPMixed'
+if HasPlug('c-utils.vim')
+    let g:tlTokenList = ["FIXME @wilson", "TODO @wilson", "XXX @wilson"]
+    let g:ctrlsf_mapping = { "next": "n", "prev": "N", }
+    let g:utilquickfix_file = $HOME."/.vim/vim.quickfix"
+    let g:c_utils_map = get(g:, 'c_utils_map', 1)
 
-    if executable('rg')
-        let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-        let g:ctrlp_use_caching = 0
-    elseif executable('ag')
-        " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-        let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-        " ag is fast enough that CtrlP doesn't need to cache
-        let g:ctrlp_use_caching = 0
+    function! s:JumpComma(mode)
+        if v:count == 0
+            call utils#Declaration()
+        else
+        endif
+    endfunction
+
+    nnoremap <silent> <leader><leader>  :"(*)Preview Tag at right-side-window         theCommand"<c-U>call VimMotionPreview()<cr>
+    vnoremap          <leader><leader>  :"(*)Preview Tag at right-side-window         theCommand"<c-U>call VimMotionPreview()<cr>
+
+    let g:c_utils_prefer_dir = get(g:, 'c_utils_prefer_dir', '')
+
+    nnoremap         ;bb    :"Search-rg all         "<c-U>Rg <c-r>=utils#GetSelected('n')<cr>
+    nnoremap  <leader>bb    :"Search-rg all         "<c-U>Rg <c-r>=utils#GetSelected('n')<cr>
+
+    nnoremap  <leader>gg    :"Search 'g:c_utils_prefer_dir' from '.vimrc.before'  "<c-U><C-\>e utilgrep#Grep(0, 0, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
+    nnoremap         ;gg    :"Search 'g:c_utils_prefer_dir' from '.vimrc.before'  "<c-U><C-\>e utilgrep#Grep(0, 0, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
+    vnoremap  <leader>gg    :<C-\>e utilgrep#Grep(0, 1, g:c_utils_prefer_dir, 1)<cr>
+    vnoremap         ;gg    :<C-\>e utilgrep#Grep(0, 1, "",           1)<cr>
+
+    nnoremap  <leader>vv    :"Search all            "<c-U><C-\>e utilgrep#Grep(0, 0, "",           1)<cr>
+    nnoremap         ;vv    :"Search all            "<c-U><C-\>e utilgrep#Grep(0, 0, "",           1)<cr>
+    vnoremap  <leader>vv    :<C-\>e utilgrep#Grep(0, 1, "",           1)<cr>
+    vnoremap         ;vv    :<C-\>e utilgrep#Grep(0, 1, "",           1)<cr>
+endif
+
+
+if HasPlug('fzf-cscope.vim') | " {{{1
+    let g:fzf_cscope_map = get(g:, 'fzf_cscope_map', 1)
+    let g:fzfCscopeFilter = get(g:, 'fzfCscopeFilter', "daemon/wad/")
+
+    if g:vim_confi_option.auto_install_tools
+        if LINUX()
+            if UBUNTU()
+                if !executable('cscope')
+                    echomsg "Auto installing cscope"
+                    call system("sudo apt install -y cscope")
+                endif
+                if !executable('ctags')
+                    echomsg "Auto installing ctags"
+                    call system("sudo apt install -y ctags")
+                endif
+                if !executable('bat')
+                    echomsg "Auto installing batcat"
+                    call system("sudo apt install -y bat")
+                endif
+                if !executable('bat')
+                    echomsg "Auto installing gawk"
+                    call system("sudo apt install -y gawk")
+                endif
+            elseif CENTOS() || FEDORA()
+                if !executable('cscope')
+                    call system("sudo yum install cscope")
+                endif
+                if !executable('ctags')
+                    call system("sudo yum install ctags")
+                endif
+            endif
+        endif
     endif
 
-    "let g:ctrlp_user_command = {
-    "            \ 'types': {
-    "            \       1: ['.git', 'git ls-files'],
-    "            \       2: ['.hg', 'hg --cwd %s locate -I .'],
-    "            \   },
-    "            \ 'fallback': 'rg %s --files --color=never --glob ""',
-    "            \ }
-    "let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
-    "let g:ctrlp_mruf_exclude = "\v\.git/(COMMIT_EDITMSG|index)"
+    " symbol
+    " 1. Please install 'batcat' first: sudo apt install bat
+    " 2. Then check the config if batcat can't works:  batcat --diagnostic
+    if !executable('batcat')
+        echom "[fzf-cscope.vim] Please install `batcat` for fzf-preview: sudo apt install bat"
+        finish
+    endif
+
+    if !executable('gawk')
+        echom "[fzf-cscope.vim] Please install `gawk` for tags filter: sudo apt install gawk"
+        finish
+    endif
+
+    " Keymap: <space>key, (+)advance ;key
+    "         If using nvim-lspconfig neovim build-lsp plug, we can using them as our (+)advance mode
+    "
+    "  file     - ff            files         files from cscope.files
+    "              +            files (all)   files from rg instance collect
+    "  function - fs            mode-word     cscope 3(func-call),
+    "                           mode-select   cscope 1(func-def),
+    "                           mode-empty    tags all-function-uniq and filter-in 'g:fzfCscopeFilter'
+    "              +            mode-word     cscope 0(symbol-all),
+    "                           mode-select   cscope 0(symbol-all),
+    "                           mode-empty    tags all-function-uniq
+    "  symbol   - fw            mode-word     cscope 0(symbol) and filter-in 'g:fzfCscopeFilter'
+    "                           mode-select   cscope 0(symbol) and filter-in 'g:fzfCscopeFilter'
+    "                           mode-empty    tags not-func-symbol-uniq but filter-in 'g:fzfCscopeFilter'
+    "              +            mode-word     cscope 9(be assigned value),
+    "                           mode-select   cscope 9(be assigned value),
+    "                           mode-empty    tags not-func-symbol-uniq
+    "  symbol   - fe            same-as fw, but without filter
+    "
+    nnoremap <silent> <leader>ff    :"open Files            theCommand"<c-U>CSFileFilter<cr>
+    vnoremap <silent> <leader>ff    :"open Files            theCommand"<c-U>CSFileFilter<cr>
+
+    nnoremap <silent>        ;ff    :"open Files            theCommand"<c-U>CSFileFilter!<cr>
+    vnoremap <silent>        ;ff    :"open Files            theCommand"<c-U>CSFileFilter!<cr>
+
+    " 'nvim-lspconfig' clangd assign with the prefix ;
+    "if HasNoPlug('nvim-lspconfig')
+    "  nnoremap <silent>        ;fs    :     call cscope#preview('0', 'n', 1, 1)<cr>
+    "  vnoremap <silent>        ;fs    :<c-u>call cscope#preview('0', 'v', 1, 1)<cr>
+    "  nnoremap <silent>        ;fw    :     call cscope#preview('9', 'n', 0, 1)<cr>
+    "  vnoremap <silent>        ;fw    :<c-u>call cscope#preview('9', 'v', 0, 1)<cr>
+    "  nnoremap <silent>        ;fe    :     call cscope#preview('9', 'n', 0, 0)<cr>
+    "  vnoremap <silent>        ;fe    :<c-u>call cscope#preview('9', 'v', 0, 0)<cr>
+    "endif
+
+    " Uppercase with filter define by g:fzfCscopeFilter
+    " Symbol:
+    nnoremap <silent> <leader>fs    :"(cscope)References        theCommand"<c-U>call cscope#preview('0', 'n', 0, 0)<cr>
+    vnoremap <silent> <leader>fs    :"(cscope)References        theCommand"<c-U>call cscope#preview('0', 'v', 0, 0)<cr>
+    nnoremap <silent> <leader>fS    :"(cscope)References(+)     theCommand"<c-U>call cscope#preview('0', 'n', 0, 1)<cr>
+    vnoremap <silent> <leader>fS    :"(cscope)References(+)     theCommand"<c-U>call cscope#preview('0', 'v', 0, 1)<cr>
+
+    " Function
+    nnoremap <silent> <leader>fc    :"(cscope)Caller            theCommand"<c-U>call cscope#preview('3', 'n', 1, 0)<cr>
+    vnoremap <silent> <leader>fc    :"(cscope)Caller            theCommand"<c-U>call cscope#preview('3', 'v', 1, 0)<cr>
+    nnoremap <silent> <leader>fC    :"(cscope)Callee            theCommand"<c-U>call cscope#preview('2', 'n', 1, 0)<cr>
+    vnoremap <silent> <leader>fC    :"(cscope)Callee            theCommand"<c-U>call cscope#preview('2', 'v', 1, 0)<cr>
+
+    " Write
+    nnoremap <silent> <leader>fw    :"(cscope)Write value       theCommand"<c-U>call cscope#preview('9', 'n', 0, 0)<cr>
+    vnoremap <silent> <leader>fw    :"(cscope)Write value       theCommand"<c-U>call cscope#preview('9', 'v', 0, 0)<cr>
+    nnoremap <silent> <leader>fW    :"(cscope)Write value(+)    theCommand"<c-U>call cscope#preview('9', 'n', 0, 1)<cr>
+    vnoremap <silent> <leader>fW    :"(cscope)Write value(+)    theCommand"<c-U>call cscope#preview('9', 'v', 0, 1)<cr>
+
+    " tExt
+    nnoremap          <leader>fe    :"Search in               theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "", 1)<cr>
+    nnoremap          <leader>f1    :"Search in 'wad'         theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "daemon/wad", 1)<cr>
+    nnoremap          <leader>f2    :"Search in 'cmf'         theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "cmf/plugin", 1)<cr>
+    " nnoremap        <leader>fe    :CscopeText! <c-r>=utils#GetSelected('')<cr>
+    " vnoremap        <leader>fe    :<c-u>CscopeText! <c-r>=utils#GetSelected('')<cr>
+    " nnoremap        <leader>fE    :CscopeGrep! <c-r>=utils#GetSelected('')<cr>
+    " vnoremap        <leader>fE    :<c-u>CscopeGrep! <c-r>=utils#GetSelected('')<cr>
+
 endif
 
 
 if HasPlug('fzf-preview.vim')
-    nnoremap <Space>fF      :"(fzf)All files            theCommand"<c-U>FZFFiles<cr>
-    nnoremap <Space>fg      :"(fzf)Grep                 theCommand"<c-U>FZFRg <c-r>=utils#GetSelected('n')<cr><cr>
-    vnoremap <Space>fg      :"(fzf)Grep                 theCommand"<c-U>FZFRg <c-r>=utils#GetSelected('v')<cr>
+    "nnoremap <leader>fF      :"(fzf)All files            theCommand"<c-U>FZFFiles<cr>
+    nnoremap <leader>fg      :"(fzf)Grep                 theCommand"<c-U>FZFRg <c-r>=utils#GetSelected('n')<cr><cr>
+    vnoremap <leader>fg      :"(fzf)Grep                 theCommand"<c-U>FZFRg <c-r>=utils#GetSelected('v')<cr>
 endif
 
 
 if HasPlug('fzf.vim') | " {{{1
-    nnoremap           <leader>s1   :"Search in 'wad'         theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "daemon/wad", 1)<cr>
-    nnoremap           <leader>s2   :"Search in 'cmf'         theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "cmf/plugin", 1)<cr>
-    nnoremap           <leader>s3   :"Search in               theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "", 1)<cr>
-
-    nnoremap           <leader>sg   :"(fzf)git-status          theCommand"<c-U>GFiles?<cr>
-    nnoremap           <leader>sc   :"(fzf)Changes             theCommand"<c-U>FZFChange<cr>
-    nnoremap           <leader>sb   :"(fzf)Buffers             theCommand"<c-U>Buffers<cr>
-    nnoremap           <leader>sm   :"(fzf)Marks               theCommand"<c-U>FZFMarks<cr>
-    nnoremap           <leader>sj   :"(fzf)Jumps               theCommand"<c-U>FZFJump<cr>
-    nnoremap           <leader>sl   :"(fzf)Lines               theCommand"<c-U>FZFBLines<cr>
-    nnoremap           <leader>sw   :"(fzf)Windows             theCommand"<c-U>FZFWindows<cr>
-    nnoremap           <leader>sh   :"(fzf)History             theCommand"<c-U>FZFHistory<cr>
-    nnoremap           <leader>sq   :"(fzf)Quickfix            theCommand"<c-U>FZFQuickFix<cr>
-    nnoremap           <leader>s:   :"(fzf)History:            theCommand"<c-U>History:<cr>
-    nnoremap           <leader>s/   :"(fzf)History/            theCommand"<c-U>History/<cr>
-    nnoremap           <leader>s;   :"(fzf)Commands            theCommand"<c-U>Commands<cr>
+    "nnoremap           ;vg   :"(fzf)git-status          theCommand"<c-U>GFiles?<cr>
+    nnoremap           ;vc   :"(fzf)Changes             theCommand"<c-U>FZFChange<cr>
+    "nnoremap           ;vb   :"(fzf)Buffers             theCommand"<c-U>Buffers<cr>
+    "nnoremap           ;vm   :"(fzf)Marks               theCommand"<c-U>FZFMarks<cr>
+    "nnoremap           ;vj   :"(fzf)Jumps               theCommand"<c-U>FZFJump<cr>
+    "nnoremap           ;vl   :"(fzf)Lines               theCommand"<c-U>FZFBLines<cr>
+    nnoremap           ;vw   :"(fzf)Windows             theCommand"<c-U>FZFWindows<cr>
+    nnoremap           ;vh   :"(fzf)History             theCommand"<c-U>FZFHistory<cr>
+    "nnoremap           ;vq   :"(fzf)Quickfix            theCommand"<c-U>FZFQuickFix<cr>
+    "nnoremap           ;v:   :"(fzf)History:            theCommand"<c-U>History:<cr>
+    "nnoremap           ;v/   :"(fzf)History/            theCommand"<c-U>History/<cr>
+    "nnoremap           ;v;   :"(fzf)Commands            theCommand"<c-U>Commands<cr>
 
 
     let g:fzf_prefer_tmux = 1
@@ -1745,7 +1799,67 @@ if HasPlug('fzf.vim') | " {{{1
     "let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
 endif
 
-if CheckPlug('coc.nvim', 1) | " {{{1
+
+if HasPlug('telescope.nvim')
+    nnoremap           ;vF   :"(fzf)All files           theCommand"<c-U>Telescope find_files<cr>
+
+    nnoremap           ;vy   :"(fzf)Yanks               theCommand"<c-U>Telescope yank_history<cr>
+    nnoremap           ;vb   :"(fzf)Buffers             theCommand"<c-U>Telescope buffers<cr>
+    nnoremap           ;vC   :"(fzf)git-commits         theCommand"<c-U>Telescope git_commits<cr>
+    nnoremap           ;vm   :"(fzf)Marks               theCommand"<c-U>Telescope marks<cr>
+    nnoremap           ;vM   :"(fzf)Key maps            theCommand"<c-U>Telescope keymaps<cr>
+    nnoremap           ;vj   :"(fzf)Jumps               theCommand"<c-U>Telescope jumplist<cr>
+    nnoremap    <leader>fl   :"(fzf)Lines               theCommand"<c-U>Telescope current_buffer_fuzzy_find<cr>
+    nnoremap    <leader>fL   :"(fzf)Live-grep           theCommand"<c-U>Telescope live_grep<cr>
+    nnoremap           ;vd   :"(fzf)Diagnostics         theCommand"<c-U>Telescope diagnostics<cr>
+    nnoremap           ;vq   :"(fzf)Quickfix            theCommand"<c-U>Telescope quickfix<cr>
+    nnoremap           ;vQ   :"(fzf)Quickfix-History    theCommand"<c-U>Telescope quickfixhistory<cr>
+    nnoremap           ;v/   :"(fzf)History/            theCommand"<c-U>Telescope search_history<cr>
+    nnoremap           ;v:   :"(fzf)Commands            theCommand"<c-U>Telescope commands<cr>
+    nnoremap           ;v;   :"(fzf)Commands-History    theCommand"<c-U>Telescope command_history<cr>
+endif
+
+
+" Git {{{3
+if HasPlug('vim-gitgutter')
+    nnoremap <silent> ;gv   :"(git)GutterToggle          theCommand"<c-U>GitGutterToggle <cr>
+    nnoremap <silent> ;gr   :"(git)Gutter                theCommand"<c-U>GitGutter <cr>
+    "nnoremap <silent> ;gf  :"(git)Gutter sink-to QuickFix "<c-U>GitGutterQuickFix \| copen <cr>
+
+    " Jump between hunks
+    nnoremap <silent> ;gn   <Plug>(GitGutterNextHunk)
+    nnoremap <silent> ;gp   <Plug>(GitGutterPrevHunk)
+
+    " Hunk-add and hunk-revert for chunk staging
+    nnoremap <silent> ;ga   <Plug>(GitGutterStageHunk)
+    nnoremap <silent> ;gu   <Plug>(GitGutterUndoHunk)
+endif
+
+if HasPlug('vim-fugitive')
+    "nnoremap <leader>bb :VCBlame<cr>
+    nnoremap <leader>gl     :"(git)Log side by side    theCommand"<c-U>GV<cr>
+    nnoremap <leader>gd     :"(git)Diff review         theCommand"<c-U>Gvdiff<cr>
+    nnoremap <leader>gD     :"(git)Diff review tabs    theCommand"<c-U>DiffReview git show
+    nnoremap <leader>gb     :"(git)Blame               theCommand"<c-U>Git blame<cr>
+    nnoremap <leader>bb     :"(git)Blame               theCommand"<c-U>Git blame<cr>
+    nnoremap <leader>gs     :"(git)Status              theCommand"<c-U>Gstatus<cr>
+endif
+
+if HasPlug('tig-explorer.vim')
+    nnoremap <leader>gL     :"(tig)Log                 theCommand"<c-U>Tig<cr>
+    nnoremap <leader>gp     :"(tig)Log --parent        theCommand"<c-U>Tig --first-parent -m<cr>
+    nnoremap <leader>gP     :"(tig)Log --parent all    theCommand"<c-U>Tig --first-parent --all<cr>
+    nnoremap <leader>gB     :"(tig)Blame               theCommand"<c-U>TigBlame<cr>
+endif
+
+
+if HasPlug('asyncrun.vim')
+    nnoremap <leader>gc         :"(git)clean-dryrun        theCommand"<c-U>AsyncStop! <bar> AsyncTask gitclean-dryrun<cr>
+    nnoremap <leader>gx         :"(git)clean               theCommand"<c-U>AsyncStop! <bar> AsyncTask gitclean<cr>
+endif
+
+
+if HasPlug('coc.nvim')
     autocmd CmdwinEnter * let b:coc_suggest_disable = 1
 endif
 

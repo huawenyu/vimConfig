@@ -15,7 +15,7 @@
     end_slide_shorthand: false
 ---
 
-# Rust {{{1}}}
+# Rust
 
 <!-- cmd:column_layout: [1, 1] -->
  <!-- cmd:column: 0 -->
@@ -77,12 +77,12 @@ fn main() {
  <!-- cmd:reset_layout -->
  <!-- cmd:end_slide -->
 
-## Header2 {{{2}}}
+## Header2
 
  <!-- cmd:pause -->
 
  <!-- cmd:end_slide -->
-# End {{{1}}}
+# End
 
 <!-- cmd:jump_to_middle -->
   **THANKS**

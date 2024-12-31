@@ -21,6 +21,7 @@ M.picker = require('vimConfig.nvim-window-picker')
 M.indent = require('vimConfig.guess-indent')
 M.indentLine = require('vimConfig.indent-blankline')
 M.feMaco = require('vimConfig.nvim-FeMaco')
+M.yanky = require('vimConfig.yanky')
 
 function M.setup()
 	M.whicyKey.load()
@@ -47,6 +48,7 @@ function M.setup()
 	M.indent.load()
 	M.indentLine.load()
 	M.feMaco.load()
+	M.yanky.load()
 
 	-- vim.opt.termguicolors = true
 	-- require("bufferline").setup{}
