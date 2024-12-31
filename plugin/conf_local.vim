@@ -78,15 +78,17 @@ endif
 "set listchars=tab:>.,trail:~,extends:<,nbsp:.
 "set listchars=tab:> ,trail:~,extends:<,nbsp:.
 
-"set dictionary-=/usr/share/dict/words dictionary+=/usr/share/dict/words
+
+" reset to sure scroll perfermance {{{2
+"   https://stackoverflow.com/questions/307148/vim-scrolling-slowly
+"   https://eduncan911.com/software/fix-slow-scrolling-in-vim-and-neovim.html
+set ttyfast
+set nocul
+set synmaxcol=128
+syntax sync minlines=256
 
 " tags {{{2
 
-    " # Issue using tags:
-    "   olddir/tags
-    "   newdir/tags
-    "   cd newdir; vi ../olddir/file1 and 'ptag func'		# which will open the file in olddir
-    " # If using 'set cscopetag', this issue not exist.
     " But if auto-update the tags with current file, we must using tags not 'set cscopetag'.
     " And the follow one-line can fix the issue.
     set notagrelative

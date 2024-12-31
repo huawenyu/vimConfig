@@ -25,6 +25,7 @@ if g:vim_confi_option.alt_shortcut
     nmap <a-t>    <leader>vt
     nmap <a-b>    <leader>vb
     nmap <a-g>    <leader>vg
+    nmap <a-q>    <leader>vq
     nmap <a-f>    ;fs
     nmap <a-s>    <leader>s1
 
@@ -167,10 +168,6 @@ if g:vim_confi_option.enable_map_useful
     nnoremap B ^
     nnoremap E $
 
-    map W <Plug>(expand_region_expand)
-    map Q <Plug>(expand_region_shrink)
-
-
     augroup HwbasicFtMap
         autocmd!
         autocmd FileType help,man,floaterm     nnoremap <buffer> <C-[> :q<cr>
@@ -273,18 +270,6 @@ endif
 
 if HasPlug('vim-table-mode')
     nnoremap  ;vt   :TableModeToggle<cr>
-endif
-
-
-if CheckPlug('deoplete.nvim', 1)
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-k>     <Plug>(neosnippet_expand_target)
-endif
-
-
-if CheckPlug('vim-autoformat', 1)
-    "noremap <F3> :Autoformat<CR>
 endif
 
 
@@ -501,37 +486,6 @@ elseif CheckPlug('vim-tabber', 1)
     "nnoremap          ;tl   :TabberShiftRight<CR>
     "nnoremap          ;ts   :TabberSwap<CR>
     "nnoremap <silent> ;aa   :TabberSelectLastActive<CR>
-endif
-
-
-if CheckPlug('vim-notes', 1)
-    " :edit note:<name>
-    vnoremap <F1> :SplitNoteFromSelectedText<Cr>
-endif
-
-
-if CheckPlug('ctrlp.vim', 1)
-    "nnoremap <leader>b :CtrlPBuffer<cr>
-endif
-
-
-if CheckPlug('ultisnips', 1)
-    let g:UltiSnipsExpandTrigger="<tab>"
-    "let g:UltiSnipsJumpForwardTrigger="<c-n>"
-    "let g:UltiSnipsJumpBackwardTrigger="<c-p>"
-    let g:UltiSnipsJumpForwardTrigger="<tab>"
-    let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
-    let g:UltiSnipsEditSplit="vertical"
-endif
-
-
-if CheckPlug('vim-repl', 1)
-    noremap <leader>rr :REPLToggle<Cr>
-    noremap <leader>rr :Repl<Cr>
-
-    autocmd Filetype python nnoremap <F12> <Esc>:REPLDebugStopAtCurrentLine<Cr>
-    autocmd Filetype python nnoremap <F10> <Esc>:REPLPDBN<Cr>
-    autocmd Filetype python nnoremap <F11> <Esc>:REPLPDBS<Cr>
 endif
 
 

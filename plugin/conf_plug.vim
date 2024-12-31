@@ -826,10 +826,17 @@ endif
 
 
 if CheckPlug('neosnippet.vim', 1) | " {{{1
-    let g:neosnippet#enable_snipmate_compatibility = 1
     "let g:neosnippet#enable_conceal_markers = 0
     " The last dir will be taken as default working dir.
     let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets, ~/.vim/bundle/vim-snippets.local/snippets, '
+
+    " Comment out due to make <tab> not work insert-mode
+    " imap <C-i>     <Plug>(neosnippet_expand_or_jump)
+    " smap <C-i>     <Plug>(neosnippet_expand_or_jump)
+    " xmap <C-i>     <Plug>(neosnippet_expand_target)
+
+    " Use Tab to expand or jump, fallback to inserting a Tab
+    inoremap <expr> <Tab> neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<Tab>'
 endif
 
 
@@ -2158,5 +2165,15 @@ endif
 
 if HasPlug('nvim-notify')
     lua vim.notify = require("notify")
+endif
+
+
+if HasPlug('vim-expand-region')
+    map W <Plug>(expand_region_expand)
+    map Q <Plug>(expand_region_shrink)
+endif
+
+if HasPlug('nvim-autopairs')
+    lua require("nvim-autopairs").setup {}
 endif
 

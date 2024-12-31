@@ -43,7 +43,7 @@ function M.load()
                 filter = function(buf)
                     return vim.b[buf].neo_tree_source == "buffers"
                 end,
-                pinned = true,
+                pinned = false,
                 collapsed = false, -- show window as closed/collapsed on start
                 open = "Neotree position=top buffers",
                 size = { height = 0.25 },
@@ -54,7 +54,7 @@ function M.load()
                 filter = function(buf)
                     return vim.b[buf].neo_tree_source == "git_status"
                 end,
-                pinned = true,
+                pinned = false,
                 collapsed = false, -- show window as closed/collapsed on start
                 open = "Neotree position=top git_status",
                 size = { height = 0.25 },
