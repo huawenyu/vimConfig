@@ -136,81 +136,101 @@ if HasPlug('accelerated-jk')
 endif
 
 
-if HasPlug('vimConfig')
-    " Section 'String'
-        "map <leader>ds :call Asm() <CR>
-        " For local replace
-        "nnoremap <leader>vm [[ma%mb:call signature#sign#Refresh(1) <CR>
-        nnoremap <leader>vr      :"Replace                   theCommand"<c-U><C-\>e SelectedReplace('n')<CR><left><left><left>
-        vnoremap <leader>vr      :"Replace                   theCommand"<C-\>e SelectedReplace('v')<CR><left><left><left>
-
-    " Section 'Execute'
-        " Plug : asynctasks.vim : ~/.vim_tasks.ini : wad|sysinit
-        nnoremap  <leader>mk     :"(diag)Make wad                   theCommand"<c-U>AsyncStop! <bar> AsyncTask! wad<CR>
-        nnoremap  <leader>ma     :"(diag)Make all                   theCommand"<c-U>AsyncStop! <bar> AsyncTask! sysinit<CR>
-
-        nnoremap  <leader>mw     :"(tool)Dictionary                 theCommand"<c-U>R! ~/tools/dict <C-R>=expand('<cword>') <cr>
-        nnoremap  <leader>mf     :"(quickfix)filter                 theCommand"<c-U>call utilquickfix#QuickFixFilter() <CR>
-        nnoremap  <leader>mc     :"(quickfix)add caller field       theCommand"<c-U>call utilquickfix#QuickFixFunction() <CR>
-
-        nnoremap  <silent>;q     :"(vim.command)SmartClose          theCommand"<c-U>SmartClose<cr>
-
-    function MyMenuExec(...)
-        let strCmd = join(a:000, '')
-        silent! call s:log.info('MyExecArgs: "', strCmd, '"')
-        exec strCmd
-    endfunc
-
-    function! SelectedReplace(mode)
-        let l:save_cursor = getcurpos()
-        let sel_str = hw#misc#GetWord(a:mode)
-
-        let nr = winnr()
-        if getwinvar(nr, '&syntax') == 'qf'
-            call setpos('.', l:save_cursor)
-            return "%s/\\<". sel_str. '\>/'. sel_str. '/gI'
-        else
-            delmarks un
-            normal [[mu%mn
-            call signature#sign#Refresh(1)
-            redraw
-            return "'u,'ns/\\<". sel_str. '\>/'. sel_str. '/gI'
-        endif
-    endfunction
+" function! SaveJump(motion)
+"   if exists('#SaveJump#CursorMoved')
+"     autocmd! SaveJump
+"   else
+"     normal! m'
+"   endif
+"   let m = a:motion
+"   if v:count
+"     let m = v:count.m
+"   endif
+"   execute 'normal!' m
+" endfunction
+"
+" function! SetJump()
+"   augroup SaveJump
+"     autocmd!
+"     autocmd CursorMoved * autocmd! SaveJump
+"   augroup END
+" endfunction
+"
+" nnoremap <silent> <C-o> :<C-u>call SaveJump("\<lt>C-u>")<CR>:call SetJump()<CR>
+" nnoremap <silent> <C-i> :<C-u>call SaveJump("\<lt>C-d>")<CR>:call SetJump()<CR>
 
 
-    " https://github.com/szw/vim-smartclose
-    command! -bang -nargs=0 -range SmartClose :call s:smart_close(<bang>0)
-    fun! s:is_auxiliary(buffer)
-        return !getbufvar(a:buffer, '&modifiable') || !getbufvar(a:buffer, '&buflisted') || (getbufvar(a:buffer, '&buftype') != '')
-    endfun
+" Section 'String'
+    "map <leader>ds :call Asm() <CR>
+    " For local replace
+    "nnoremap <leader>vm [[ma%mb:call signature#sign#Refresh(1) <CR>
+    nnoremap <leader>vr      :"Replace                   theCommand"<c-U><C-\>e SelectedReplace('n')<CR><left><left><left>
+    vnoremap <leader>vr      :"Replace                   theCommand"<C-\>e SelectedReplace('v')<CR><left><left><left>
 
-    fun! s:smart_close(bang)
-        let current_buffer = bufnr('%')
+" Section 'Execute'
+    " Plug : asynctasks.vim : ~/.vim_tasks.ini : wad|sysinit
+    nnoremap  <leader>mk     :"(diag)Make wad                   theCommand"<c-U>AsyncStop! <bar> AsyncTask! wad<CR>
+    nnoremap  <leader>ma     :"(diag)Make all                   theCommand"<c-U>AsyncStop! <bar> AsyncTask! sysinit<CR>
 
-        if s:is_auxiliary(current_buffer) || a:bang
-            silent! exe 'q'
-        else
-            let auxiliary_buffer = 0
+    nnoremap  <leader>mw     :"(tool)Dictionary                 theCommand"<c-U>R! ~/tools/dict <C-R>=expand('<cword>') <cr>
+    nnoremap  <leader>mf     :"(quickfix)filter                 theCommand"<c-U>call utilquickfix#QuickFixFilter() <CR>
+    nnoremap  <leader>mc     :"(quickfix)add caller field       theCommand"<c-U>call utilquickfix#QuickFixFunction() <CR>
 
-            for b in tabpagebuflist()
-                if s:is_auxiliary(b) && (b > auxiliary_buffer)
-                    let auxiliary_buffer = b
-                endif
-            endfor
+    nnoremap  <silent>;q     :"(vim.command)SmartClose          theCommand"<c-U>SmartClose<cr>
 
-            if auxiliary_buffer
-                silent! exe 'noautocmd ' . bufwinnr(auxiliary_buffer) . 'wincmd w'
-                silent! exe 'noautocmd q'
-                silent! exe 'noautocmd ' . bufwinnr(current_buffer) . 'wincmd w'
-            else
-                silent! exe 'q'
+function MyMenuExec(...)
+    let strCmd = join(a:000, '')
+    silent! call s:log.info('MyExecArgs: "', strCmd, '"')
+    exec strCmd
+endfunc
+
+function! SelectedReplace(mode)
+    let l:save_cursor = getcurpos()
+    let sel_str = hw#misc#GetWord(a:mode)
+
+    let nr = winnr()
+    if getwinvar(nr, '&syntax') == 'qf'
+        call setpos('.', l:save_cursor)
+        return "%s/\\<". sel_str. '\>/'. sel_str. '/gI'
+    else
+        delmarks un
+        normal [[mu%mn
+        call signature#sign#Refresh(1)
+        redraw
+        return "'u,'ns/\\<". sel_str. '\>/'. sel_str. '/gI'
+    endif
+endfunction
+
+
+" https://github.com/szw/vim-smartclose
+command! -bang -nargs=0 -range SmartClose :call s:smart_close(<bang>0)
+fun! s:is_auxiliary(buffer)
+    return !getbufvar(a:buffer, '&modifiable') || !getbufvar(a:buffer, '&buflisted') || (getbufvar(a:buffer, '&buftype') != '')
+endfun
+
+fun! s:smart_close(bang)
+    let current_buffer = bufnr('%')
+
+    if s:is_auxiliary(current_buffer) || a:bang
+        silent! exe 'q'
+    else
+        let auxiliary_buffer = 0
+
+        for b in tabpagebuflist()
+            if s:is_auxiliary(b) && (b > auxiliary_buffer)
+                let auxiliary_buffer = b
             endif
+        endfor
+
+        if auxiliary_buffer
+            silent! exe 'noautocmd ' . bufwinnr(auxiliary_buffer) . 'wincmd w'
+            silent! exe 'noautocmd q'
+            silent! exe 'noautocmd ' . bufwinnr(current_buffer) . 'wincmd w'
+        else
+            silent! exe 'q'
         endif
-    endfun
-
-endif
-
+    endif
+endfun
 
 " vim:set ft=vim et sw=4:
 

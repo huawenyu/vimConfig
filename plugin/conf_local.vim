@@ -43,6 +43,7 @@ set shortmess+=o  " Overwrite file-written message
 " Ensuring that even longer messages don't require a press
 "set cmdheight=2  " Increase command height to avoid prompt
 set cmdheight=1
+"set jumpoptions=
 
 "hi CursorLine guibg=Grey40
 "hi CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white

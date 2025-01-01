@@ -1,5 +1,16 @@
 local M = { loaded = false }
 
+local function quickfix_status()
+    local qflist = vim.fn.getqflist()
+    local count = #qflist
+    if count > 0 then
+        return 'Q' .. count
+    else
+        return ''
+    end
+end
+
+
 function M.load()
     if M.loaded then
         return
@@ -45,6 +56,8 @@ function M.load()
             lualine_x = { 'branch', },
             lualine_y = { 'encoding', 'filetype', },
             lualine_z = {
+                quickfix_status,
+                'filesize',
                 { 'location', fmt = function(location)
                         local width = 9 -- Set the desired width
                         if #location > width then

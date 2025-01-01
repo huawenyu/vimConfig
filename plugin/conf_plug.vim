@@ -774,6 +774,7 @@ endif
 
 if CheckPlug('deoplete.nvim', 1) | " {{{1
     let g:deoplete#enable_at_startup = 1
+    autocmd FileType TelescopePrompt call deoplete#custom#buffer_option('auto_complete', v:false)
 endif
 
 
