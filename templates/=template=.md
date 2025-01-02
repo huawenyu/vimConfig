@@ -81,6 +81,11 @@ fn main() {
 
  <!-- cmd:pause -->
 
+```bash +exec_replace
+# If not suport code-render, we can use exist tool:
+bat -nP -r 0:100 --color always %FULLPATH%
+```
+
  <!-- cmd:end_slide -->
 # End
 

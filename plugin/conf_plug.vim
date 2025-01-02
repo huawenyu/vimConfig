@@ -491,8 +491,10 @@ endif
 
 if HasPlug('vim-easy-align') | " {{{1
     let g:easy_align_ignore_comment = 0 " align comments
-    vnoremap <leader>cc      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign *\|<cr>
-    nmap     <leader>cc      mzvic:"(edit)EasyAlign theCommand"<c-U>'<,'>EasyAlign *\|<cr> \| 'zzz
+    vnoremap <leader>cc      :"(edit)EasyAlign    theCommand"<c-U>EasyAlign *\|<cr>
+    nmap     <leader>cc      mzvic:"(edit)EasyAlign theCommand"<c-U>EasyAlign *\|<cr> \| 'zzz
+    vnoremap <leader>ga      :"(edit)EasyAlign theCommand"<c-U>EasyAlign<cr>
+    vnoremap <leader>ca      :"(edit)EasyAlign theCommand"<c-U>EasyAlign <space><cr>
 
     let g:easy_align_delimiters = {
         \ '>': { 'pattern': '>>\|=>\|>' },
@@ -656,7 +658,7 @@ if HasPlug('nerdtree')
                     \ '.ccls-cache', '.devops','.arcconfig','.vscode',
                     \ ]
         " dir
-        call extend(g:NERDTreeIgnore, ['__pycache__', 'CMakeFiles', 'htmlcov', 'node_modules', '.idea', '.git', '^build$', '^target$', 'obj', ])
+        call extend(g:NERDTreeIgnore, ['__pycache__', 'CMakeFiles', 'htmlcov', 'node_modules', '.idea', '.git', '^build$', '^target$', '^obj$', ])
         " file
         call extend(g:NERDTreeIgnore, ['rusty-tags.vi', '\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', 'tags', '^cscope\.', '\.obj$', '\.o$', '\.lib$', '\.a$', '\.dll$', '\.pyc$'])
 
@@ -677,8 +679,6 @@ if HasPlug('nerdtree')
         " Enable trimming of trailing whitespace when uncommenting
         "let g:NERDTrimTrailingWhitespace = 1
     endfun
-
-    call s:loadNerdtree()
 endif
 
 
@@ -2285,7 +2285,7 @@ endif
 
 if HasPlug('vim-expand-region')
     map W <Plug>(expand_region_expand)
-    map Q <Plug>(expand_region_shrink)
+    map B <Plug>(expand_region_shrink)
 endif
 
 if HasPlug('nvim-autopairs')
