@@ -38,7 +38,7 @@ endif
         if g:vim_confi_option.auto_save
             " Automatically write changes when the file is writable
             "autocmd InsertLeave * write
-            autocmd BufLeave,FocusLost * if &modifiable | silent! write | endif
+            autocmd BufLeave,FocusLost * if &modifiable | silent! update | endif
         endif
 
         " Sometime crack the tag file

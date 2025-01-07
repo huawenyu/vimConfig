@@ -13,7 +13,7 @@ function M.load()
 
     local map = vim.api.nvim_set_keymap
     local opts = { noremap = true, silent = true }
-    map('n', '<c-\\>', ':"(view)Terminal          theCommand"<c-U>TermToggle<cr>', opts)
+    map('n', '<c-\\>', ':"(view)Terminal          theCommand"<c-U>ToggleTerm<cr>', opts)
 
 end
 
@@ -36,7 +36,6 @@ function M.setup()
         persist_size = false,
         persist_mode = false, -- if set to true (default) the previous terminal mode will be remembered
         close_on_exit = true, -- close the terminal window when the process exits
-        shell = '/bin/bash',
     }
 
     -- require("toggleterm").setup{

@@ -29,6 +29,14 @@ if g:vim_confi_option.alt_shortcut
     nmap <a-f>    ;fs
     nmap <a-s>    <leader>g1
 
+    nnoremap <a-/>    :AsyncTaskList<cr>
+    nnoremap <a-;>    :AsyncTask build<cr>
+    nnoremap <a-'>    :AsyncTask run<cr>
+
+    " Write only changed all-buffer
+    nnoremap ;w   :wall<cr>
+    vnoremap ;w   :<c-U>wall<cr>
+
 
     if HasPlug('vim-motion')
         "let g:vim_motion_maps = 1

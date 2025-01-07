@@ -491,10 +491,10 @@ endif
 
 if HasPlug('vim-easy-align') | " {{{1
     let g:easy_align_ignore_comment = 0 " align comments
-    vnoremap <leader>cc      :"(edit)EasyAlign    theCommand"<c-U>EasyAlign *\|<cr>
-    nmap     <leader>cc      mzvic:"(edit)EasyAlign theCommand"<c-U>EasyAlign *\|<cr> \| 'zzz
-    vnoremap <leader>ga      :"(edit)EasyAlign theCommand"<c-U>EasyAlign<cr>
-    vnoremap <leader>ca      :"(edit)EasyAlign theCommand"<c-U>EasyAlign <space><cr>
+    vnoremap <leader>cc      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign *\|<cr>
+    nmap     <leader>cc      mzvic:"(edit)EasyAlign theCommand"<c-U>'<,'>EasyAlign *\|<cr> \| 'zzz
+    vnoremap <leader>ga      :"(edit)EasyAlign theCommand"<c-U>'<,'>EasyAlign<cr>
+    vnoremap <leader>ca      :"(edit)EasyAlign theCommand"<c-U>'<,'>EasyAlign " "<cr>
 
     let g:easy_align_delimiters = {
         \ '>': { 'pattern': '>>\|=>\|>' },
@@ -550,14 +550,21 @@ if CheckPlug('vim-autotag', 1) | " {{{1
 endif
 
 
-if HasPlug('asyncrun.vim') | " {{{1
-    nnoremap        <leader>f]      :"(tool)Auto generate tags          "<c-U>AsyncRun! tagme<cr>
+if HasPlug('asyncrun.vim')
+    nnoremap <leader>gc         :"(git)clean-dryrun        theCommand"<c-U>AsyncStop! <bar> AsyncTask gitclean-dryrun<cr>
+    nnoremap <leader>gx         :"(git)clean               theCommand"<c-U>AsyncStop! <bar> AsyncTask gitclean<cr>
+    nnoremap <leader>f]         :"(tool)Auto generate tags theCommand"<c-U>AsyncRun! tagme<cr>
+
+    if filereadable(expand('~/.vim_tasks.ini')) && !filereadable(expand('~/.vim/tasks.ini'))
+        call system(expand('ln -s ~/.vim_tasks.ini ~/.vim/tasks.ini'))
+    endif
 
     let g:asyncrun_silent = 1
     let g:asyncrun_open = 8
     let g:asyncrun_rootmarks = ['.git', '.svn', '.root', '.project', '.hg']
     let g:asynctasks_term_reuse = 1
-    let g:asynctasks_term_focus = 0
+    let g:asynctasks_term_focus = 1
+    let g:asynctasks_term_pos = 'bottom'
 
     " Create template
     " :AsyncTaskEdit cargo
@@ -631,6 +638,8 @@ endif
 
 if HasPlug('nerdtree')
     nnoremap <silent> <leader>ve      :"(view)Explore(legacy)    theCommand"<c-U>NERDTreeToggle<cr><cr>
+    nnoremap <silent> <leader>vf      :"(view)Explore Focus      theCommand"<c-U>NERDTreeFocus<cr>
+
     command! LoadNerdtree call s:loadNerdtree()
 
     fun s:loadNerdtree()
@@ -1805,6 +1814,7 @@ if HasPlug('telescope.nvim')
     nnoremap           ;vF   :"(fzf)All files           theCommand"<c-U>Telescope find_files<cr>
 
     nnoremap           ;vy   :"(fzf)Yanks               theCommand"<c-U>Telescope yank_history<cr>
+    nnoremap           ;va   :"(fzf)autoCmd             theCommand"<c-U>Telescope autocommands<cr>
     nnoremap           ;vb   :"(fzf)Buffers             theCommand"<c-U>Telescope buffers<cr>
     nnoremap           ;vC   :"(fzf)git-commits         theCommand"<c-U>Telescope git_commits<cr>
     nnoremap           ;vm   :"(fzf)Marks               theCommand"<c-U>Telescope marks<cr>
@@ -1851,12 +1861,6 @@ if HasPlug('tig-explorer.vim')
     nnoremap <leader>gp     :"(tig)Log --parent        theCommand"<c-U>Tig --first-parent -m<cr>
     nnoremap <leader>gP     :"(tig)Log --parent all    theCommand"<c-U>Tig --first-parent --all<cr>
     nnoremap <leader>gB     :"(tig)Blame               theCommand"<c-U>TigBlame<cr>
-endif
-
-
-if HasPlug('asyncrun.vim')
-    nnoremap <leader>gc         :"(git)clean-dryrun        theCommand"<c-U>AsyncStop! <bar> AsyncTask gitclean-dryrun<cr>
-    nnoremap <leader>gx         :"(git)clean               theCommand"<c-U>AsyncStop! <bar> AsyncTask gitclean<cr>
 endif
 
 
@@ -2240,13 +2244,6 @@ if HasPlug('nvim-lspconfig')
 endif
 
 
-if HasPlug('asynctasks.vim')
-    if filereadable(expand('~/.vim_tasks.ini')) && !filereadable(expand('~/.vim/tasks.ini'))
-        call system(expand('ln -s ~/.vim_tasks.ini ~/.vim/tasks.ini'))
-    endif
-endif
-
-
 if HasPlug('neo-tree.nvim')
     let s:viewBuff = 0
     fun s:toggleBuffers()
@@ -2290,5 +2287,9 @@ endif
 
 if HasPlug('nvim-autopairs')
     lua require("nvim-autopairs").setup {}
+endif
+
+if HasPlug('toggleterm.nvim')
+    lua require("toggleterm").setup()
 endif
 
