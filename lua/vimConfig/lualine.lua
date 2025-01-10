@@ -27,7 +27,7 @@ function M.load()
             icons_enabled = true,
             theme = 'auto', -- Replace with your preferred theme
             component_separators = { left = '⋮', right = '⋮'},
-            section_separators = { left = '▌', right = '▐'},
+            section_separators = { left = '▌', right = '▐'}, -- 🔧   󰞯
             disabled_filetypes = {
                 'tpipeline',
                 statusline = {},
@@ -39,10 +39,21 @@ function M.load()
         sections = {
             lualine_a = {
                 { 'mode', fmt = function(mode)
+                        local handle1 = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-clients 2>/dev/null | wc -l || echo "_" ')
+                        local ret1 = handle1:read("*a")
+                        handle1:close()
+                        local r1 = ret1:gsub("\n", "") ~= '' and ret1:gsub("\n", "") or '_'
+
+                        local handle2 = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-session 2>/dev/null | wc -l || echo "_" ')
+                        local ret2 = handle2:read("*a")
+                        handle2:close()
+                        local r2 = ret2:gsub("\n", "") ~= '' and ret2:gsub("\n", "") or '_'
+
                         local buf_num = tostring(vim.api.nvim_get_current_buf())
                         local width = 4 -- Fixed width (example)
-                        return mode:sub(1, width - #buf_num) .. buf_num
-                    end
+                        return r2 .. r1 .. " " .. mode:sub(1, width - #buf_num) .. buf_num
+                    end,
+                    icon = '', -- Optional Nerd Font icon
                 },
             },
             lualine_b = {

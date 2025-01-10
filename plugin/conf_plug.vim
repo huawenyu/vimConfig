@@ -2269,7 +2269,7 @@ if HasPlug('neo-tree.nvim')
     endfunc
 
     nnoremap  <silent> <leader>vE  :"(view)Explore File           theCommand"<c-U>Neotree toggle<cr>
-    nnoremap  <silent> <leader>vf  :"(view)Explore Focus          theCommand"<c-U>Neotree reveal<cr>
+    nnoremap  <silent> <leader>vF  :"(view)Explore Focus          theCommand"<c-U>Neotree reveal<cr>
     nnoremap  <silent> <leader>vb  :"(view)Explore buffer         theCommand"<c-U>call <sid>toggleBuffers()<cr>
     nnoremap  <silent> <leader>vg  :"(view)Explore git            theCommand"<c-U>call <sid>toggleGitStatus()<cr>
 endif
