@@ -270,7 +270,7 @@ if HasPlug('vim-floaterm') | " {{{1
         silent execute l:command
     endfun
 
-    command! -nargs=1 Tldr2   execute 'FloatermNew --name=Help --wintype=split --position=bottom --autoclose=1 --height=0.4 --width=0.6 --title=Tldr tldr -e ' .. string(<q-args>)
+    command! -nargs=1 Tldr   execute 'FloatermNew --name=Help --wintype=split --position=bottom --autoclose=1 --height=0.4 --width=0.6 --title=Tldr tldr -e ' .. string(<q-args>)
 
     "autocmd FileType * nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run()<cr>
     nnoremap <silent> <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run('n')<cr>
@@ -1044,8 +1044,8 @@ if HasPlug('fzf-cscope.vim') | " {{{1
 endif
 
 
-if HasPlug('vim-tldr') | " {{{1
-    let g:tldr_split_type = 'horizontal'
+if HasPlug('tldr.nvim') | " {{{1
+    nnoremap    ;ft      :"Tldr     "<c-U>Telescope tldr<cr>
 endif
 
 
