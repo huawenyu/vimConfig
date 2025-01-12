@@ -1,4 +1,4 @@
--- vim: :C0:
+-- vim: ft=lua setlocal autoindent cindent et ts=4 sw=4 sts=4:
 
 local M = { loaded = false }
 

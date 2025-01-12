@@ -10,6 +10,10 @@ local function quickfix_status()
     end
 end
 
+local state = {
+    refreshRate = 0,
+    la_data = "",
+}
 
 function M.load()
     if M.loaded then
@@ -34,31 +38,48 @@ function M.load()
                 winbar = {},
             },
             always_divide_middle = true,
+            always_show_tabline = false,
             globalstatus = true, -- Unified statusline for all windows
         },
         sections = {
             lualine_a = {
-                { 'mode', fmt = function(mode)
-                        local handle1 = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-clients 2>/dev/null | wc -l || echo "_" ')
-                        local ret1 = handle1:read("*a")
-                        handle1:close()
-                        local r1 = ret1:gsub("\n", "") ~= '' and ret1:gsub("\n", "") or '_'
+                {
+                    function()
+                        -- Delay the refresh for this heavy cost
+                        state.refreshRate = state.refreshRate + 1
+                        local rem = state.refreshRate % 10
+                        if rem ~= 0 and state.la_data ~= "" then
+                            return state.la_data
+                        end
 
-                        local handle2 = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-session 2>/dev/null | wc -l || echo "_" ')
-                        local ret2 = handle2:read("*a")
-                        handle2:close()
-                        local r2 = ret2:gsub("\n", "") ~= '' and ret2:gsub("\n", "") or '_'
+                        state.refreshRate = 0
+                        local handle = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-clients 2>/dev/null | wc -l || echo "_" ')
+                        local ret = handle:read("*a")
+                        handle:close()
+                        local cli = ret:gsub("\n", "") ~= '' and ret:gsub("\n", "") or '_'
 
-                        local buf_num = tostring(vim.api.nvim_get_current_buf())
-                        local width = 4 -- Fixed width (example)
-                        return r2 .. r1 .. " " .. mode:sub(1, width - #buf_num) .. buf_num
+                        handle = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-session 2>/dev/null | wc -l || echo "_" ')
+                        local ret = handle:read("*a")
+                        handle:close()
+                        local ses = ret:gsub("\n", "") ~= '' and ret:gsub("\n", "") or '_'
+
+                        state.la_data = ses .. cli
+                        return state.la_data
                     end,
                     icon = '', -- Optional Nerd Font icon
                 },
             },
             lualine_b = {
+                {
+                    'mode',
+                    fmt = function(mode)
+                        local buf_num = tostring(vim.api.nvim_get_current_buf())
+                        local width = 4 -- Fixed width (example)
+                        return mode:sub(1, width - #buf_num) .. buf_num
+                    end,
+                },
                 { 'diff', symbols = { added = ' ', modified = ' ', removed = ' ' } },
-                'diagnostics',
+                --[[ 'diagnostics', ]]
             },
             lualine_c = {
                 { 'filename', path = 1, symbols = { modified = ' ●', readonly = ' ', unnamed = '[No Name]' } }

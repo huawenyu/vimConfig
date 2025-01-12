@@ -57,7 +57,7 @@ if HasPlug('vim-template') | " {{{1
         return expand('%:p')
     endfunction
 
-    nnoremap <leader>ep      :"(Snippet)Template        theCommand"<c-U>TemplateHere *.
+    nnoremap <leader>et      :"(Snippet)Template        theCommand"<c-U>TemplateHere .
 endif
 
 
@@ -197,7 +197,7 @@ if HasPlug('vim-floaterm') | " {{{1
 
     " Check if the cursor is on a word character
     fun! s:getManWord()
-        " Check a loose word character mode: alphanumeric or underscore or . or -
+        " try a loose mode: a word include alphanumeric or underscore or . or -
         if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\v\w|[.-]'
             let saved_iskeyword = &iskeyword
             for key in [2, 1, 0]
@@ -207,53 +207,61 @@ if HasPlug('vim-floaterm') | " {{{1
                 elseif key == 1
                     set iskeyword+=-
                 endif
-
                 let theWord = expand('<cword>')
+
+                " Check man
                 let checkExist = "man -w ".. theWord
                 call system(checkExist)
                 if v:shell_error == 0
-                    break
-                else
-                    let theWord = ''
+                    return ['Man', theWord]
                 endif
+
+                " Check tldr
+                let checkExist = "tldr --list | grep -e '^".. theWord .. "$'"
+                call system(checkExist)
+                if v:shell_error == 0
+                    return ['Tldr', theWord]
+                endif
+
+                " Found fail
+                let theWord = ''
             endfor
             let &iskeyword = saved_iskeyword
         endif
 
-        " Back to strict word mode: alphanumeric or underscore
+        " Back to strict word mode: only include alphanumeric or underscore
         if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\w'
             let theWord = expand('<cword>')
         else
             " If it is not, return an empty string
             let theWord = ''
         endif
-        return theWord
+        return ['none', theWord]
     endfun
 
 
     fun! s:man_show(mode)
         if a:mode == 'k'
-            let word = s:getManWord()
-            if empty(word)
-                execute "Man vim_cheat"
+            " [cmd, word]
+            let words = s:getManWord()
+            if empty(words[1])
+                execute "Tldr"
                 return
             else
-                execute "Man ".. word
-                return
+                let l:text = words[1]
+                if words[0] == "Man"
+                    execute join(words, ' ')
+                    return
+                endif
             endif
         endif
 
-        let l:command=':FloatermNew --name=Help --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Man-'..&filetype
-        let l:text = hw#misc#GetWord(a:mode)
-
-        if &ft=='vim' || &ft=='sh' || &ft=='markdown'
-            let l:command = l:command. printf("  tldr -p linux common -L en %s -e", l:text)
-        else
-            echomsg "Not support filetype, but can reference 'vimConfig::man_show()' to append it."
-            return
+        let l:command=':FloatermNew --name=Help --wintype=split --position=bottom --autoclose=1 --height=0.4 --width=0.6 --title=Man-' .. &filetype
+        if empty(l:text)
+            let l:text = hw#misc#GetWord(a:mode)
         endif
 
-        "echomsg "Debug: ". l:command
+        let l:command = l:command .. printf("  tldr %s -e", l:text)
         silent execute l:command
     endfun
 
@@ -261,6 +269,8 @@ if HasPlug('vim-floaterm') | " {{{1
         let l:command=':FloatermNew --name=Shell --wintype=split --position=bottom --autoclose=0 --height=0.4 --width=0.6 --title=Shell bash'
         silent execute l:command
     endfun
+
+    command! -nargs=1 Tldr2   execute 'FloatermNew --name=Help --wintype=split --position=bottom --autoclose=1 --height=0.4 --width=0.6 --title=Tldr tldr -e ' .. string(<q-args>)
 
     "autocmd FileType * nnoremap <buffer> <leader>ee :w<esc>:call <sid>compile_run()<cr>
     nnoremap <silent> <leader>ee      :"(*repl)Run me        "<c-U>w<esc>:call <sid>compile_run('n')<cr>
@@ -1035,7 +1045,7 @@ endif
 
 
 if HasPlug('vim-tldr') | " {{{1
-    nnoremap    <Space>vm      :"(man)Another Man tldr ':TldrUpdateDocs'    "<c-U>Tldr<Space>
+    let g:tldr_split_type = 'horizontal'
 endif
 
 
@@ -2291,5 +2301,22 @@ endif
 
 if HasPlug('toggleterm.nvim')
     lua require("toggleterm").setup()
+endif
+
+if HasPlug('wilder.nvim')
+    " Disable auto active, but <tab> it
+    call wilder#setup({
+      \ 'modes': [':', '/', '?'],
+      \ 'enable_cmdline_enter': 0,
+      \ })
+
+    " Can also be passed to the 'highlights' option
+    call wilder#set_option('renderer', wilder#popupmenu_renderer({
+                \ 'highlighter': wilder#basic_highlighter(),
+                \ 'highlights': {
+                \   'accent': wilder#make_hl('WilderAccent', 'Pmenu', [{}, {}, {'foreground': '#f4468f'}]),
+                \ },
+                \ }))
+
 endif
 

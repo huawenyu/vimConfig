@@ -24,6 +24,7 @@ M.feMaco = require('vimConfig.nvim-FeMaco')
 M.yanky = require('vimConfig.yanky')
 M.bufjump = require('vimConfig.bufjump')
 M.telescope = require('vimConfig.telescope')
+M.telescopeTldr = require('vimConfig.telescope-tldr')
 
 function M.setup()
 	M.whicyKey.load()
@@ -53,6 +54,7 @@ function M.setup()
 	M.yanky.load()
 	M.bufjump.load()
 	M.telescope.load()
+	M.telescopeTldr.load()
 
 	-- vim.opt.termguicolors = true
 	-- require("bufferline").setup{}
