@@ -61,7 +61,7 @@ endif
         "autocmd BufRead *.rs :setlocal tags=./rusty-tags.vi;/
 
         " Set filetype base on extension
-        autocmd BufNewFile,BufRead *.c.rej,*.c.orig,h.rej,*.h.orig,patch.*,*.diff,*.patch set ft=diff
+        autocmd BufNewFile,BufRead *.c.rej,*.c.orig,h.rej,*.h.orig,patch.*,*.diff,*.patch set ft=diff | C4
         autocmd BufNewFile,BufRead *.c,*.c,*.h,*.cpp,*.C,*.CXX,*.CPP set ft=c
         autocmd TermOpen * silent! ContextDisable
 

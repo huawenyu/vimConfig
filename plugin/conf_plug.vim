@@ -195,6 +195,15 @@ if HasPlug('vim-floaterm') | " {{{1
         return 0
     endfun
 
+    fun! s:isGitRepo() abort
+        let l:output = system('git rev-parse --is-inside-work-tree 2>/dev/null')
+        return v:shell_error == 0 && trim(l:output) == 'true'
+    endfun
+
+    fun! s:isGitSHA(word) abort
+        return a:word =~# '\v^[0-9a-f]{40}$'
+    endfun
+
     " Check if the cursor is on a word character
     fun! s:getManWord()
         " try a loose mode: a word include alphanumeric or underscore or . or -
@@ -209,6 +218,11 @@ if HasPlug('vim-floaterm') | " {{{1
                 endif
                 let theWord = expand('<cword>')
 
+                " Check is git-SHA
+                if theWord =~# '\v^[0-9a-f]{7,40}$'
+                    return ['Git', theWord]
+                endif
+
                 " Check man
                 let checkExist = "man -w ".. theWord
                 call system(checkExist)
@@ -222,6 +236,7 @@ if HasPlug('vim-floaterm') | " {{{1
                 if v:shell_error == 0
                     return ['Tldr', theWord]
                 endif
+
 
                 " Found fail
                 let theWord = ''
@@ -241,6 +256,9 @@ if HasPlug('vim-floaterm') | " {{{1
 
 
     fun! s:man_show(mode)
+        let l:cmd = ""
+        let l:subcmd = ""
+        let l:word = ""
         if a:mode == 'k'
             " [cmd, word]
             let words = s:getManWord()
@@ -248,21 +266,35 @@ if HasPlug('vim-floaterm') | " {{{1
                 execute "Tldr"
                 return
             else
-                let l:text = words[1]
+                let l:word = words[1]
                 if words[0] == "Man"
                     execute join(words, ' ')
                     return
+                elseif words[0] == "Git"
+                    call system(printf("git show -p %s > /tmp/vim_a.diff", words[1]))
+                    if v:shell_error == 0
+                        let l:cmd = "PreviewFile /tmp/vim_a.diff"
+                    endif
                 endif
             endif
         endif
 
-        let l:command=':FloatermNew --name=Help --wintype=split --position=bottom --autoclose=1 --height=0.4 --width=0.6 --title=Man-' .. &filetype
-        if empty(l:text)
-            let l:text = hw#misc#GetWord(a:mode)
+
+        if empty(l:cmd)
+            let l:cmd=':FloatermNew --name=Help --wintype=split --position=bottom --autoclose=1 --height=0.4 --width=0.6 --title=Man-' .. &filetype
+
+            if empty(l:word)
+                let l:word = hw#misc#GetWord(a:mode)
+            endif
+
+            if empty(l:subcmd)
+                let l:subcmd = printf("tldr %s -e", l:word)
+            endif
+
+            let l:cmd = l:cmd .. " " .. l:subcmd
         endif
 
-        let l:command = l:command .. printf("  tldr %s -e", l:text)
-        silent execute l:command
+        silent execute l:cmd
     endfun
 
     fun! s:toggle_terminal(mode)
