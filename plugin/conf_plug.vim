@@ -271,7 +271,7 @@ if HasPlug('vim-floaterm') | " {{{1
                     execute join(words, ' ')
                     return
                 elseif words[0] == "Git"
-                    call system(printf("git show -p %s > /tmp/vim_a.diff", words[1]))
+                    call system(printf("git show --stat -p %s > /tmp/vim_a.diff", words[1]))
                     if v:shell_error == 0
                         let l:cmd = "PreviewFile /tmp/vim_a.diff"
                     endif

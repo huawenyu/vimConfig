@@ -37,6 +37,13 @@ function M.load()
             },
         },
         extensions = {
+            fzf = {
+                fuzzy = true,                    -- false will only do exact matching
+                override_generic_sorter = true,  -- override the generic sorter
+                override_file_sorter = true,     -- override the file sorter
+                case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                -- the default case_mode is "smart_case"
+            },
             hop = {
                 -- the shown `keys` are the defaults, no need to set `keys` if defaults work for you ;)
                 keys = {"a", "s", "d", "f", "g", "h", "j", "k", "l", ";",
@@ -58,6 +65,7 @@ function M.load()
         }
     }
 
+    telescope.load_extension('fzf')
     telescope.load_extension('hop')
 end
 

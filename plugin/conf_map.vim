@@ -628,7 +628,7 @@ endif
 
         " Toggle source/header
         "nnoremap <silent> <leader>a  :<c-u>FuzzyOpen <C-R>=printf("%s\\.", expand('%:t:r'))<cr><cr>
-        nnoremap <silent>  ;a   :"(info)Toggle source/header   theCommand"<c-U>call CurtineIncSw()<cr>
+        nnoremap <silent>  ;aa  :"(info)Toggle source/header   theCommand"<c-U>call CurtineIncSw()<cr>
 
         if HasPlug('vim-sleuth')
             nnoremap <leader>fd :"Auto detect indent   theCommand"<c-U>Sleuth<cr>
