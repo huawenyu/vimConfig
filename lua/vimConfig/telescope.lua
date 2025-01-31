@@ -67,6 +67,7 @@ function M.load()
 
     telescope.load_extension('fzf')
     telescope.load_extension('hop')
+    telescope.load_extension('neoclip')
 end
 
 return M

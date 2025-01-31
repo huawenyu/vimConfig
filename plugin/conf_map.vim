@@ -40,12 +40,12 @@ if g:vim_confi_option.alt_shortcut
 
     if HasPlug('vim-motion')
         "let g:vim_motion_maps = 1
-        nnoremap <a-p>     <Plug>_JumpPrevIndent
-        nnoremap <a-n>     <Plug>_JumpNextIndent
-        vnoremap <a-p>     <Plug>_JumpPrevIndent
-        vnoremap <a-n>     <Plug>_JumpNextIndent
-        onoremap <a-p>     <Plug>_JumpPrevIndent
-        onoremap <a-n>     <Plug>_JumpNextIndent
+        nnoremap <a-,>     <Plug>_JumpPrevIndent
+        nnoremap <a-.>     <Plug>_JumpNextIndent
+        vnoremap <a-.>     <Plug>_JumpPrevIndent
+        vnoremap <a-,>     <Plug>_JumpNextIndent
+        onoremap <a-,>     <Plug>_JumpPrevIndent
+        onoremap <a-.>     <Plug>_JumpNextIndent
     endif
 
 
@@ -225,12 +225,14 @@ if g:vim_confi_option.enable_map_useful
     inoremap <C-e>      <C-o>A
 
     " Navigate quickfix
-    nnoremap <silent> <c-n> :cn<cr>
-    nnoremap <silent> <c-p> :cp<cr>
+    nnoremap <silent> <c-n> :"(navigate)Next quickfix            "<c-U>cn<cr>
+    nnoremap <silent> <c-p> :"(navigate)Previous quickfix        "<c-U>cp<cr>
+    nnoremap <silent> <a-n> :"(navigate)Next locallist           "<c-U>lne<cr>
+    nnoremap <silent> <a-p> :"(navigate)Previous locallist       "<c-U>lp<cr>
 
     " Navigate locallist
-    nnoremap <silent> <leader>n     :"(navigate)Next locallist           "<c-U>lne<cr>
-    nnoremap <silent> <leader>p     :"(navigate)Previous locallist       "<c-U>lp<cr>
+    " nnoremap <silent> <leader>n     :"(navigate)Next locallist           "<c-U>lne<cr>
+    " nnoremap <silent> <leader>p     :"(navigate)Previous locallist       "<c-U>lp<cr>
 
 
     " nvim.terminal map {{{2
@@ -262,7 +264,8 @@ if g:vim_confi_option.enable_map_useful
     nnoremap <silent> p p`]
 
     " now it is possible to paste many times over selected text
-    xnoremap <expr> p 'pgv"'.v:register.'y'
+    "xnoremap <expr> p 'pgv"'.v:register.'y'
+    xnoremap p "_dP
 
 
     " remove space from emptyline
