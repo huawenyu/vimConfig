@@ -265,7 +265,7 @@ if g:vim_confi_option.enable_map_useful
 
     " now it is possible to paste many times over selected text
     "xnoremap <expr> p 'pgv"'.v:register.'y'
-    xnoremap p "_dP
+    xnoremap p "_dp
 
 
     " remove space from emptyline
