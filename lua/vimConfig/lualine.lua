@@ -51,20 +51,31 @@ function M.load()
                         if rem ~= 0 and state.la_data ~= "" then
                             return state.la_data
                         end
-
                         state.refreshRate = 0
-                        local handle = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-clients 2>/dev/null | wc -l || echo "_" ')
-                        local ret = handle:read("*a")
-                        handle:close()
-                        local cli = ret:gsub("\n", "") ~= '' and ret:gsub("\n", "") or '_'
 
-                        handle = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-session 2>/dev/null | wc -l || echo "_" ')
-                        local ret = handle:read("*a")
-                        handle:close()
-                        local ses = ret:gsub("\n", "") ~= '' and ret:gsub("\n", "") or '_'
+                        local function file_exists(filepath)
+                            local ok, _ = os.rename(filepath, filepath)  -- Try renaming the file to itself
+                            return ok and true or false
+                        end
 
-                        state.la_data = ses .. cli
-                        return state.la_data
+                        local is_docker = "/.dockerenv"
+                        if file_exists(is_docker) then
+                            state.la_data = "Container"
+                            return state.la_data
+                        else
+                            local handle = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-clients 2>/dev/null | wc -l || echo "_" ')
+                            local ret = handle:read("*a")
+                            handle:close()
+                            local cli = ret:gsub("\n", "") ~= '' and ret:gsub("\n", "") or '_'
+
+                            handle = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-session 2>/dev/null | wc -l || echo "_" ')
+                            local ret = handle:read("*a")
+                            handle:close()
+                            local ses = ret:gsub("\n", "") ~= '' and ret:gsub("\n", "") or '_'
+
+                            state.la_data = ses .. cli
+                            return state.la_data
+                        end
                     end,
                     icon = '', -- Optional Nerd Font icon
                 },
