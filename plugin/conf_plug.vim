@@ -664,6 +664,11 @@ if CheckPlug('vim-tmux-navigator', 1) | " {{{1
     let g:tmux_navigator_disable_when_zoomed = 1
 
     let g:tmux_navigator_no_mappings = 1
+    noremap <silent> <c-h>     <c-w>h
+    noremap <silent> <c-j>     <c-w>j
+    noremap <silent> <c-k>     <c-w>k
+    noremap <silent> <c-l>     <c-w>l
+
     noremap <silent> <a-h>     :<c-U>TmuxNavigateLeft<cr>
     noremap <silent> <a-j>     :<c-U>TmuxNavigateDown<cr>
     noremap <silent> <a-k>     :<c-U>TmuxNavigateUp<cr>
