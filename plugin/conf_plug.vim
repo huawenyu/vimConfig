@@ -664,19 +664,13 @@ if CheckPlug('vim-tmux-navigator', 1) | " {{{1
     let g:tmux_navigator_disable_when_zoomed = 1
 
     let g:tmux_navigator_no_mappings = 1
-    if filereadable("/.dockerenv")
-        noremap <silent> <c-h>     <c-w>h
-        noremap <silent> <c-j>     <c-w>j
-        noremap <silent> <c-k>     <c-w>k
-        noremap <silent> <c-l>     <c-w>l
-    else
-        noremap <silent> <c-h>     :<c-U>TmuxNavigateLeft<cr>
-        noremap <silent> <c-j>     :<c-U>TmuxNavigateDown<cr>
-        noremap <silent> <c-k>     :<c-U>TmuxNavigateUp<cr>
-        noremap <silent> <c-l>     :<c-U>TmuxNavigateRight<cr>
-        " Conflict with fzf: cause fzf jump to another tmux-panel, since fzf will feedkeys(<c-\>)
-        "noremap <silent> <c-\> :<C-U>TmuxNavigatePrevious<cr>
-    endif
+    noremap <silent> <a-h>     :<c-U>TmuxNavigateLeft<cr>
+    noremap <silent> <a-j>     :<c-U>TmuxNavigateDown<cr>
+    noremap <silent> <a-k>     :<c-U>TmuxNavigateUp<cr>
+    noremap <silent> <a-l>     :<c-U>TmuxNavigateRight<cr>
+
+    " Conflict with fzf: cause fzf jump to another tmux-panel, since fzf will feedkeys(<c-\>)
+    noremap <silent> <a-\>     :<C-U>TmuxNavigatePrevious<cr>
 endif
 
 

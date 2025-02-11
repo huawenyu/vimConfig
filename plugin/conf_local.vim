@@ -99,6 +99,6 @@ syntax sync minlines=256
     "endif
 
     " http://arjanvandergaag.nl/blog/combining-vim-and-ctags.html
-    set tags=./tags,tags,./.tags,.tags;$HOME
+    set tags=./tags,tags,.cache/tags,./.tags,.tags;
 "}}}
 
