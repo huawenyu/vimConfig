@@ -971,22 +971,45 @@ if HasPlug('tagbar') | " {{{1
         endif
 
         " Add support for markdown files in tagbar.
-        if executable('markdown2ctags.py')
-            let path_mdctags = systemlist("which markdown2ctags.py")[0]
+        if executable('tag4md.py')
+            let path_mdctags = systemlist("which tag4md.py")[0]
             let g:markdown_use_custom_ctags_defs = 1
             let g:tagbar_type_markdown = {
                         \   'ctagsbin' : path_mdctags,
                         \   'ctagstype' : 'markdown',
                         \   'ctagsargs' : '-f - --sort=yes --sro=»',
                         \   'kinds' : [
-                        \       's:sections',
-                        \       'i:images'
-                        \    ],
-                        \    'sro' : '»',
-                        \    'kind2scope' : {
-                        \       's' : 'section',
-                        \     },
-                        \     'sort': 0,
+                        \     'n:modules',
+                        \     's:sections',
+                        \     'i:images'
+                        \   ],
+                        \   'sro' : '»',
+                        \   'kind2scope' : {
+                        \     'n': 'module',
+                        \     's': 'section',
+                        \   },
+                        \   'sort': 0,
+                        \ }
+        endif
+
+        " Add support for markdown files in tagbar.
+        if executable('tag4log')
+            let path_logctags = systemlist("which tag4log")[0]
+            let g:log_use_custom_ctags_defs = 1
+            let g:tagbar_type_log = {
+                        \   'ctagsbin' : path_logctags,
+                        \   'ctagstype' : 'log',
+                        \   'kinds' : [
+                        \     'n:modules',
+                        \     's:sections',
+                        \     'i:images'
+                        \   ],
+                        \   'sro' : '»',
+                        \   'kind2scope' : {
+                        \     'n': 'module',
+                        \     's': 'section',
+                        \   },
+                        \   'sort': 0,
                         \ }
         endif
     endfun
