@@ -31,7 +31,7 @@ endif
         autocmd!
 
         " This replaces [Process exited 0] with "Custom Message!".
-        autocmd TermClose * echom "Enter Normal mode: Ctrl + \\n"
+        autocmd TermClose * echom "Normal:<C-\\n>; Insert: i"
 
         "autocmd VimLeavePre * cclose | lclose
         autocmd InsertEnter,InsertLeave * set cul!
