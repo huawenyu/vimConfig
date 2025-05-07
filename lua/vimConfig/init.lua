@@ -25,6 +25,7 @@ M.yanky = require('vimConfig.yanky')
 M.bufjump = require('vimConfig.bufjump')
 M.telescope = require('vimConfig.telescope')
 -- M.telescopeTldr = require('vimConfig.telescope-tldr')
+M.obsidian = require('vimConfig.obsidian')
 
 function M.setup()
 	M.whicyKey.load()
@@ -55,6 +56,7 @@ function M.setup()
 	M.bufjump.load()
 	M.telescope.load()
 	-- M.telescopeTldr.load()
+	M.obsidian.load()
 
 	-- vim.opt.termguicolors = true
 	-- require("bufferline").setup{}

@@ -29,8 +29,8 @@ if g:vim_confi_option.alt_shortcut
     nmap <a-f>    ;fs
     nmap <a-s>    <leader>g1
 
-    nnoremap <a-/>    :AsyncTaskList<cr>
-    nnoremap <a-;>    :AsyncTask build<cr>
+    nnoremap <a-/>    :TodoLocList<cr>
+    nnoremap <a-;>    :AsyncTask tag4one
     nnoremap <a-'>    :AsyncTask run<cr>
 
     " Write only changed all-buffer
