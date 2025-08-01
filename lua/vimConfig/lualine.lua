@@ -1,12 +1,16 @@
 local M = { loaded = false }
 
 local function quickfix_status()
-    local qflist = vim.fn.getqflist()
-    local count = #qflist
-    if count > 0 then
-        return 'Q' .. count
+    if vim.bo.filetype == 'qf' then
+        return string.format('%d/%d', vim.fn.line('.'), vim.fn.line('$'))
     else
-        return ''
+        local qflist = vim.fn.getqflist()
+        local count = #qflist
+        if count > 0 then
+            return 'Q' .. count
+        else
+            return ''
+        end
     end
 end
 
@@ -63,6 +67,7 @@ function M.load()
                             state.la_data = "Container"
                             return state.la_data
                         else
+                            -- tmux-info 'MN': M - session count; N - attched client count
                             local handle = io.popen(' [ -n "$TMUX_PANE" ] && tmux list-clients 2>/dev/null | wc -l || echo "_" ')
                             local ret = handle:read("*a")
                             handle:close()
@@ -93,7 +98,25 @@ function M.load()
                 --[[ 'diagnostics', ]]
             },
             lualine_c = {
-                { 'filename', path = 1, symbols = { modified = ' ●', readonly = ' ', unnamed = '[No Name]' } }
+                { 'filename', path = 1, symbols = { modified = ' ●', readonly = ' ', unnamed = '[No Name]' },
+                    cond = function()
+                        -- Exclude these filetypes
+                        local excluded = { 'qf', 'help', 'terminal', 'NvimTree' }
+                        return not vim.tbl_contains(excluded, vim.bo.filetype)
+                    end
+                },
+                {
+                    function()
+                        -- Get quickfix title
+                        local title = vim.w.quickfix_title or vim.fn.getwinvar(vim.fn.win_getid(), 'quickfix_title')
+
+                        -- Extract clean command (remove line count and pipe)
+                        local command = title and title:gsub('|%d+ lines?$', ''):gsub('^:', '') or 'quickfix'
+
+                        -- Add position info
+                        return string.format('%s', command)
+                    end
+                }
             },
 
             lualine_x = { 'branch', },
@@ -122,7 +145,8 @@ function M.load()
             lualine_z = {}
         },
         tabline = {}, -- Add tabline config if needed
-        extensions = { 'quickfix', 'fugitive' }
+        -- extensions = { 'quickfix', 'fugitive' }
+        extensions = { 'fugitive' }
 
     }
 end

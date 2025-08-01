@@ -5,6 +5,7 @@ let g:loaded_conf_plug = 1
 let s:base_dir = resolve(expand("<sfile>:p:h"))
 silent! let s:log = logger#getLogger(expand('<sfile>:t'))
 
+
 lua require('vimConfig').setup()
 
 
@@ -538,10 +539,10 @@ endif
 
 if HasPlug('vim-easy-align') | " {{{1
     let g:easy_align_ignore_comment = 0 " align comments
-    vnoremap <leader>cc      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign *\|<cr>
-    nmap     <leader>cc      mzvic:"(edit)EasyAlign theCommand"<c-U>'<,'>EasyAlign *\|<cr> \| 'zzz
-    vnoremap <leader>ga      :"(edit)EasyAlign theCommand"<c-U>'<,'>EasyAlign<cr>
-    vnoremap <leader>ca      :"(edit)EasyAlign theCommand"<c-U>'<,'>EasyAlign " "<cr>
+    vnoremap <leader>ga      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign<cr>
+    vnoremap <leader>cc      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign *\|
+    " nmap   <leader>cc      mzvic:"(edit)EasyAlign theCommand"<c-U>'u,'nEasyAlign *\|<cr> \| 'zzz
+    nmap     <leader>cc      :"(edit)EasyAlign    theCommand"<c-U>'u,'nEasyAlign */\|/<all0
 
     let g:easy_align_delimiters = {
         \ '>': { 'pattern': '>>\|=>\|>' },
@@ -1686,15 +1687,15 @@ if HasPlug('c-utils.vim')
     nnoremap         ;bb    :"Search-rg all         "<c-U>Rg <c-r>=utils#GetSelected('n')<cr>
     nnoremap  <leader>bb    :"Search-rg all         "<c-U>Rg <c-r>=utils#GetSelected('n')<cr>
 
-    nnoremap  <leader>gg    :"Search 'g:c_utils_prefer_dir' from '.vimrc.before'  "<c-U><C-\>e utilgrep#Grep(0, 0, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
-    nnoremap         ;gg    :"Search 'g:c_utils_prefer_dir' from '.vimrc.before'  "<c-U><C-\>e utilgrep#Grep(0, 0, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
-    vnoremap  <leader>gg    :<C-\>e utilgrep#Grep(0, 1, g:c_utils_prefer_dir, 1)<cr>
-    vnoremap         ;gg    :<C-\>e utilgrep#Grep(0, 1, "",           1)<cr>
+    nnoremap  <leader>gg    :"Search to-quickfix    "<c-U><C-\>e utilgrep#Grep(0, 0, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
+    nnoremap         ;gg    :"Search to-locallist   "<c-U><C-\>e utilgrep#Grep(0, 0, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 0)<cr>
+    vnoremap  <leader>gg    :<C-\>e utilgrep#Grep(0, 1, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
+    vnoremap         ;gg    :<C-\>e utilgrep#Grep(0, 1, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 0)<cr>
 
-    nnoremap  <leader>vv    :"Search all            "<c-U><C-\>e utilgrep#Grep(0, 0, "",           1)<cr>
-    nnoremap         ;vv    :"Search all            "<c-U><C-\>e utilgrep#Grep(0, 0, "",           1)<cr>
+    nnoremap  <leader>vv    :"Search all to-quickfix  "<c-U><C-\>e utilgrep#Grep(0, 0, "",           1)<cr>
+    nnoremap         ;vv    :"Search all to-locallist "<c-U><C-\>e utilgrep#Grep(0, 0, "",           0)<cr>
     vnoremap  <leader>vv    :<C-\>e utilgrep#Grep(0, 1, "",           1)<cr>
-    vnoremap         ;vv    :<C-\>e utilgrep#Grep(0, 1, "",           1)<cr>
+    vnoremap         ;vv    :<C-\>e utilgrep#Grep(0, 1, "",           0)<cr>
 endif
 
 
@@ -2317,6 +2318,7 @@ if HasPlug('nvim-lspconfig')
         nnoremap <silent>        ;f3    :Diagnostics <cr>
         nnoremap <silent>        ;f4    :DiagnosticsAll <cr>
     endif
+    lua vim.lsp.set_log_level("off")
 endif
 
 

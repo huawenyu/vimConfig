@@ -467,7 +467,7 @@ if HasPlug('vimConfig')
     nnoremap <silent> ;7     7gt
     nnoremap <silent> ;8     8gt
     nnoremap <silent> ;9     9gt
-    nnoremap <silent> ;0     10gt
+    nnoremap <silent> ;0     :tabonly<CR>
 
     "nnoremap <silent> ;tt     :$tab tag <c-r>=utils#GetSelected('n')<cr><cr>
     nnoremap <silent> ;tt      :"(*)Tag word into new tab          theCommand"<c-U>$tab split<cr>:exec("silent! tag "..utils#GetSelected('n'))<cr>
@@ -711,13 +711,33 @@ endif
 
 
     " Text/Motion {{{2
-        nnoremap <leader>ci :"(txt)Capitalize word          theCommand"<c-U>CapitalizeWord<CR>
-        nnoremap <leader>cu :"(txt)UPPERCASE word           theCommand"<c-U>UppercaseWord<CR>
-        nnoremap <leader>cl :"(txt)lowercase word           theCommand"<c-U>LowercaseWord<CR>
+        " nnoremap <leader>ci :"(txt)Capitalize word          theCommand"<c-U>CapitalizeWord<CR>
+        " nnoremap <leader>cl :"(txt)lowercase word           theCommand"<c-U>LowercaseWord<CR>
+        " nnoremap <leader>cu :"(txt)UPPERCASE word           theCommand"<c-U>UppercaseWord<CR>
+
+        " Send current line to command line
+        nnoremap <leader>ci :"(txt)Insert line-as-command    theCommand"<c-U><C-r><C-r>=substitute(getline('.'), '^\s*', '', '')<CR>
+
+        function! TrimTrailingEmpties(num)
+            let save_pos = getpos('.')
+            if (a:num == 1)
+                silent! %s/\n\+$//e
+            elseif (a:num == 2)
+                silent! %s/\n\n/\r/e
+            endif
+
+            call setpos('.', save_pos)
+        endfunction
+        " Remove duplicate empty lines (keep single blanks)
+        " nnoremap <leader>cd1 :"(txt)Remove duplicate emptyline theCommand"<c-U>silent! g/^$/,/./-j<CR>
+        nnoremap <leader>cdd :"(txt)Delete search-pattern    theCommand"<c-U>g/<c-r><C-w>/ norm dd
+        vnoremap <leader>cdd                                          y:<c-U>g/<c-r>"/ norm dd
+        nnoremap <leader>cd1 :call TrimTrailingEmpties(1)<CR>
+        nnoremap <leader>cd2 :call TrimTrailingEmpties(2)<CR>
+
         nnoremap <leader>c<space> :"(txt)Just one space     theCommand"<c-U>JustOneInnerSpace<CR>
         nnoremap <leader>ct :"(txt)Trim tail space          theCommand"<c-U>RemoveTrailingSpaces<CR>
-        nnoremap <leader>cd :"(txt)Delete search-pattern    theCommand"<c-U>g/<c-r><C-w>/ norm dd
-        vnoremap <leader>cd                                          y:<c-U>g/<c-r>"/ norm dd
+
 
     " Info {{{2
         " Show current color's name: iS show syntax[vim-scriptease]
