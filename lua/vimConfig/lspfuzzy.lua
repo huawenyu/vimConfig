@@ -11,8 +11,13 @@ function M.load()
     end
 
 
-    require'lspconfig'.clangd.setup{}
-    require'lspconfig'.rust_analyzer.setup{}
+    -- require'lspconfig'.clangd.setup{}
+    vim.lsp.config('clangd', {})
+    vim.lsp.enable({ 'lua_ls', 'clangd' })
+
+    -- require'lspconfig'.rust_analyzer.setup{}
+    vim.lsp.config('rust_analyzer', {})
+    vim.lsp.enable({ 'lua_ls', 'rust_analyzer' })
 
     -- Plug 'glepnir/lspsaga.nvim'
     -- require 'lspsaga'.init_lsp_saga()
