@@ -313,6 +313,11 @@ if CheckPlug('vim-yoink', 1)
 endif
 
 
+if CheckPlug('fzf.vim', 1)
+    noremap <silent> <leader>fs     :GscopeFind s <C-R><C-W><cr>
+endif
+
+
 if CheckPlug('vim-gutentags', 1)
     if !CheckPlug('fzf-cscope.vim', 1)
         " gutentags_plus

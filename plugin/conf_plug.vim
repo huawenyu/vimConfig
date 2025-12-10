@@ -1822,9 +1822,9 @@ endif
 if HasPlug('fzf.vim') | " {{{1
     "nnoremap           ;vg   :"(fzf)git-status          theCommand"<c-U>GFiles?<cr>
     nnoremap           ;vc   :"(fzf)Changes             theCommand"<c-U>FZFChange<cr>
-    "nnoremap           ;vb   :"(fzf)Buffers             theCommand"<c-U>Buffers<cr>
-    "nnoremap           ;vm   :"(fzf)Marks               theCommand"<c-U>FZFMarks<cr>
-    "nnoremap           ;vj   :"(fzf)Jumps               theCommand"<c-U>FZFJump<cr>
+
+    nnoremap           ;vt   :"(fzf)BTags               theCommand"<c-U>BTags<cr>
+
     "nnoremap           ;vl   :"(fzf)Lines               theCommand"<c-U>FZFBLines<cr>
     nnoremap           ;vw   :"(fzf)Windows             theCommand"<c-U>FZFWindows<cr>
     nnoremap           ;vh   :"(fzf)History             theCommand"<c-U>FZFHistory<cr>
