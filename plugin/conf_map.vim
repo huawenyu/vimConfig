@@ -735,6 +735,10 @@ endif
         nnoremap <leader>cd1 :call TrimTrailingEmpties(1)<CR>
         nnoremap <leader>cd2 :call TrimTrailingEmpties(2)<CR>
 
+        nnoremap <leader>cr :"(txt)Replace prefix as '-'     theCommand"<c-U>%s/^\s*/\=repeat("-", len(submatch(0)))/
+        vnoremap <leader>cr                                          y:<c-U>%s/^\s*/\=repeat("-", len(submatch(0)))/
+
+
         nnoremap <leader>c<space> :"(txt)Just one space     theCommand"<c-U>JustOneInnerSpace<CR>
         nnoremap <leader>ct :"(txt)Trim tail space          theCommand"<c-U>RemoveTrailingSpaces<CR>
 
