@@ -38,7 +38,7 @@ if g:vim_confi_option.alt_shortcut
     vnoremap ;w   :<c-U>wall<cr>
 
 
-    if HasPlug('vim-motion')
+    if v:lua.HasPlug('vim-motion')
         "let g:vim_motion_maps = 1
         nnoremap <a-,>     <Plug>_JumpPrevIndent
         nnoremap <a-.>     <Plug>_JumpNextIndent
@@ -279,12 +279,12 @@ if g:vim_confi_option.enable_map_useful
 endif
 
 
-if HasPlug('vim-table-mode')
+if v:lua.HasPlug('vim-table-mode')
     nnoremap  ;vt   :TableModeToggle<cr>
 endif
 
 
-if CheckPlug('vim-go', 1)
+if v:lua.HasPlug('vim-go')
     au FileType go nmap <leader>gr <Plug>(go-run)
     au FileType go nmap <leader>gb <Plug>(go-build)
     au FileType go nmap <leader>gt <Plug>(go-test)
@@ -296,7 +296,7 @@ if CheckPlug('vim-go', 1)
 endif
 
 
-if CheckPlug('vim-yoink', 1)
+if v:lua.HasPlug('vim-yoink')
     "nmap <c-n> <plug>(YoinkPostPasteSwapBack)
     "nmap <c-p> <plug>(YoinkPostPasteSwapForward)
 
@@ -313,13 +313,13 @@ if CheckPlug('vim-yoink', 1)
 endif
 
 
-if CheckPlug('fzf.vim', 1)
+if v:lua.HasPlug('fzf.vim')
     noremap <silent> <leader>fs     :GscopeFind s <C-R><C-W><cr>
 endif
 
 
-if CheckPlug('vim-gutentags', 1)
-    if !CheckPlug('fzf-cscope.vim', 1)
+if v:lua.HasPlug('vim-gutentags')
+    if v:lua.HasNoPlug('fzf-cscope.vim')
         " gutentags_plus
         let g:fzf_cscope_map = 0
         let g:gutentags_plus_nomap = 1
@@ -347,7 +347,7 @@ if CheckPlug('vim-gutentags', 1)
 endif
 
 
-if CheckPlug('vim-emacscommandline', 1)
+if v:lua.HasPlug('vim-emacscommandline')
     "let g:EmacsCommandLine[Command]Disable = 1
     "let g:EmacsCommandLineBeginningOfLineMap = ['<C-B>', '<C-A>']
 
@@ -377,37 +377,7 @@ if CheckPlug('vim-emacscommandline', 1)
 endif
 
 
-if HasPlug('coc.nvim')
-    " using coc.vim/ale with ccls-cache which base on clang
-    nnoremap  <silent>  ;fd <Plug>(coc-definition)
-    nnoremap  <silent>  ;fs <Plug>(coc-references)
-    "nnoremap <silent>  ;fD <Plug>(coc-type-definition)
-    "nnoremap <silent>  ;fi <Plug>(coc-implementation)
-    nnoremap <silent>   ;fH call CocAction('doHover')
-    nnoremap <silent>   ;fr <Plug>(coc-rename)
-    nnoremap <silent>   ;fp <Plug>(coc-diagnostic-next)
-    nnoremap <silent>   ;fn <Plug>(coc-diagnostic-prev)
-
-    "autocmd CursorHold * silent call CocActionAsync('highlight')
-endif
-
-
-if CheckPlug('ale.vim', 1)
-    nnoremap  <silent>   ;fd :ALEGoToDefinition<cr>
-    nnoremap  <silent>   ;fs :ALEFindReferences<cr>
-    "nnoremap <silent>   ;fS :ALESymbolSearch<cr>
-    nnoremap  <silent>   ;fh :ALEHover<cr>
-    nnoremap  <silent>   ;fn <Plug>(ale_next_wrap)
-    nnoremap  <silent>   ;fp <Plug>(ale_previous_wrap)
-endif
-
-
-if CheckPlug('vim-prettier', 1)
-    nnoremap <leader>cf <Plug>(Prettier)
-endif
-
-
-if CheckPlug('nnn.vim', 1) | " {{{1
+if v:lua.HasPlug('nnn.vim') | " {{{1
     " Disable default mappings
     let g:nnn#set_default_mappings = 0
 
@@ -420,7 +390,7 @@ if CheckPlug('nnn.vim', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-qf', 1)
+if v:lua.HasPlug('vim-qf')
     ""nnoremap <leader>mn :QFAddNote note:
     "nnoremap <leader>ms :SaveList
     "nnoremap <leader>mS :SaveListAdd
@@ -438,7 +408,7 @@ if CheckPlug('vim-qf', 1)
 endif
 
 
-if CheckPlug('tabularize', 1)
+if v:lua.HasPlug('tabularize')
     if exists(":Tabularize")
         "nnoremap <leader>t= :Tabularize /=<CR>
         "vnoremap <leader>t= :Tabularize /=<CR>
@@ -448,7 +418,7 @@ if CheckPlug('tabularize', 1)
 endif
 
 
-if CheckPlug('vim-tmux-runner', 1)
+if v:lua.HasPlug('vim-tmux-runner')
     "nnoremap <silent> <leader>tt :exec "VtrLoad" \| exec "call vtr#SendCommandEx('n')"<CR>
     "vnoremap <silent> <leader>tt :exec "VtrLoad" \| exec "call vtr#SendCommandEx('v')"<CR>
     "nnoremap <silent> <leader>tw :exec "VtrLoad" \| exec "call vtr#ExecuteCommand('n')"<CR>
@@ -462,7 +432,7 @@ if CheckPlug('vim-tmux-runner', 1)
 endif
 
 
-if HasPlug('vimConfig')
+if v:lua.HasPlug('vimConfig')
     nnoremap <silent> ;1     1gt
     nnoremap <silent> ;2     2gt
     nnoremap <silent> ;3     3gt
@@ -479,11 +449,11 @@ if HasPlug('vimConfig')
     vnoremap <silent> ;tt      :"(*)Tag word into new tab          theCommand"<c-U>$tab split<cr>:exec("silent! tag "..utils#GetSelected('v'))<cr>
 endif
 
-if CheckPlug('taboo.vim', 1)
+if v:lua.HasPlug('taboo.vim')
     "nnoremap <silent> ;tt   :TabooOpen new-tab<CR>
     nnoremap <silent> ;tc   :tabclose<CR>
     nnoremap          ;tr   :TabooRename <C-R>=expand('%:t:r')<CR>
-elseif CheckPlug('vim-tabber', 1)
+elseif v:lua.HasPlug('vim-tabber')
     "set tabline=%!tabber#TabLine()
     "
     "let g:tabber_wrap_when_shifting = 1
@@ -505,21 +475,12 @@ elseif CheckPlug('vim-tabber', 1)
 endif
 
 
-if CheckPlug('vim-youdao-translater', 1)
-    vnoremap <silent> ;ww :<C-u>Ydv<CR>
-    nnoremap <silent> ;ww :<C-u>Ydc<CR>
-    "noremap <leader>yd :<C-u>Yde<CR>
-elseif executable('~/tools/dict')
-    nmap ;ww :R! ~/tools/dict <C-R>=expand('<cword>') <cr>
-endif
-
-
-if CheckPlug('vim-lookup', 1)
+if v:lua.HasPlug('vim-lookup')
     autocmd FileType vim nnoremap <buffer><silent> <c-]>  :call lookup#lookup()<cr>
 endif
 
 
-if CheckPlug('w3m.vim', 1)
+if v:lua.HasPlug('w3m.vim')
     if WINDOWS()
         let $PATH = $PATH . ';c:\Programs\FireFox1.5'
     endif
@@ -544,13 +505,7 @@ if CheckPlug('w3m.vim', 1)
 endif
 
 
-if CheckPlug('vim-which-key', 1) | " {{{1
-    "noremap <silent> ;?            :<c-u>WhichKey ';'<cr>
-    "noremap <silent> <leader>?     :<c-u>WhichKey '<leader>'<cr>
-endif
-
-
-if CheckPlug('vim-argwrap', 1) | " {{{1
+if v:lua.HasPlug('vim-argwrap') | " {{{1
     nnoremap <silent> <leader>fa :"(*)Toggle source/header         theCommand"<c-U>ArgWrap<CR>
 endif
 
@@ -569,22 +524,22 @@ endif
 "=========================================================
 
 " Key unmap plugin {{{1
-    if HasPlug('DrawIt')
+    if v:lua.HasPlug('DrawIt')
         " release map <leader>w, <leader>r
         unmap <leader>swp
         unmap <leader>rwp
     endif
 
-    if HasPlug('DrawIt')
+    if v:lua.HasPlug('DrawIt')
         unmap <leader>g
     endif
 
 
 " Key maps {{{1
     " view {{{2
-        if HasPlug('vim-maximizer')
+        if v:lua.HasPlug('vim-maximizer')
             nnoremap <silent> <leader>vw     :"(view)maximize Windows      theCommand"<c-U>MaximizerToggle<cr>
-        elseif HasPlug('maximize')
+        elseif v:lua.HasPlug('maximize')
             nnoremap <silent> <leader>vw     :"(view)maximize Windows      theCommand"<c-U>MaximizeWindow<cr>
         else
             nnoremap <silent> <leader>vw     :"(view)maximize Windows      theCommand"<c-U>ZoomToggle<cr>
@@ -607,7 +562,7 @@ endif
 
     " Sugar {{{2
         " bookmark/color
-        if HasPlug('vim-mark')
+        if v:lua.HasPlug('vim-mark')
             nnoremap <silent> <leader>mm  :"(color)Toggle Colorize word        theCommand"<c-U>silent! call mark#MarkCurrentWord(expand('<cword>'))<cr>
             "vnoremap <silent> <leader>mm  :<c-u>silent! call mark#GetVisualSelection()<cr>
             nnoremap <silent> <leader>mx  :"(color)Clear all colorize word   theCommand"<c-U>silent! call mark#ClearAll()<cr>
@@ -616,13 +571,13 @@ endif
 
         " Suppose record macro in register `q`:
         "vnoremap <leader>mm  :normal @q
-        if HasPlug('vim-macroscope')
+        if v:lua.HasPlug('vim-macroscope')
             "nnoremap <leader>mr     :<c-U>Macroscope
             "nnoremap <leader>mp     :<c-U>Macroplay<cr>
         endif
 
 
-        if HasPlug('rainbow_parentheses.vim')
+        if v:lua.HasPlug('rainbow_parentheses.vim')
             nnoremap <silent> <leader>m[   :"Colorize brace     theCommand"<c-U>RainbowParentheses!!<cr>
         endif
 
@@ -638,9 +593,9 @@ endif
         "nnoremap <silent> <leader>a  :<c-u>FuzzyOpen <C-R>=printf("%s\\.", expand('%:t:r'))<cr><cr>
         nnoremap <silent>  ;aa  :"(info)Toggle source/header   theCommand"<c-U>call CurtineIncSw()<cr>
 
-        if HasPlug('vim-sleuth')
+        if v:lua.HasPlug('vim-sleuth')
             nnoremap <leader>fd :"Auto detect indent   theCommand"<c-U>Sleuth<cr>
-        elseif HasPlug('detectindent')
+        elseif v:lua.HasPlug('detectindent')
             nnoremap <leader>fd :"Auto detect indent   theCommand"<c-U>DetectIndent<cr>
         endif
 
@@ -695,7 +650,7 @@ endif
 
         " Yank from the cursor to the end of the line, to be consistent with C and D.
         nnoremap Y y$
-        if HasPlug('vim-oscyank')
+        if v:lua.HasPlug('vim-oscyank')
             let g:oscyank_max_length = 1000000
             "let g:oscyank_term = 'tmux'  " or 'screen', 'kitty', 'default'
             let g:oscyank_term = 'tmux'

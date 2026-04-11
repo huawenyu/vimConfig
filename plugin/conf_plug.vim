@@ -6,10 +6,7 @@ let s:base_dir = resolve(expand("<sfile>:p:h"))
 silent! let s:log = logger#getLogger(expand('<sfile>:t'))
 
 
-lua require('vimConfig').setup()
-
-
-if HasPlug('syntastic') | " {{{1
+if v:lua.HasPlug('syntastic') | " {{{1
     let g:syntastic_vim_checkers = ['vint']
     let g:syntastic_vim_vint_exe = 'LC_CTYPE=UTF-8 vint'
 
@@ -20,32 +17,32 @@ if HasPlug('syntastic') | " {{{1
 endif
 
 
-if HasPlug('vim-unimpaired') | " {{{1
+if v:lua.HasPlug('vim-unimpaired') | " {{{1
     let g:unimpaired_listchar = 0
     noremap <F12> <Plug>(SwitchListchars)
 endif
 
 
-if HasPlug('ctrlp.vim') | " {{{1
+if v:lua.HasPlug('ctrlp.vim') | " {{{1
     if exists("g:ctrl_user_command") | unlet g:ctrlp_user_command | endif
 endif
 
 
-if HasPlug('vimfiler.vim') | " {{{1
+if v:lua.HasPlug('vimfiler.vim') | " {{{1
     let g:vimfiler_as_default_explorer = 1
 endif
 
 
-if HasPlug('vcscommand.vim') | " {{{1
+if v:lua.HasPlug('vcscommand.vim') | " {{{1
     "let g:signify_vcs_list = [ 'git', 'svn' ]
 endif
 
-if HasPlug('vim-oscyank') | " {{{1
+if v:lua.HasPlug('vim-oscyank') | " {{{1
     "let g:oscyank_term = 'default'
 endif
 
 
-if HasPlug('vim-template') | " {{{1
+if v:lua.HasPlug('vim-template') | " {{{1
     let tDir = fnamemodify(expand('<sfile>:p'), ':h') .. '/../templates'
     let g:templates_directory = tDir
     let g:username = "Wilson"
@@ -62,7 +59,7 @@ if HasPlug('vim-template') | " {{{1
 endif
 
 
-if HasPlug('goyo.vim') | " {{{1
+if v:lua.HasPlug('goyo.vim') | " {{{1
     let g:goyo_width = 120
     let g:goyo_height = 20
 
@@ -79,7 +76,7 @@ if HasPlug('goyo.vim') | " {{{1
 endif
 
 
-if HasPlug('presenting.vim') | " {{{1
+if v:lua.HasPlug('presenting.vim') | " {{{1
     let g:presenting_figlets = 0
     let g:presenting_font_large = 'doh'
     let g:presenting_font_small = 'univers'
@@ -89,18 +86,18 @@ if HasPlug('presenting.vim') | " {{{1
 endif
 
 
-if HasPlug('vim-floaterm-repl') | " {{{1
+if v:lua.HasPlug('vim-floaterm-repl') | " {{{1
     autocmd FileType markdown    nnoremap <buffer>  ;ee :"(repl)Run me        "<c-U>FloatermRepl<cr>
 endif
 
 
-if HasPlug('vim-evalvim') | " {{{1
+if v:lua.HasPlug('vim-evalvim') | " {{{1
     autocmd FileType vim    nmap <buffer> <leader>ee <Plug>(EvalVimLine)
     autocmd FileType vim    vmap <buffer> <leader>ee <Plug>(EvalVim)
-elseif HasPlug('vim-eval') | " {{{1
+elseif v:lua.HasPlug('vim-eval') | " {{{1
     autocmd FileType vim    nmap <buffer> <leader>ee <Plug>eval_viml
     autocmd FileType vim    vmap <buffer> <leader>ee <Plug>eval_viml_region
-elseif HasPlug('vim-basic') | " {{{1
+elseif v:lua.HasPlug('vim-basic') | " {{{1
     let g:vim_basic_map = get(g:, 'vim_basic_map', 1)
 
     " Don't why the this map cause VimL execute '10new' error, and VimL get Select not correct
@@ -115,7 +112,7 @@ elseif HasPlug('vim-basic') | " {{{1
 endif
 
 
-if HasPlug('vim-floaterm') | " {{{1
+if v:lua.HasPlug('vim-floaterm') | " {{{1
     let g:floaterm_autoinsert = 1
     let g:floaterm_shell = '/bin/bash'
 
@@ -315,7 +312,7 @@ if HasPlug('vim-floaterm') | " {{{1
     nnoremap <silent> <leader>K      :"(Man)Tldr             "<c-U>call <sid>man_show('n')<cr>
     vnoremap <silent> <leader>K      :"(Man)Tldr             "<c-U>call <sid>man_show('v')<cr>
 
-    if HasNoPlug('vim-floaterm-repl') && HasNoPlug('toggleterm.nvim')    | " {{{1
+    if v:lua.HasNoPlug('vim-floaterm-repl') && v:lua.HasNoPlug('toggleterm.nvim')    | " {{{1
         nnoremap <silent> <C-\>          :"(Tool)Terminal        ":<c-U>call <sid>toggle_terminal('n')<cr>
         vnoremap <silent> <C-\>          :"(Tool)Terminal        ":<c-U>call <sid>toggle_terminal('v')<cr>
         inoremap <silent> <C-\>     <esc>:"(Tool)Terminal        ":<c-U>call <sid>toggle_terminal('v')<cr>
@@ -323,7 +320,7 @@ if HasPlug('vim-floaterm') | " {{{1
 endif
 
 
-if HasPlug('vim-slime') | " {{{1
+if v:lua.HasPlug('vim-slime') | " {{{1
     " for all buffers
     if executable('tmux')
         let g:slime_target = "tmux"
@@ -332,7 +329,7 @@ if HasPlug('vim-slime') | " {{{1
     if executable('nvr')
         nnoremap <silent> <leader>fo      :"(Terminal)RemoteOpen     ":<c-U>echomsg "Please execute 'nvr --remote' at other terminal first if failed!" \| !nvr -s --nostart --remote-tab %<cr>
     endif
-elseif HasPlug('vimux') | " {{{1
+elseif v:lua.HasPlug('vimux') | " {{{1
     let g:VimuxUseNearest = v:true
     let g:VimuxCloseOnExit = 0
     let g:VimuxOrientation = "h"
@@ -346,18 +343,18 @@ elseif HasPlug('vimux') | " {{{1
     nnoremap <silent> <leader>fo      :"(Terminal)RemoteOpen     ":<c-U>VimuxOpenRunner <cr> \| :call VimuxRunCommandInDir('vi', 1)<cr>
 endif
 
-if HasPlug('vim-dispatch') | " {{{1
+if v:lua.HasPlug('vim-dispatch') | " {{{1
     let g:dispatch_tmux_height = '50% -h'
 endif
 
 
-if HasPlug('vim-browser-search') | " {{{1
+if v:lua.HasPlug('vim-browser-search') | " {{{1
     nmap <silent> <Leader>sw <Plug>SearchNormal
     vmap <silent> <Leader>sw <Plug>SearchVisual
 endif
 
 " Pencil draw
-if HasPlug('venn.nvim') | " {{{1
+if v:lua.HasPlug('venn.nvim') | " {{{1
     "nnoremap <silent>   ;vb     :"(mode)Draw pencil box     "<c-U>ToggleVennDraw<cr>
 
     " Troubleshooting:
@@ -399,7 +396,7 @@ if HasPlug('venn.nvim') | " {{{1
 endif
 
 
-if CheckPlug('new-gdb.vim', 1) || CheckPlug('vimgdb', 1) " {{{1
+if v:lua.HasPlug('new-gdb.vim') || v:lua.HasPlug('vimgdb') " {{{1
     "let g:neogdb_window = ['backtrace', 'breakpoint']
     let g:gdb_require_enter_after_toggling_breakpoint = 0
 
@@ -410,7 +407,7 @@ if CheckPlug('new-gdb.vim', 1) || CheckPlug('vimgdb', 1) " {{{1
         "let g:neogdb_attach_remote_str = 'sysinit/init dut:444 -u admin -p "" -t "gdb:wad"'
         let g:neogdb_attach_remote_str = 'sysinit/init'
     endif
-elseif CheckPlug('vimspector', 1) | " {{{1
+elseif v:lua.HasPlug('vimspector') | " {{{1
     "let g:vimspector_base_dir=expand( '$HOME/.vim/vimspector-config' )
     "let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-go', 'CodeLLDB' ]
     let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
@@ -475,14 +472,14 @@ elseif CheckPlug('vimspector', 1) | " {{{1
 endif
 
 
-if CheckPlug('tabman.vim', 1) | " {{{1
+if v:lua.HasPlug('tabman.vim') | " {{{1
     " disable old config
     let g:tabman_toggle = '<leader>xt'
     let g:tabman_focus  = '<leader>xf'
 endif
 
 
-if CheckPlug('neocomplcache.vim', 1) | " {{{1
+if v:lua.HasPlug('neocomplcache.vim') | " {{{1
     let g:acp_enableAtStartup = 0
     let g:neocomplcache_enable_at_startup = 1
     let g:neocomplcache_enable_smart_case = 1
@@ -491,18 +488,18 @@ if CheckPlug('neocomplcache.vim', 1) | " {{{1
 endif
 
 
-if CheckPlug('tcl.vim', 1) | " {{{1
+if v:lua.HasPlug('tcl.vim') | " {{{1
     let tcl_extended_syntax = 1
 endif
 
 
-if CheckPlug('vim-rooter', 1) | " {{{1
+if v:lua.HasPlug('vim-rooter') | " {{{1
     let g:rooter_manual_only = 1
     let g:rooter_patterns = ['Rakefile', '.git', '.git/', '.svn', '.svn/']
 endif
 
 
-if CheckPlug('neomake', 1) | " {{{1
+if v:lua.HasPlug('neomake') | " {{{1
     " make & asynrun
     let g:neomake_open_list = 0
     let g:neomake_place_signs = 1
@@ -519,25 +516,25 @@ if CheckPlug('neomake', 1) | " {{{1
 endif
 
 
-if CheckPlug('neovim-fuzzy', 1) | " {{{1
+if v:lua.HasPlug('neovim-fuzzy') | " {{{1
     " fuzzy
     "let g:fuzzy_file_list = ["cscope.files"]
     "let g:fuzzy_file_tag = ['tags.x', '.tags.x']
 endif
 
 
-if CheckPlug('supertab', 1) | " {{{1
+if v:lua.HasPlug('supertab') | " {{{1
     let g:SuperTabDefaultCompletionType = "<c-n>"
 endif
 
 
-if CheckPlug('neoterm', 1) | " {{{1
+if v:lua.HasPlug('neoterm') | " {{{1
     let g:neoterm_default_mod = 'vertical'
     let g:neoterm_autoinsert = 1
 endif
 
 
-if HasPlug('vim-easy-align') | " {{{1
+if v:lua.HasPlug('vim-easy-align') | " {{{1
     let g:easy_align_ignore_comment = 0 " align comments
     vnoremap <leader>ga      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign<cr>
     vnoremap <leader>cc      :"(edit)EasyAlign    theCommand"<c-U>'<,'>EasyAlign *\|
@@ -577,7 +574,7 @@ if HasPlug('vim-easy-align') | " {{{1
 endif
 
 
-if HasPlug('rainbow_parentheses.vim') | " {{{1
+if v:lua.HasPlug('rainbow_parentheses.vim') | " {{{1
     let g:rainbow#max_level = 16
     let g:rainbow#pairs = [['(', ')'], ['[', ']']]
 
@@ -587,7 +584,7 @@ if HasPlug('rainbow_parentheses.vim') | " {{{1
 endif
 
 
-if CheckPlug('vim-autotag', 1) | " {{{1
+if v:lua.HasPlug('vim-autotag') | " {{{1
     " log: /tmp/vim-autotag.log
     let g:autotagVerbosityLevel = 10
     let g:autotagmaxTagsFileSize = 50 * 1024 * 1024
@@ -598,7 +595,7 @@ if CheckPlug('vim-autotag', 1) | " {{{1
 endif
 
 
-if HasPlug('asyncrun.vim')
+if v:lua.HasPlug('asyncrun.vim')
     nnoremap <leader>gc         :"(git)clean-dryrun        theCommand"<c-U>AsyncStop! <bar> AsyncTask gitclean-dryrun<cr>
     nnoremap <leader>gx         :"(git)clean               theCommand"<c-U>AsyncStop! <bar> AsyncTask gitclean<cr>
     nnoremap <leader>f]         :"(tool)Auto generate tags theCommand"<c-U>AsyncRun! tagme<cr>
@@ -635,7 +632,7 @@ if HasPlug('asyncrun.vim')
 endif
 
 
-if CheckPlug('vista.vim', 1) | " {{{1
+if v:lua.HasPlug('vista.vim') | " {{{1
     let g:vista_icon_indent = ["▸ ", ""]
     let g:vista_ctags_cmd = {
       \ 'haskell': 'hasktags -x -o - -c',
@@ -649,38 +646,7 @@ if CheckPlug('vista.vim', 1) | " {{{1
     "let g:vista_sidebar_position = 'vertical botright'
 endif
 
-
-if CheckPlug('vim-bookmarks', 1) | " {{{1
-    let g:bookmark_no_default_key_mappings = 1
-    let g:bookmark_highlight_lines = 1
-    let g:bookmark_save_per_working_dir = 1
-    let g:bookmark_auto_save = 0
-    let g:bookmark_show_warning = 0
-    "let g:bookmark_location_list = 1
-endif
-
-
-if CheckPlug('vim-tmux-navigator', 1) | " {{{1
-    "" Disable tmux navigator when zooming the Vim pane
-    let g:tmux_navigator_disable_when_zoomed = 1
-
-    let g:tmux_navigator_no_mappings = 1
-    noremap <silent> <c-h>     <c-w>h
-    noremap <silent> <c-j>     <c-w>j
-    noremap <silent> <c-k>     <c-w>k
-    noremap <silent> <c-l>     <c-w>l
-
-    noremap <silent> <a-h>     :<c-U>TmuxNavigateLeft<cr>
-    noremap <silent> <a-j>     :<c-U>TmuxNavigateDown<cr>
-    noremap <silent> <a-k>     :<c-U>TmuxNavigateUp<cr>
-    noremap <silent> <a-l>     :<c-U>TmuxNavigateRight<cr>
-
-    " Conflict with fzf: cause fzf jump to another tmux-panel, since fzf will feedkeys(<c-\>)
-    noremap <silent> <a-\>     :<C-U>TmuxNavigatePrevious<cr>
-endif
-
-
-if CheckPlug('netrw', 1) | " {{{1, But not work like side-tree
+if v:lua.HasPlug('netrw') | " {{{1, But not work like side-tree
     let g:netrw_banner = 0
     let g:netrw_liststyle = 3
     let g:netrw_browse_split = 4
@@ -690,85 +656,12 @@ if CheckPlug('netrw', 1) | " {{{1, But not work like side-tree
 endif
 
 
-if HasPlug('nerdtree')
-    nnoremap <silent> <leader>ve      :"(view)Explore(legacy)    theCommand"<c-U>NERDTreeToggle<cr><cr>
-    nnoremap <silent> <leader>vf      :"(view)Explore Focus      theCommand"<c-U>NERDTreeFocus<cr>
-
-    command! LoadNerdtree call s:loadNerdtree()
-
-    fun s:loadNerdtree()
-        " Conflicts with NERDTree menu ('m' key): And the only reason to create and remove maps is because of the conflicting m map in NERDTree.
-        " https://github.com/kshenoy/vim-signature/issues/3
-        let g:NERDTreeMapMenu='M'
-        " Dicard this two key maps, avoid conflict <C-j/k>
-        let g:NERDTreeMapJumpNextSibling = 'gJ'
-        let g:NERDTreeMapJumpPrevSibling = 'gK'
-        let g:NERDTreeMapOpenInTab = 'gT'
-
-        let g:NERDTreeMouseMode = 3
-        "let g:NERDTreeAutoDeleteBuffer = 1
-        let g:NERDTreeMinimalUI = 1
-        let g:NERDTreeDirArrows = 1
-        let g:NERDTreeRespectWildIgnore = 1
-        let g:NERDTreeShowBookmarks = 0
-        let g:NERDTreeFileLines = 0
-        let g:NERDTreeWinSize = 25
-
-        let g:NERDTreeIgnore = [ 'null', ".DS_Store", "thumbs.db",
-                    \ "tags", '.tags', '.tagx', '.cscope.files', 'cscope.in.out', 'cscope.out','cscope.po.out',
-                    \ '.jshintrc', '.jscsrc', '.eslintignore', '.eslintrc.json',
-                    \ '.gitattributes', '.git',
-                    \ '.ccls-cache', '.devops','.arcconfig','.vscode',
-                    \ ]
-        " dir
-        call extend(g:NERDTreeIgnore, ['__pycache__', 'CMakeFiles', 'htmlcov', 'node_modules', '.idea', '.git', '^build$', '^target$', '^obj$', ])
-        " file
-        call extend(g:NERDTreeIgnore, ['rusty-tags.vi', '\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', 'tags', '^cscope\.', '\.obj$', '\.o$', '\.lib$', '\.a$', '\.dll$', '\.pyc$'])
-
-        let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
-
-        " Add spaces after comment delimiters by default
-        let g:NERDSpaceDelims = 1
-        " Use compact syntax for prettified multi-line comments
-        let g:NERDCompactSexyComs = 1
-        " Align line-wise comment delimiters flush left instead of following code indentation
-        let g:NERDDefaultAlign = 'left'
-        " Set a language to use its alternate delimiters by default
-        let g:NERDAltDelims_java = 1
-        " Add your own custom formats or override the defaults
-        let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
-        " Allow commenting and inverting empty lines (useful when commenting a region)
-        let g:NERDCommentEmptyLines = 1
-        " Enable trimming of trailing whitespace when uncommenting
-        "let g:NERDTrimTrailingWhitespace = 1
-    endfun
-endif
-
-
-if CheckPlug('nnn.vim', 1) | " {{{1
-    " Opens the nnn window in a split
-    "let g:nnn#layout = 'new' " or vnew, tabnew etc.
-
-    " Or pass a dictionary with window size
-    "let g:nnn#layout = { 'left': '~20%' } " or right, up, down
-
-    " Floating window (neovim latest and vim with patch 8.2.191)
-    let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Debug' } }
-endif
-
-
-if CheckPlug('defx.nvim', 1) | " {{{1
-    let g:defx_icons_enable_syntax_highlight = 0
-    let g:defx#_python_version_check = 1
-endif
-
-
-if CheckPlug('rust.vim', 1) | " {{{1
+if v:lua.HasPlug('rust.vim') | " {{{1
     let g:rustfmt_autosave = 1
 endif
 
 
-if CheckPlug('vim-buffergator', 1) | " {{{1
+if v:lua.HasPlug('vim-buffergator') | " {{{1
     let g:buffergator_suppress_keymaps = 1
     let g:buffergator_suppress_mru_switch_into_splits_keymaps = 1
     let g:buffergator_autoupdate = 1
@@ -784,21 +677,21 @@ if CheckPlug('vim-buffergator', 1) | " {{{1
 endif
 
 
-if HasPlug('fzf-folds.vim') | " {{{1
+if v:lua.HasPlug('fzf-folds.vim') | " {{{1
     " tpope/vim-markdown Fold:  zR openAll, zM closeAll, zr +foldLevel, zm -foldLevel, zo opencurr,
     nnoremap zs :Folds<CR>
     let g:fzf_folds_open = 1
 endif
 
 
-if CheckPlug('gist-vim', 1) | " {{{1
+if v:lua.HasPlug('gist-vim') | " {{{1
     let g:gist_show_privates = 1
     let g:gist_post_private = 1
     let g:gist_get_multiplefile = 1
 endif
 
 
-if CheckPlug('vim-startify', 1) | " {{{1
+if v:lua.HasPlug('vim-startify') | " {{{1
     let g:startify_list_order = ['sessions', 'bookmarks', 'files', 'dir', 'commands']
     let g:startify_relative_path = 1
     let g:startify_change_to_dir = 0
@@ -814,7 +707,7 @@ if CheckPlug('vim-startify', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-workspace', 1) | " {{{1
+if v:lua.HasPlug('vim-workspace') | " {{{1
     let g:workspace_session_name = '.Session.vim'
     let g:workspace_autosave_always = 1
     let g:workspace_persist_undo_history = 0
@@ -824,7 +717,7 @@ if CheckPlug('vim-workspace', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-session', 1) | " {{{1
+if v:lua.HasPlug('vim-session') | " {{{1
     let g:session_directory = getcwd()
     let g:session_default_name = ".Session"
     let g:session_default_overwrite = 1
@@ -835,13 +728,13 @@ if CheckPlug('vim-session', 1) | " {{{1
 endif
 
 
-if CheckPlug('deoplete.nvim', 1) | " {{{1
+if v:lua.HasPlug('deoplete.nvim') | " {{{1
     let g:deoplete#enable_at_startup = 1
     autocmd FileType TelescopePrompt call deoplete#custom#buffer_option('auto_complete', v:false)
 endif
 
 
-if CheckPlug('neosnippet.vim', 1) | " {{{1
+if v:lua.HasPlug('neosnippet.vim') | " {{{1
     "let g:neosnippet#enable_conceal_markers = 0
     " The last dir will be taken as default working dir.
     let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets, ~/.vim/bundle/vim-snippets.local/snippets, '
@@ -856,7 +749,7 @@ if CheckPlug('neosnippet.vim', 1) | " {{{1
 endif
 
 
-if HasPlug('w3m.vim') | " {{{1
+if v:lua.HasPlug('w3m.vim') | " {{{1
     command! LoadW3m call s:loadW3m()
 
     fun s:loadW3m()
@@ -868,24 +761,7 @@ if HasPlug('w3m.vim') | " {{{1
 endif
 
 
-"let g:AutoComplPop_CompleteoptPreview = 1
-"let g:AutoComplPop_Behavior = {
-"        \ 'c': [ {'command' : "\<C-x>\<C-o>",
-"        \       'pattern' : ".",
-"        \       'repeat' : 0}
-"        \      ]
-"        \}
-"
-
-
-if CheckPlug('command-t', 1) | " {{{1
-    let g:CommandTHighlightColor = 'Ptext'
-    let g:CommandTNeverShowDotFiles = 1
-    let g:CommandTScanDotDirectories = 0
-endif
-
-
-if HasPlug('quickfix-reflector.vim') | " {{{1
+if v:lua.HasPlug('quickfix-reflector.vim') | " {{{1
     " toggles the quickfix window.
     command! -bang -nargs=? QFix call QFixToggle(<bang>0)
     function! QFixToggle(forced)
@@ -902,16 +778,7 @@ if HasPlug('quickfix-reflector.vim') | " {{{1
 endif
 
 
-if HasPlug('VOoM') | " {{{1
-    nnoremap <silent>  <leader>vo     :"(view)Outline          theCommand"<c-U>VoomToggle<cr>
-    nnoremap <silent>  <leader>v0     :"(view)Outline fmr1     theCommand"<c-U>VoomToggle fmr<cr>
-
-    " nnoremap <silent>   <leader>v1         :"(helper)Insert outline header     theCommand"<c-U>call utils#VoomInsert(0) <CR>
-    " vnoremap <silent>   <leader>v1         :"(helper)Insert outline header     theCommand"<c-U>call utils#VoomInsert(1) <CR>
-endif
-
-
-if HasPlug('tagbar') | " {{{1
+if v:lua.HasPlug('tagbar') | " {{{1
     nnoremap <silent>  <leader>vt   :TagbarToggle<cr>
     command! LoadTagbar call s:loadTagbar()
 
@@ -1016,37 +883,24 @@ if HasPlug('tagbar') | " {{{1
     endfun
 endif
 
-if CheckPlug('taglist.vim', 1) | " {{{1
-    "let Tlist_GainFocus_On_ToggleOpen = 1
-    let Tlist_Auto_Update = 0
-    let Tlist_Show_Menu = 0
-    let Tlist_Use_Right_Window = 1
-    let Tlist_WinWidth = 40
-    let Tlist_File_Fold_Auto_Close = 1
-    let Tlist_Show_One_File = 1
-    let Tlist_Use_SingleClick = 1
-    let Tlist_Enable_Fold_Column = 0
-endif
-
-
-if CheckPlug('minibufexpl.vim', 1) | " {{{1
+if v:lua.HasPlug('minibufexpl.vim') | " {{{1
     let g:miniBufExplSplitToEdge = 1
     let g:miniBufExplorerAutoStart = 1
 endif
 
 
-if CheckPlug('vim-json', 1) | " {{{1
+if v:lua.HasPlug('vim-json') | " {{{1
     let g:vim_json_syntax_conceal = 0
 endif
 
 
-if CheckPlug('vim-sneak', 1) | " {{{1
+if v:lua.HasPlug('vim-sneak') | " {{{1
     let g:sneak#s_next = 1
     let g:sneak#use_ic_scs = 1
 endif
 
 
-if CheckPlug('vimdiff', 1) | " {{{1
+if v:lua.HasPlug('vimdiff') | " {{{1
     " output to html ignore the same line
     let g:html_ignore_folding = 1
     let g:html_use_css = 0
@@ -1054,51 +908,7 @@ if CheckPlug('vimdiff', 1) | " {{{1
 endif
 
 
-if HasPlug('vimwiki') | " {{{1
-    " {'path': '$HOME/wiki', 'auto_toc': 1, 'syntax': 'markdown', 'ext': '.md', 'maxhi': 1, 'auto_tags': 1},
-    let g:vimwiki_list = [
-          \{'name': 'work',  'path': '$HOME/dotwiki', 'ext': '.md', 'syntax': 'markdown', 'auto_toc': 1, 'maxhi': 1, 'auto_tags': 1},
-          \{'name': 'linux', 'path': '$HOME/wiki',    'ext': '.md', 'syntax': 'markdown', 'auto_toc': 1, 'maxhi': 1, 'auto_tags': 1},
-          \]
-
-    let g:vimwiki_global_ext = 0    | " only set the 'vimwiki' filetype of markdown files inside a wiki directory, rather than globally.
-    let g:vimwiki_ext2syntax = {'.wiki': 'media', '.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown', '.mkd': 'markdown'}
-    "let g:vimwiki_ext2syntax = {'.md': 'markdown', '.mkd': 'markdown', '.wiki': 'markdown'}
-
-    let g:vimwiki_menu = ""         | "Disable error msg: No menu 'Vimwiki'
-    let g:vimwiki_url_maxsave = 0   | "Turn off the link shortening
-    let g:vimwiki_conceallevel = 0  | "Default=2, -1 Disable conceal
-
-endif
-
-
-if HasPlug('wiki.vim') | " {{{1
-    let g:wiki_mappings_use_defaults = 'none'
-    let g:wiki_root = '~/dotwiki'
-    let g:wiki_log_verbose = 0
-    let g:wiki_completion_enabled = 0
-    let g:wiki_filetypes = ['md']
-    let g:wiki_link_extension = '.md'
-    let g:wiki_link_target_type = 'md'
-    let g:wiki_link_toggle_on_follow = 1
-    let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
-
-    nnoremap    <leader>wb      :"WikiLinkReturn    "<c-U>WikiLinkReturn<cr>
-    "nnoremap    <leader>wc     :"WikiFzfTags       "<c-U>WikiFzfTags<cr>
-    nnoremap    <leader>wd      :"WikiPageDelete    "<c-U>WikiPageDelete<cr>
-    "nnoremap   <leader>wh      :"WikiFzfPages      "<c-U>WikiFzfPages<cr>
-    nnoremap    <leader>wi      :"WikiIndex         "<c-U>WikiIndex<cr>
-    nnoremap    <leader>wj      :"WikiLinkFollow    "<c-U>WikiLinkFollow<cr>
-    nnoremap    <leader>wJ      :"WikiLinkToggle    "<c-U>WikiLinkToggle<cr>
-    nnoremap    <leader>wn      :"WikiOpen          "<c-U>WikiOpen<cr>
-    nnoremap    <leader>wr      :"WikiPageRename    "<c-U>WikiPageRename<cr>
-    nnoremap    <leader>wt      :"WikiTags          "<c-U>FzfTagHomeCacheTag<cr>
-    nnoremap    <leader>wT      :"CurPageCreateToc  "<c-U>WikiPageToc<cr>
-    nnoremap    <leader>ww      :"WikiEnable        "<c-U>WikiEnable<cr>
-endif
-
-
-if HasPlug('fzf-cscope.vim') | " {{{1
+if v:lua.HasPlug('fzf-cscope.vim') | " {{{1
     nnoremap    <leader>wh      :"TldrFzfHeader     "<c-U>Wiki2FzfHeader<cr>
     nnoremap    <leader>wH      :"TldrFzfText       "<c-U>Wiki2FzfText<cr>
     nnoremap    <leader>wl      :"TldrFzfFiles      "<c-U>Wiki2FzfFile<cr>
@@ -1111,12 +921,12 @@ if HasPlug('fzf-cscope.vim') | " {{{1
 endif
 
 
-if HasPlug('tldr.nvim') | " {{{1
+if v:lua.HasPlug('tldr.nvim') | " {{{1
     nnoremap    ;ft      :"Tldr     "<c-U>Telescope tldr<cr>
 endif
 
 
-if HasPlug('vim-mark') | " {{{1
+if v:lua.HasPlug('vim-mark') | " {{{1
     let g:mw_no_mappings = 1
     let g:mwDefaultHighlightingPalette = 'extended'
     let g:mwHistAdd = '/@'
@@ -1125,7 +935,7 @@ if HasPlug('vim-mark') | " {{{1
 endif
 
 
-if HasPlug('tpope_vim-markdown') | " {{{1
+if v:lua.HasPlug('tpope_vim-markdown') | " {{{1
     let g:markdown_folding = 2
     "let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
     " About yaml fence-code:
@@ -1140,7 +950,7 @@ if HasPlug('tpope_vim-markdown') | " {{{1
 endif
 
 
-if HasPlug('vim-markdown') | " {{{1
+if v:lua.HasPlug('vim-markdown') | " {{{1
     " ge: jump follow link
     " gx: open link in browser
 
@@ -1171,16 +981,10 @@ if HasPlug('vim-markdown') | " {{{1
     let g:vim_markdown_strikethrough = 1   | " ~~Scratch this.~~
     let g:vim_markdown_no_extensions_in_markdown = 1      | "`ge`: [link text](link-url), the (link-url) part donnot need .md extention, 'gx' open in browser
 
-
-    if !CheckPlug('vimwiki', 1) | " {{{1
-        augroup markdown_syntax
-            au! BufNewFile,BufFilePre,BufRead *.md,*.wiki set filetype=markdown
-        augroup END
-    endif
 endif
 
 
-if HasPlug('context.vim') | " {{{1
+if v:lua.HasPlug('context.vim') | " {{{1
     nnoremap <silent>   <leader>aa      :"(*)Context         theCommand"<c-U>ContextToggle<cr>
     command! LoadContextVim call s:loadContextVim()
 
@@ -1197,7 +1001,7 @@ if HasPlug('context.vim') | " {{{1
 endif
 
 
-if HasPlug('lightline.vim') | " {{{1
+if v:lua.HasPlug('lightline.vim') | " {{{1
    let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ 'active': {
@@ -1210,57 +1014,8 @@ if HasPlug('lightline.vim') | " {{{1
       \ }
 endif
 
-if CheckPlug('mkdx', 1) | " {{{1
-    "let g:mkdx#settings = { 'map': { 'prefix': ';' } }
 
-    let g:mkdx#settings = { 'highlight': { 'enable': 1 },
-                        \ 'enter': { 'shift': 1 },
-                        \ 'links': { 'external': { 'enable': 0 } },
-                        \ 'toc': { 'text': 'Content', 'update_on_write': 1 },
-                        \ 'fold': { 'enable': 0 },
-                        \ 'checkbox': { 'toggles': [' ', '-', 'x'] },
-                        \ 'tokens': { 'enter': ['-', '*', '>'] },
-                        \ }
-
-    if CheckPlug('vim-markdown', 1) | " {{{1
-        " For vim-polyglot users, it loads Plasticboy's markdown
-        "   plugin which unfortunately interferes with mkdx list indentation.
-        let g:polyglot_disabled = ['markdown']
-    endif
-
-    augroup mkdx_remap
-        au! mkdx_remap
-        au! FileType conf,markdown nnoremap ;i :call      mkdx#GenerateOrUpdateTOC()<Cr>
-        "au! FileType conf,markdown nnoremap ;I :call      mkdx#QuickfixHeaders()<cr>
-        "au! FileType conf,markdown  noremap ;t :call      mkdx#ToggleCheckboxTask()<Cr>
-        "au! FileType conf,markdown  noremap ;l :call      mkdx#ToggleCheckList()<Cr>
-        "au! FileType conf,markdown nnoremap ;L :call      mkdx#QuickfixDeadLinks()<cr>
-        "au! FileType conf,markdown  noremap ;h :call      mkdx#JumpToHeader()<cr>
-    augroup END
-endif
-
-
-if CheckPlug('vim-pandoc', 1) | " {{{1
-    if CheckPlug('vimwiki', 1) | " {{{1
-        augroup pandoc_syntax
-            au! FileType vimwiki set syntax=markdown.pandoc
-        augroup END
-    else
-        augroup pandoc_syntax
-            au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
-        augroup END
-    endif
-endif
-
-
-if CheckPlug('vim-zettel', 1) | " {{{1
-    let g:zettel_default_mappings = 0
-    let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading --color=always "
-    let g:zettel_fzf_options = ['--exact', '--tiebreak=end']
-endif
-
-
-if CheckPlug('python-mode', 1) | " {{{1
+if v:lua.HasPlug('python-mode') | " {{{1
     " Activate rope
     " Keys:
     " K             Show python docs
@@ -1305,7 +1060,7 @@ if CheckPlug('python-mode', 1) | " {{{1
 endif
 
 
-if HasPlug('jedi-vim')
+if v:lua.HasPlug('jedi-vim')
     " leader+t:   doctest
     let g:jedi#completions_command = "<C-Space>"
     let g:jedi#goto_command = "<leader>gg"
@@ -1317,7 +1072,7 @@ if HasPlug('jedi-vim')
 endif
 
 
-if HasPlug('NrrwRgn')
+if v:lua.HasPlug('NrrwRgn')
     vnoremap    <leader>ei   vic:"(edit)Narrow edit    theCommand"<c-U>NRV<cr>
     command! LoadNrrwRgn call s:loadNrrwRgn()
 
@@ -1335,12 +1090,12 @@ if HasPlug('NrrwRgn')
 endif
 
 
-if HasPlug('SingleCompile')
+if v:lua.HasPlug('SingleCompile')
     let g:SingleCompile_usequickfix=1
 endif
 
 
-if HasPlug('vim-go')
+if v:lua.HasPlug('vim-go')
     let g:go_version_warning = 0
     let g:go_highlight_functions = 1
     let g:go_highlight_methods = 1
@@ -1357,7 +1112,7 @@ if HasPlug('vim-go')
 endif
 
 
-if CheckPlug('haskellmode-vim', 1) | " {{{1
+if v:lua.HasPlug('haskellmode-vim') | " {{{1
     let $PATH = $PATH . ':' . expand('~/.cabal/bin')
 
     " Configure browser for haskell_doc.vim
@@ -1388,7 +1143,7 @@ if CheckPlug('haskellmode-vim', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-yoink', 1) | " {{{1
+if v:lua.HasPlug('vim-yoink') | " {{{1
     " yank/paste
     " Disable warning: Clipboard error : Target STRING not available when running
     let g:yankring_clipboard_monitor=0
@@ -1401,7 +1156,7 @@ if CheckPlug('vim-yoink', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-gutentags', 1) | " {{{1
+if v:lua.HasPlug('vim-gutentags') | " {{{1
     " https://www.reddit.com/r/vim/comments/d77t6j/guide_how_to_setup_ctags_with_gutentags_properly/
     " https://github.com/skywind3000/gutentags_plus
     "
@@ -1410,7 +1165,7 @@ if CheckPlug('vim-gutentags', 1) | " {{{1
     "let g:gutentags_trace = 1
 
 
-    if CheckPlug('c-utils.vim', 1)
+    if v:lua.HasPlug('c-utils.vim')
         let g:gutentags_enabled = 0
     else
         let g:gutentags_enabled = 1
@@ -1528,7 +1283,7 @@ if CheckPlug('vim-gutentags', 1) | " {{{1
 endif
 
 
-if CheckPlug('ale.vim', 1) | " {{{1
+if v:lua.HasPlug('ale.vim') | " {{{1
     let g:ale_cpp_ccls_init_options = {
       \   'cache': {
       \       'directory': './ccls-cache',
@@ -1551,14 +1306,14 @@ if CheckPlug('ale.vim', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-prettier', 1) | " {{{1
+if v:lua.HasPlug('vim-prettier') | " {{{1
     let g:prettier#autoformat = 0
     let g:prettier#quickfix_enabled = 0
     let g:prettier#quickfix_auto_focus = 0
 endif
 
 
-if CheckPlug('todo.vim', 1) | " {{{1
+if v:lua.HasPlug('todo.vim') | " {{{1
     " :Todo
     " :Todo {filter}
     let g:todo_root = '~/tools/todo.txt-cli-ex/todo'
@@ -1566,7 +1321,7 @@ if CheckPlug('todo.vim', 1) | " {{{1
 endif
 
 
-if CheckPlug('taskwiki', 1) | " {{{1
+if v:lua.HasPlug('taskwiki') | " {{{1
     let g:task_rc_override = 'rc.defaultwidth=0'
     let g:task_rc_override = 'rc.defaultheight=0'
     let g:task_report_name = 'long'
@@ -1581,14 +1336,14 @@ if CheckPlug('taskwiki', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-editqf', 1) | " {{{1
+if v:lua.HasPlug('vim-editqf') | " {{{1
     "let g:editqf_no_mappings = 1
     "let g:editqf_saveqf_filename  = "vim.qf"
     "let g:editqf_saveloc_filename = "vim.qflocal"
 endif
 
 
-if CheckPlug('vim-qf', 1) | " {{{1
+if v:lua.HasPlug('vim-qf') | " {{{1
     " Please silent and don't make troubles
     "let g:qf_mapping_ack_style = 0       | " donnot set this variable, for exist() trigger the keymap
     let g:qf_window_bottom = 0
@@ -1602,7 +1357,7 @@ if CheckPlug('vim-qf', 1) | " {{{1
 endif
 
 
-if CheckPlug('vim-cpp-enhanced-highlight', 1) | " {{{1
+if v:lua.HasPlug('vim-cpp-enhanced-highlight') | " {{{1
     " improve performance
     let g:cpp_class_scope_highlight = 0
     let g:cpp_member_variable_highlight = 0
@@ -1614,7 +1369,7 @@ if CheckPlug('vim-cpp-enhanced-highlight', 1) | " {{{1
 endif
 
 
-if HasPlug('vim-grepper')
+if v:lua.HasPlug('vim-grepper')
     let g:grepper = {}
     let g:grepper.highlight = 0
     let g:grepper.open = 1
@@ -1624,7 +1379,7 @@ if HasPlug('vim-grepper')
 endif
 
 
-if CheckPlug('vim-tmux-runner', 1) | " {{{1
+if v:lua.HasPlug('vim-tmux-runner') | " {{{1
     let g:VtrUseVtrMaps = 0
     let g:VtrClearBeforeSend = 0
     "let g:vtr_filetype_runner_overrides = {
@@ -1638,432 +1393,24 @@ if CheckPlug('vim-tmux-runner', 1) | " {{{1
 endif
 
 
-if CheckPlug('new.vim', 1) | " {{{1
+if v:lua.HasPlug('new.vim') | " {{{1
     " neovim expect window
     let g:new#eager_render = 1
 endif
 
 
-if CheckPlug('vim-plugin-AnsiEsc', 1) | " {{{1
+if v:lua.HasPlug('vim-plugin-AnsiEsc') | " {{{1
     let g:no_cecutil_maps = 1
 endif
 
 
-if CheckPlug('vim-ctrlspace', 1) | " {{{1
+if v:lua.HasPlug('vim-ctrlspace') | " {{{1
     let g:CtrlSpaceDefaultMappingKey = "<C-space> "
 endif
 
 
-if CheckPlug('vim-fugitive', 1) | " {{{1
-    if executable('git')
-        " 'git mydiff' yields the expected behavior, typing :wq in vim cycles to the next file in the changeset.
-        "git config --global diff.tool vimdiff
-        "git config --global difftool.prompt false
-        "git config --global alias.mydiff difftool
-        "
-        call system('git config --global alias.vimdiff ''!f() { vim -p $(git diff --name-only) +"tabdo Gvdiff $@" +tabfirst; }; f''')
-    endif
-endif
 
-
-if HasPlug('c-utils.vim')
-    let g:tlTokenList = ["FIXME @wilson", "TODO @wilson", "XXX @wilson"]
-    let g:ctrlsf_mapping = { "next": "n", "prev": "N", }
-    let g:utilquickfix_file = $HOME."/.vim/vim.quickfix"
-    let g:c_utils_map = get(g:, 'c_utils_map', 1)
-
-    function! s:JumpComma(mode)
-        if v:count == 0
-            call utils#Declaration()
-        else
-        endif
-    endfunction
-
-    nnoremap <silent> <leader><leader>  :"(*)Preview Tag at right-side-window         theCommand"<c-U>call VimMotionPreview()<cr>
-    vnoremap          <leader><leader>  :"(*)Preview Tag at right-side-window         theCommand"<c-U>call VimMotionPreview()<cr>
-
-    let g:c_utils_prefer_dir = get(g:, 'c_utils_prefer_dir', '')
-
-    nnoremap         ;bb    :"Search-rg all         "<c-U>Rg <c-r>=utils#GetSelected('n')<cr>
-    nnoremap  <leader>bb    :"Search-rg all         "<c-U>Rg <c-r>=utils#GetSelected('n')<cr>
-
-    nnoremap  <leader>gg    :"Search to-quickfix    "<c-U><C-\>e utilgrep#Grep(0, 0, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
-    nnoremap         ;gg    :"Search to-locallist   "<c-U><C-\>e utilgrep#Grep(0, 0, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 0)<cr>
-    vnoremap  <leader>gg    :<C-\>e utilgrep#Grep(0, 1, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 1)<cr>
-    vnoremap         ;gg    :<C-\>e utilgrep#Grep(0, 1, exists('g:c_utils_prefer_dir') ? g:c_utils_prefer_dir : 'daemon/wad', 0)<cr>
-
-    nnoremap  <leader>vv    :"Search all to-quickfix  "<c-U><C-\>e utilgrep#Grep(0, 0, "",           1)<cr>
-    nnoremap         ;vv    :"Search all to-locallist "<c-U><C-\>e utilgrep#Grep(0, 0, "",           0)<cr>
-    vnoremap  <leader>vv    :<C-\>e utilgrep#Grep(0, 1, "",           1)<cr>
-    vnoremap         ;vv    :<C-\>e utilgrep#Grep(0, 1, "",           0)<cr>
-endif
-
-
-if HasPlug('fzf-cscope.vim') | " {{{1
-    let g:fzf_cscope_map = get(g:, 'fzf_cscope_map', 1)
-    let g:fzfCscopeFilter = get(g:, 'fzfCscopeFilter', "daemon/wad/")
-
-    if g:vim_confi_option.auto_install_tools
-        if LINUX()
-            if UBUNTU()
-                if !executable('cscope')
-                    echomsg "Auto installing cscope"
-                    call system("sudo apt install -y cscope")
-                endif
-                if !executable('ctags')
-                    echomsg "Auto installing ctags"
-                    call system("sudo apt install -y ctags")
-                endif
-                if !executable('bat')
-                    echomsg "Auto installing batcat"
-                    call system("sudo apt install -y bat")
-                endif
-                if !executable('bat')
-                    echomsg "Auto installing gawk"
-                    call system("sudo apt install -y gawk")
-                endif
-            elseif CENTOS() || FEDORA()
-                if !executable('cscope')
-                    call system("sudo yum install cscope")
-                endif
-                if !executable('ctags')
-                    call system("sudo yum install ctags")
-                endif
-            endif
-        endif
-    endif
-
-    " symbol
-    " 1. Please install 'batcat' first: sudo apt install bat
-    " 2. Then check the config if batcat can't works:  batcat --diagnostic
-    if !executable('batcat')
-        echom "[fzf-cscope.vim] Please install `batcat` for fzf-preview: sudo apt install bat"
-        finish
-    endif
-
-    if !executable('gawk')
-        echom "[fzf-cscope.vim] Please install `gawk` for tags filter: sudo apt install gawk"
-        finish
-    endif
-
-    " Keymap: <space>key, (+)advance ;key
-    "         If using nvim-lspconfig neovim build-lsp plug, we can using them as our (+)advance mode
-    "
-    "  file     - ff            files         files from cscope.files
-    "              +            files (all)   files from rg instance collect
-    "  function - fs            mode-word     cscope 3(func-call),
-    "                           mode-select   cscope 1(func-def),
-    "                           mode-empty    tags all-function-uniq and filter-in 'g:fzfCscopeFilter'
-    "              +            mode-word     cscope 0(symbol-all),
-    "                           mode-select   cscope 0(symbol-all),
-    "                           mode-empty    tags all-function-uniq
-    "  symbol   - fw            mode-word     cscope 0(symbol) and filter-in 'g:fzfCscopeFilter'
-    "                           mode-select   cscope 0(symbol) and filter-in 'g:fzfCscopeFilter'
-    "                           mode-empty    tags not-func-symbol-uniq but filter-in 'g:fzfCscopeFilter'
-    "              +            mode-word     cscope 9(be assigned value),
-    "                           mode-select   cscope 9(be assigned value),
-    "                           mode-empty    tags not-func-symbol-uniq
-    "  symbol   - fe            same-as fw, but without filter
-    "
-    nnoremap <silent> <leader>ff    :"open Files            theCommand"<c-U>CSFileFilter<cr>
-    vnoremap <silent> <leader>ff    :"open Files            theCommand"<c-U>CSFileFilter<cr>
-
-    nnoremap <silent>        ;ff    :"open Files            theCommand"<c-U>CSFileFilter!<cr>
-    vnoremap <silent>        ;ff    :"open Files            theCommand"<c-U>CSFileFilter!<cr>
-
-    " 'nvim-lspconfig' clangd assign with the prefix ;
-    "if HasNoPlug('nvim-lspconfig')
-    "  nnoremap <silent>        ;fs    :     call cscope#preview('0', 'n', 1, 1)<cr>
-    "  vnoremap <silent>        ;fs    :<c-u>call cscope#preview('0', 'v', 1, 1)<cr>
-    "  nnoremap <silent>        ;fw    :     call cscope#preview('9', 'n', 0, 1)<cr>
-    "  vnoremap <silent>        ;fw    :<c-u>call cscope#preview('9', 'v', 0, 1)<cr>
-    "  nnoremap <silent>        ;fe    :     call cscope#preview('9', 'n', 0, 0)<cr>
-    "  vnoremap <silent>        ;fe    :<c-u>call cscope#preview('9', 'v', 0, 0)<cr>
-    "endif
-
-    " Uppercase with filter define by g:fzfCscopeFilter
-    " Symbol:
-    nnoremap <silent> <leader>fs    :"(cscope)References        theCommand"<c-U>call cscope#preview('0', 'n', 0, 0)<cr>
-    vnoremap <silent> <leader>fs    :"(cscope)References        theCommand"<c-U>call cscope#preview('0', 'v', 0, 0)<cr>
-    nnoremap <silent> <leader>fS    :"(cscope)References(+)     theCommand"<c-U>call cscope#preview('0', 'n', 0, 1)<cr>
-    vnoremap <silent> <leader>fS    :"(cscope)References(+)     theCommand"<c-U>call cscope#preview('0', 'v', 0, 1)<cr>
-
-    " Function
-    nnoremap <silent> <leader>fc    :"(cscope)Caller            theCommand"<c-U>call cscope#preview('3', 'n', 1, 0)<cr>
-    vnoremap <silent> <leader>fc    :"(cscope)Caller            theCommand"<c-U>call cscope#preview('3', 'v', 1, 0)<cr>
-    nnoremap <silent> <leader>fC    :"(cscope)Callee            theCommand"<c-U>call cscope#preview('2', 'n', 1, 0)<cr>
-    vnoremap <silent> <leader>fC    :"(cscope)Callee            theCommand"<c-U>call cscope#preview('2', 'v', 1, 0)<cr>
-
-    " Write
-    nnoremap <silent> <leader>fw    :"(cscope)Write value       theCommand"<c-U>call cscope#preview('9', 'n', 0, 0)<cr>
-    vnoremap <silent> <leader>fw    :"(cscope)Write value       theCommand"<c-U>call cscope#preview('9', 'v', 0, 0)<cr>
-    nnoremap <silent> <leader>fW    :"(cscope)Write value(+)    theCommand"<c-U>call cscope#preview('9', 'n', 0, 1)<cr>
-    vnoremap <silent> <leader>fW    :"(cscope)Write value(+)    theCommand"<c-U>call cscope#preview('9', 'v', 0, 1)<cr>
-
-    " tExt
-    nnoremap          <leader>fe    :"Search in               theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "", 1)<cr>
-    nnoremap          <leader>f1    :"Search in 'wad'         theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "daemon/wad", 1)<cr>
-    nnoremap          <leader>f2    :"Search in 'cmf'         theCommand"<c-U><C-\>e utilgrep#Grep(0, 0, "cmf/plugin", 1)<cr>
-    " nnoremap        <leader>fe    :CscopeText! <c-r>=utils#GetSelected('')<cr>
-    " vnoremap        <leader>fe    :<c-u>CscopeText! <c-r>=utils#GetSelected('')<cr>
-    " nnoremap        <leader>fE    :CscopeGrep! <c-r>=utils#GetSelected('')<cr>
-    " vnoremap        <leader>fE    :<c-u>CscopeGrep! <c-r>=utils#GetSelected('')<cr>
-
-endif
-
-
-if HasPlug('fzf-preview.vim')
-    "nnoremap <leader>fF      :"(fzf)All files            theCommand"<c-U>FZFFiles<cr>
-    nnoremap <leader>fg      :"(fzf)Grep                 theCommand"<c-U>FZFRg <c-r>=utils#GetSelected('n')<cr><cr>
-    vnoremap <leader>fg      :"(fzf)Grep                 theCommand"<c-U>FZFRg <c-r>=utils#GetSelected('v')<cr>
-endif
-
-
-if HasPlug('fzf.vim') | " {{{1
-    "nnoremap           ;vg   :"(fzf)git-status          theCommand"<c-U>GFiles?<cr>
-    nnoremap           ;vc   :"(fzf)Changes             theCommand"<c-U>FZFChange<cr>
-
-    nnoremap           ;vt   :"(fzf)BTags               theCommand"<c-U>BTags<cr>
-
-    "nnoremap           ;vl   :"(fzf)Lines               theCommand"<c-U>FZFBLines<cr>
-    nnoremap           ;vw   :"(fzf)Windows             theCommand"<c-U>FZFWindows<cr>
-    nnoremap           ;vh   :"(fzf)History             theCommand"<c-U>FZFHistory<cr>
-    "nnoremap           ;vq   :"(fzf)Quickfix            theCommand"<c-U>FZFQuickFix<cr>
-    "nnoremap           ;v:   :"(fzf)History:            theCommand"<c-U>History:<cr>
-    "nnoremap           ;v/   :"(fzf)History/            theCommand"<c-U>History/<cr>
-    "nnoremap           ;v;   :"(fzf)Commands            theCommand"<c-U>Commands<cr>
-
-
-    let g:fzf_prefer_tmux = 1
-
-    " Customize fzf colors to match your color scheme
-    let g:fzf_colors =
-    \ { 'fg':      ['fg', 'Normal'],
-      \ 'bg':      ['bg', 'Normal'],
-      \ 'hl':      ['fg', 'Function'],
-      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+':     ['fg', 'Statement'],
-      \ 'info':    ['fg', 'PreProc'],
-      \ 'border':  ['fg', 'Ignore'],
-      \ 'prompt':  ['fg', 'Conditional'],
-      \ 'pointer': ['fg', 'Exception'],
-      \ 'marker':  ['fg', 'Keyword'],
-      \ 'spinner': ['fg', 'Label'],
-      \ 'header':  ['fg', 'Comment'] }
-
-    " Enable per-command history.
-    " CTRL-N and CTRL-P will be automatically bound to next-history and
-    " previous-history instead of down and up. If you don't like the change,
-    " explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
-    let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-    command! -bang -nargs=? -complete=dir FilePre
-      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
-
-    command! -bang -nargs=* RgType
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --smart-case -t c '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview('up:60%')
-      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \   <bang>0)
-
-
-    ""https://github.com/junegunn/fzf.vim/issues/185
-    ""CTRL-A CTRL-Q to select all and build quickfix list
-    "function! s:build_quickfix_list(lines)
-    "  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-    "  copen
-    "  cc
-    "endfunction
-    "
-    "let g:fzf_action = {
-    "  \ 'ctrl-q': function('s:build_quickfix_list'),
-    "  \ 'ctrl-t': 'tab split',
-    "  \ 'ctrl-x': 'split',
-    "  \ 'ctrl-v': 'vsplit' }
-    "
-    "let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
-endif
-
-
-if HasPlug('telescope.nvim')
-    nnoremap           ;vF   :"(fzf)All files           theCommand"<c-U>Telescope find_files<cr>
-
-    nnoremap           ;vy   :"(fzf)Yanks               theCommand"<c-U>Telescope yank_history<cr>
-    nnoremap           ;va   :"(fzf)autoCmd             theCommand"<c-U>Telescope autocommands<cr>
-    nnoremap           ;vb   :"(fzf)Buffers             theCommand"<c-U>Telescope buffers<cr>
-    nnoremap           ;vC   :"(fzf)git-commits         theCommand"<c-U>Telescope git_commits<cr>
-    nnoremap           ;vm   :"(fzf)Marks               theCommand"<c-U>Telescope marks<cr>
-    nnoremap           ;vM   :"(fzf)Key maps            theCommand"<c-U>Telescope keymaps<cr>
-    nnoremap           ;vj   :"(fzf)Jumps               theCommand"<c-U>Telescope jumplist<cr>
-    nnoremap    <leader>fl   :"(fzf)Lines               theCommand"<c-U>Telescope current_buffer_fuzzy_find<cr>
-    nnoremap    <leader>fL   :"(fzf)Live-grep           theCommand"<c-U>Telescope live_grep<cr>
-    nnoremap           ;vd   :"(fzf)Diagnostics         theCommand"<c-U>Telescope diagnostics<cr>
-    nnoremap           ;vq   :"(fzf)Quickfix            theCommand"<c-U>Telescope quickfix<cr>
-    nnoremap           ;vQ   :"(fzf)Quickfix-History    theCommand"<c-U>Telescope quickfixhistory<cr>
-    nnoremap           ;v/   :"(fzf)History/            theCommand"<c-U>Telescope search_history<cr>
-    nnoremap           ;v:   :"(fzf)Commands            theCommand"<c-U>Telescope commands<cr>
-    nnoremap           ;v;   :"(fzf)Commands-History    theCommand"<c-U>Telescope command_history<cr>
-endif
-
-
-" Git {{{3
-if HasPlug('vim-gitgutter')
-    nnoremap <silent> ;gv   :"(git)GutterToggle          theCommand"<c-U>GitGutterToggle <cr>
-    nnoremap <silent> ;gr   :"(git)Gutter                theCommand"<c-U>GitGutter <cr>
-    "nnoremap <silent> ;gf  :"(git)Gutter sink-to QuickFix "<c-U>GitGutterQuickFix \| copen <cr>
-
-    " Jump between hunks
-    nnoremap <silent> ;gn   <Plug>(GitGutterNextHunk)
-    nnoremap <silent> ;gp   <Plug>(GitGutterPrevHunk)
-
-    " Hunk-add and hunk-revert for chunk staging
-    nnoremap <silent> ;ga   <Plug>(GitGutterStageHunk)
-    nnoremap <silent> ;gu   <Plug>(GitGutterUndoHunk)
-endif
-
-if HasPlug('vim-fugitive')
-    "nnoremap <leader>bb :VCBlame<cr>
-    nnoremap <leader>gl     :"(git)Log side by side    theCommand"<c-U>GV<cr>
-    nnoremap <leader>gd     :"(git)Diff review         theCommand"<c-U>Gvdiff<cr>
-    nnoremap <leader>gD     :"(git)Diff review tabs    theCommand"<c-U>DiffReview git show
-    nnoremap <leader>gb     :"(git)Blame               theCommand"<c-U>Git blame<cr>
-    nnoremap <leader>bb     :"(git)Blame               theCommand"<c-U>Git blame<cr>
-    nnoremap <leader>gs     :"(git)Status              theCommand"<c-U>Gstatus<cr>
-endif
-
-if HasPlug('tig-explorer.vim')
-    nnoremap <leader>gL     :"(tig)Log                 theCommand"<c-U>Tig<cr>
-    nnoremap <leader>gp     :"(tig)Log --parent        theCommand"<c-U>Tig --first-parent -m<cr>
-    nnoremap <leader>gP     :"(tig)Log --parent all    theCommand"<c-U>Tig --first-parent --all<cr>
-    nnoremap <leader>gB     :"(tig)Blame               theCommand"<c-U>TigBlame<cr>
-endif
-
-
-if HasPlug('coc.nvim')
-    autocmd CmdwinEnter * let b:coc_suggest_disable = 1
-endif
-
-if CheckPlug('vim-eval', 1) | " {{{1
-    let g:eval_viml_map_keys = 0
-endif
-
-
-if CheckPlug('vim-quickrun', 1) | " {{{1
-    let g:eval_viml_map_keys = 0
-endif
-
-
-if CheckPlug('vim-repl', 1) | " {{{1
-    let g:repl_position = 3
-    let g:repl_cursor_down = 1
-
-    let g:repl_program = {
-                \   'python': 'ipython',
-                \   'default': 'zsh',
-                \   'r': 'R',
-                \   'lua': 'lua',
-                \   'vim': 'vim -e',
-                \   }
-    let g:repl_predefine_python = {
-                \   'numpy': 'import numpy as np',
-                \   'matplotlib': 'from matplotlib import pyplot as plt'
-                \   }
-    let g:repl_python_automerge = 1
-    let g:repl_ipython_version = '7'
-endif
-
-
-if CheckPlug('vim-sleuth', 1) | " {{{1
-    let g:sleuth_automatic = 1
-endif
-
-
-if CheckPlug('vim-submode', 1) | " {{{1
-    " A message will appear in the message line when you're in a submode
-    " and stay there until the mode has existed.
-    let g:submode_always_show_submode = 1
-    "let g:submode_keep_leaving_key=1
-    let g:submode_timeout = 0
-    "let g:submode_timeoutlen=5000
-
-    " Implement feature 'dstein64/vim-win'
-        " We're taking over the default <C-w> setting. Don't worry we'll do
-        " our best to put back the default functionality.
-        call submode#enter_with('window', 'n', '', '<C-w>')
-        " Note: <C-c> will also get you out to the mode without this mapping.
-        " Note: <C-[> also behaves as <ESC>
-        call submode#leave_with('window', 'n', '', '<ESC>')
-                " Go through every letter
-                for key in ['a','b','c','d','e','f','g','h','i','j','k','l','m',
-                \           'n','o','p','q','r','s','t','u','v','w','x','y','z']
-                  " maps lowercase, uppercase and <C-key>
-                  call submode#map('window', 'n', '', key, '<C-w>' . key)
-                  call submode#map('window', 'n', '', toupper(key), '<C-w>' . toupper(key))
-                  call submode#map('window', 'n', '', '<C-' . key . '>', '<C-w>' . '<C-'.key . '>')
-                endfor
-                " Go through symbols. Sadly, '|', not supported in submode plugin.
-                for key in ['=','_','+','-','<','>']
-                  call submode#map('window', 'n', '', key, '<C-w>' . key)
-                endfor
-
-        " Old way, just in case.
-        nnoremap <Leader>w <C-w>
-endif
-
-
-if CheckPlug('nvim-libmodal', 1) | " {{{1
-    " Mode windows: Implement feature 'dstein64/vim-win'
-        nnoremap <Leader>w :call <sid>windowsMode()<cr>
-
-        let s:windowsModeRecurse = 0
-        let s:windowsModeCombos = {
-                    \   'j': 'wincmd j',
-                    \   'k': 'wincmd k',
-                    \   'h': 'wincmd h',
-                    \   'l': 'wincmd l',
-                    \   'H': '3 wincmd >',
-                    \   'L': '3 wincmd <',
-                    \   'J': '3 wincmd +',
-                    \   'K': '3 wincmd -',
-                    \   'r': 'wincmd r',
-                    \   'x': 'wincmd x',
-                    \}
-
-        " define the BarMode() function which is called whenever the user presses 'z'
-        function! s:windowsMode()
-            let s:windowsModeRecurse += 1
-            call libmodal#Enter('windows' . s:windowsModeRecurse, s:windowsModeCombos)
-            let s:windowsModeRecurse -= 1
-        endfunction
-endif
-
-
-if HasPlug('vim-multiple-cursors') | " {{{1
-    let g:multi_cursor_use_default_mapping=0
-endif
-
-
-if HasPlug('vim-visual-multi')
-    " https://github.com/mg979/vim-visual-multi/wiki/Quick-start#cursor-mode-vs-extend-mode
-    let g:VM_maps = {}
-    let g:VM_maps['Find Under']         = '<C-d>'
-    let g:VM_maps['Find Subword Under'] = '<C-d>'
-endif
-
-
-if HasPlug('delimitMate') | " {{{1
-    let delimitMate_expand_space = 1
-    let delimitMate_expand_cr = 2
-    "let delimitMate_jump_expansion = 1
-    let delimitMate_expand_inside_quotes = 1
-    let delimitMate_nesting_quotes = ['"','`']
-    let delimitMate_excluded_regions = ""
-endif
-
-
-if HasPlug('vwm.vim') | " {{{1
+if v:lua.HasPlug('vwm.vim') | " {{{1
     " Example layouts
 
     " Vista attempts to move itself, the sleep prevents a race.
@@ -2170,7 +1517,7 @@ if HasPlug('vwm.vim') | " {{{1
 endif
 
 
-if HasPlug('vim-projectionist') | " {{{1
+if v:lua.HasPlug('vim-projectionist') | " {{{1
     function! VimConfigLoadProjectionistJson(proj_jsn)
         " filter-out the comment line: beginwith '//'
         let l:json = filter(readfile(a:proj_jsn), 'match(v:val, "\s*//.*") < 0')
@@ -2179,7 +1526,7 @@ if HasPlug('vim-projectionist') | " {{{1
     endfunction
 endif
 
-if HasPlug('vim-gitgutter') | " {{{1
+if v:lua.HasPlug('vim-gitgutter') | " {{{1
     let g:gitgutter_enabled = 0
     let g:gitgutter_map_keys = 0
     let g:gitgutter_max_signs = 500  " default value (Vim < 8.1.0614, Neovim < 0.4.0)
@@ -2198,59 +1545,18 @@ if HasPlug('vim-gitgutter') | " {{{1
 endif
 
 
-if HasPlug('vim-diff-enhanced') | " {{{1
-    set diffopt+=internal,algorithm:patience
-    "EnhancedDiffIgnorePat ^WARNING:.*
-    let g:enhanced_diff_ignore_pat = '^WARNING:.*'
-endif
-
-
-if HasPlug('editorconfig-vim') | " {{{1
+if v:lua.HasPlug('editorconfig-vim') | " {{{1
     let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
     au FileType gitcommit let b:EditorConfig_disable = 1
     let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
 endif
 
-if HasPlug('vim-searchindex') | " {{{1
+if v:lua.HasPlug('vim-searchindex') | " {{{1
     let g:searchindex_line_limit=1000000
 endif
 
 
-if HasPlug('any-jump.vim') | " {{{1
-    let g:any_jump_disable_default_keybindings = 1
-    nnoremap ;jj :AnyJump<CR>
-    xnoremap ;jj :AnyJumpVisual<CR>
-    nnoremap ;jb :AnyJumpBack<CR>
-    nnoremap ;jl :AnyJumpLastResults<CR>
-
-    " Prefered search engine: rg or ag
-    let g:any_jump_search_prefered_engine = 'ag'
-endif
-
-
-if HasPlug('nerdcommenter') | " {{{1
-    let g:NERDCreateDefaultMappings = 0
-    let g:NERDCompactSexyComs = 1
-    let g:NERDSpaceDelims = 1
-    let g:NERDDefaultAlign = 'left'
-    let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
-    let g:NERDAltDelims_java = 1
-    let g:NERDCommentEmptyLines = 1
-    let g:NERDTrimTrailingWhitespace = 1
-    let g:NERDToggleCheckAllLines = 1
-
-    " Remap as <c-/>
-    nnoremap <silent> <c-_>    :call nerdcommenter#Comment('n', "Sexy")<cr>
-    xnoremap <silent> <c-_>    :call nerdcommenter#Comment('x', "Sexy")<cr>gv
-
-    "nnoremap    <leader>c   :"Comment toggle but not fancy!              "<c-U>call nerdcommenter#Comment('n', "Toggle")<cr>
-    "xnoremap    <leader>c                                                     :call nerdcommenter#Comment('x', "Toggle")<cr>gv
-    "nnoremap    ;c      :"Comment: <C-/> or <leader>c add,   <;c> uncomment"<c-U>call nerdcommenter#Comment('n', "Uncomment")<cr>
-    "xnoremap    ;c                                                            :call nerdcommenter#Comment('x', "Uncomment")<cr>gv
-endif
-
-
-if HasPlug('vim-signify') | " {{{1
+if v:lua.HasPlug('vim-signify') | " {{{1
     " Diff by commit SHA: 76748de92fa
     "             OR SHA..HEAD:
     let g:signify_sha_range = $VimGit
@@ -2267,124 +1573,4 @@ if HasPlug('vim-signify') | " {{{1
     endif
 endif
 
-
-if HasPlug('cheatsheet.nvim')
-    let g:coq_settings = {
-                \ 'auto_start': 'shut-up',
-                \ 'display.icons.mode': 'none',
-                \}
-endif
-
-
-if HasPlug('neomux')
-    " If don't change from <leader> to ';', cause the terminal <space> slow
-    "   We can check by :verbose tmap <leader>
-    let g:neomux_no_exit_term_map = 1
-    let g:neomux_exit_term_mode_map = ";sX"
-
-    let g:neomux_start_term_map = ";sx"
-    let g:neomux_start_term_split_map = ";sh"
-    let g:neomux_start_term_vsplit_map = ";sv"
-endif
-
-
-if HasPlug('vim-windowswap')
-    let g:windowswap_map_keys = 0
-    "nnoremap <silent> <leader>wy :call WindowSwap#MarkWindowSwap()<CR>
-    "nnoremap <silent> <leader>wp :call WindowSwap#DoWindowSwap()<CR>
-    nnoremap <silent> <leader>va :"(view)BufferWindowSwap              theCommand"<c-U>call WindowSwap#EasyWindowSwap()<CR>
-endif
-
-
-if HasPlug('vim-terminal-help')
-    let g:terminal_key = "<C-\\>"
-    let g:terminal_cwd = 0
-    let g:terminal_shell = "/bin/bash"
-    let g:terminal_kill = "term"
-    let g:terminal_list = 0
-    let g:terminal_close = 1
-endif
-
-
-if HasPlug('nvim-lspconfig')
-    if HasPlug('fzf-lsp.nvim')
-        nnoremap <silent>        ;fD    :Declarations <cr>
-        nnoremap <silent>        ;fd    :Definitions <cr>
-        nnoremap <silent>        ;fi    :Implementations <cr>
-        nnoremap <silent>        ;fr    :CodeActions <cr>
-        nnoremap <silent>        ;fs    :References <cr>
-        nnoremap <silent>        ;f1    :IncomingCalls <cr>
-        nnoremap <silent>        ;f2    :OutgoingCalls <cr>
-        nnoremap <silent>        ;f3    :Diagnostics <cr>
-        nnoremap <silent>        ;f4    :DiagnosticsAll <cr>
-    endif
-    lua vim.lsp.set_log_level("off")
-endif
-
-
-if HasPlug('neo-tree.nvim')
-    let s:viewBuff = 0
-    fun s:toggleBuffers()
-        if s:viewBuff == 0
-            let s:viewBuff = 1
-            exec 'Neotree buffers'
-        else
-            let s:viewBuff = 0
-            exec 'Neotree close buffers'
-        endif
-    endfunc
-
-
-    let s:viewGit = 0
-    fun s:toggleGitStatus()
-        if s:viewGit == 0
-            let s:viewGit = 1
-            exec 'Neotree git_status'
-        else
-            let s:viewGit = 0
-            exec 'Neotree close git_status'
-        endif
-    endfunc
-
-    nnoremap  <silent> <leader>vE  :"(view)Explore File           theCommand"<c-U>Neotree toggle<cr>
-    nnoremap  <silent> <leader>vF  :"(view)Explore Focus          theCommand"<c-U>Neotree reveal<cr>
-    nnoremap  <silent> <leader>vb  :"(view)Explore buffer         theCommand"<c-U>call <sid>toggleBuffers()<cr>
-    nnoremap  <silent> <leader>vg  :"(view)Explore git            theCommand"<c-U>call <sid>toggleGitStatus()<cr>
-endif
-
-
-if HasPlug('nvim-notify')
-    lua vim.notify = require("notify")
-endif
-
-
-if HasPlug('vim-expand-region')
-    map W <Plug>(expand_region_expand)
-    map B <Plug>(expand_region_shrink)
-endif
-
-if HasPlug('nvim-autopairs')
-    lua require("nvim-autopairs").setup {}
-endif
-
-if HasPlug('toggleterm.nvim')
-    lua require("toggleterm").setup()
-endif
-
-if HasPlug('wilder.nvim')
-    " Disable auto active, but <tab> it
-    call wilder#setup({
-      \ 'modes': [':', '/', '?'],
-      \ 'enable_cmdline_enter': 0,
-      \ })
-
-    " Can also be passed to the 'highlights' option
-    call wilder#set_option('renderer', wilder#popupmenu_renderer({
-                \ 'highlighter': wilder#basic_highlighter(),
-                \ 'highlights': {
-                \   'accent': wilder#make_hl('WilderAccent', 'Pmenu', [{}, {}, {'foreground': '#f4468f'}]),
-                \ },
-                \ }))
-
-endif
 

@@ -72,7 +72,7 @@ hi clear SpecialKey
 hi link SpecialKey NonText
 
 " The characters after tab is U+2002. in vim with Ctrl-v u 2 0 0 2 (in insert mode).
-if HasNoPlug('cyclist.vim') && HasNoPlug('vim-listchars') && HasNoPlug('vim-basic') | " {{{1
+if v:lua.HasNoPlug('cyclist.vim') && v:lua.HasNoPlug('vim-listchars') && v:lua.HasNoPlug('vim-basic') | " {{{1
     set listchars=tab:»\ ,trail:~,extends:<,nbsp:.
 endif
 "set listchars=nbsp:.,tab:>-,trail:~,extends:>,precedes:<
