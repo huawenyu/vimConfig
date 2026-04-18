@@ -313,40 +313,6 @@ if v:lua.HasPlug('vim-yoink')
 endif
 
 
-if v:lua.HasPlug('fzf.vim')
-    noremap <silent> <leader>fs     :GscopeFind s <C-R><C-W><cr>
-endif
-
-
-if v:lua.HasPlug('vim-gutentags')
-    if v:lua.HasNoPlug('fzf-cscope.vim')
-        " gutentags_plus
-        let g:fzf_cscope_map = 0
-        let g:gutentags_plus_nomap = 1
-        noremap <silent> <leader>fs     :GscopeFind s <C-R><C-W><cr>
-        noremap <silent> <leader>fg     :GscopeFind g <C-R><C-W><cr>
-        noremap <silent> <leader>fc     :GscopeFind c <C-R><C-W><cr>
-        noremap <silent> <leader>ft     :GscopeFind t <C-R><C-W><cr>
-        noremap <silent> <leader>fe     :GscopeFind e <C-R><C-W><cr>
-        "noremap <silent> <leader>ff    :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
-        noremap <silent> <leader>fi     :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
-        noremap <silent> <leader>fd     :GscopeFind d <C-R><C-W><cr>
-        noremap <silent> <leader>fa     :GscopeFind a <C-R><C-W><cr>
-
-        "let g:gutentags_plus_nomap = 1
-        "noremap <silent> <leader>fs    :cs find s <C-R><C-W><cr>
-        "noremap <silent> <leader>fg    :cs find g <C-R><C-W><cr>
-        "noremap <silent> <leader>fc    :cs find c <C-R><C-W><cr>
-        "noremap <silent> <leader>ft    :cs find t <C-R><C-W><cr>
-        "noremap <silent> <leader>fe    :cs find e <C-R><C-W><cr>
-        ""noremap <silent> <leader>ff   :cs find f <C-R>=expand("<cfile>")<cr><cr>
-        "noremap <silent> <leader>fi    :cs find i <C-R>=expand("<cfile>")<cr><cr>
-        "noremap <silent> <leader>fd    :cs find d <C-R><C-W><cr>
-        "noremap <silent> <leader>fa    :cs find a <C-R><C-W><cr>
-    endif
-endif
-
-
 if v:lua.HasPlug('vim-emacscommandline')
     "let g:EmacsCommandLine[Command]Disable = 1
     "let g:EmacsCommandLineBeginningOfLineMap = ['<C-B>', '<C-A>']
@@ -562,21 +528,6 @@ endif
 
     " Sugar {{{2
         " bookmark/color
-        if v:lua.HasPlug('vim-mark')
-            nnoremap <silent> <leader>mm  :"(color)Toggle Colorize word        theCommand"<c-U>silent! call mark#MarkCurrentWord(expand('<cword>'))<cr>
-            "vnoremap <silent> <leader>mm  :<c-u>silent! call mark#GetVisualSelection()<cr>
-            nnoremap <silent> <leader>mx  :"(color)Clear all colorize word   theCommand"<c-U>silent! call mark#ClearAll()<cr>
-        endif
-
-
-        " Suppose record macro in register `q`:
-        "vnoremap <leader>mm  :normal @q
-        if v:lua.HasPlug('vim-macroscope')
-            "nnoremap <leader>mr     :<c-U>Macroscope
-            "nnoremap <leader>mp     :<c-U>Macroplay<cr>
-        endif
-
-
         if v:lua.HasPlug('rainbow_parentheses.vim')
             nnoremap <silent> <leader>m[   :"Colorize brace     theCommand"<c-U>RainbowParentheses!!<cr>
         endif
@@ -599,10 +550,6 @@ endif
             nnoremap <leader>fd :"Auto detect indent   theCommand"<c-U>DetectIndent<cr>
         endif
 
-        " Set log
-        "nnoremap <silent> <leader>ll :<c-u>call log#log(expand('%'))<CR>
-        "vnoremap <silent> <leader>ll :<c-u>call log#log(expand('%'))<CR>
-        " Lint: -i ignore-error and continue, -s --silent --quiet
 
     " Format {{{2
         " Reserve to cscope/ctags
@@ -614,61 +561,6 @@ endif
         "autocmd FileType vimwiki vnoremap <leader>ff :!fmt -c -w 100 -u -s <cr>
         nnoremap <leader>cw     vip:"(*)Auto wrapline paragraph   theCommand"<c-U>'<,'>!fmt -c -w 100 -u -s <cr>
         vnoremap <leader>cw     :!fmt -c -w 100 -u -s <cr>
-
-    " repl/execute {{{2
-        "if mapcheck('<leader>ee', 'n') == ""
-        "    "" execute file that I'm editing in Vi(m) and get output in split window
-        "    "nnoremap <silent> <leader>x :w<CR>:silent !chmod 755 %<CR>:silent !./% > /tmp/vim.tmpx<CR>
-        "    "            \ :tabnew<CR>:r /tmp/vim.tmpx<CR>:silent !rm /tmp/vim.tmpx<CR>:redraw!<CR>
-        "    "vnoremap <silent> <unique> <leader>ee :NR<CR> \| :w! /tmp/1.c<cr> \| :e /tmp/1.c<cr>
-
-        "    silent! Shortcut! <space>ee    Tool compile & run
-        "    nnoremap <leader>ee :call SingleCompileSplit() \| SCCompileRun<CR>
-        "    silent! Shortcut! <leader>eo    Tool View Result
-        "    nnoremap <leader>eo :SCViewResult<CR>
-        "endif
-
-        "nnoremap <leader>el :VlogDisplay \| Messages \| VlogClear<CR><CR>
-
-
-    " Copy/paste {{{2
-        " " vp doesn't replace paste buffer
-        " function! RestoreRegister()
-        "     let @" = s:restore_reg
-        "     let @+ = s:restore_reg | " sometime other plug use this register as paste-buffer
-        "     return ''
-        " endfunction
-        " function! s:Repl()
-        "     let s:restore_reg = @"
-        "     return "p@=RestoreRegister()\<cr>"
-        " endfunction
-        " vnoremap <silent> <expr> p <sid>Repl()
-
-        "" FIXME: Revert this f70be548
-        "" fullscreen mode for GVIM and Terminal, need 'wmctrl' in you PATH
-        "map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
-
-        " Yank from the cursor to the end of the line, to be consistent with C and D.
-        nnoremap Y y$
-        if v:lua.HasPlug('vim-oscyank')
-            let g:oscyank_max_length = 1000000
-            "let g:oscyank_term = 'tmux'  " or 'screen', 'kitty', 'default'
-            let g:oscyank_term = 'tmux'
-            vnoremap Y :OSCYank<CR>
-            "vnoremap Y :call YankOSC52(getreg('+'))<CR>
-        endif
-
-
-        vnoremap <silent> <leader>yy    :"Copy text to tmpfile       theCommand"<c-U>call utils#GetSelected('v', "/tmp/vim.yank")<CR>
-        nnoremap <silent> <leader>yy    :"Copy text to tmpfile       theCommand"<c-U>call vimuxscript#Copy() <CR>
-        nnoremap <silent> <leader>yp    :"Paste text from tmpfile    theCommand"<c-U>r! cat /tmp/vim.yank<CR>
-
-        " Map `*`, `&` same to avoid ft=git conflict:
-        xnoremap *      :<c-u>call utils#VSetSearch('/')<CR>/<C-R>=@/<CR>
-        xnoremap &      :<c-u>call utils#VSetSearch('/')<CR>/<C-R>=@/<CR>
-        xnoremap #      :<c-u>call utils#VSetSearch('?')<CR>?<C-R>=@/<CR>
-        vnoremap // y   :vim /\<<C-R>"\C/gj %
-
 
     " Text/Motion {{{2
         " nnoremap <leader>ci :"(txt)Capitalize word          theCommand"<c-U>CapitalizeWord<CR>
