@@ -41,7 +41,8 @@ endif
         if g:vim_confi_option.auto_save
             " Automatically write changes when the file is writable
             "autocmd InsertLeave * write
-            autocmd BufLeave,FocusLost * if &modifiable | silent! update | endif
+            " Disabled: causes slow :qa - migrated to init.lua
+            "autocmd BufLeave,FocusLost * if &modifiable | silent! update | endif
         endif
 
         " Sometime crack the tag file
@@ -110,20 +111,7 @@ endif
 
 
 " Commands {{{2
-    " :R ls -l   grab command output int new buffer
-    " :R! ls -l   only show output in another tab
-    "command! -nargs=+ -bang -complete=shellcmd R call s:R(<bang>1, <q-args>)
-    command! -nargs=+ -bang -complete=shellcmd R execute ':NeomakeRun! '.<q-args>
-
-    "Misc
-    command! -bang -nargs=* -complete=file Grep call utilgrep#_Grep('grep<bang>',<q-args>)
-    command! -bang -nargs=* -complete=file GrepAdd call utilgrep#_Grep('grepadd<bang>', <q-args>)
-    command! -bang -nargs=* -complete=file LGrep call utilgrep#_Grep('lgrep<bang>', <q-args>)
-    command! -bang -nargs=* -complete=file LGrepAdd call utilgrep#_Grep('lgrepadd<bang>', <q-args>)
-    "command! -bang -nargs=* -complete=file Replace call utilgrep#ReplaceAll(<f-args>)
-
-    "add commas to a number, e.g. change 31415926 to 31,415,926
-    "command! Int3 execute ':%s/\(\d\)\(\(\d\d\d\)\+\d\@!\)\@=/\1,/g'
+    " Migrated to lazy.nvim init.lua
 "}}}
 
 
@@ -154,22 +142,10 @@ endif
 
 
 " Section 'String'
-    "map <leader>ds :call Asm() <CR>
-    " For local replace
-    "nnoremap <leader>vm [[ma%mb:call signature#sign#Refresh(1) <CR>
-    nnoremap <leader>vr      :"Replace                   theCommand"<c-U><C-\>e SelectedReplace('n')<CR><left><left><left>
-    vnoremap <leader>vr      :"Replace                   theCommand"<C-\>e SelectedReplace('v')<CR><left><left><left>
+    " Migrated to lazy.nvim init.lua
 
 " Section 'Execute'
-    " Plug : asynctasks.vim : ~/.vim_tasks.ini : wad|sysinit
-    nnoremap  <leader>mk     :"(diag)Make wad                   theCommand"<c-U>AsyncStop! <bar> AsyncTask! wad<CR>
-    nnoremap  <leader>ma     :"(diag)Make all                   theCommand"<c-U>AsyncStop! <bar> AsyncTask! sysinit<CR>
-
-    nnoremap  <leader>mw     :"(tool)Dictionary                 theCommand"<c-U>R! ~/tools/dict <C-R>=expand('<cword>') <cr>
-    nnoremap  <leader>mf     :"(quickfix)filter                 theCommand"<c-U>call utilquickfix#QuickFixFilter() <CR>
-    nnoremap  <leader>mc     :"(quickfix)add caller field       theCommand"<c-U>call utilquickfix#QuickFixFunction() <CR>
-
-    nnoremap  <silent>;q     :"(vim.command)SmartClose          theCommand"<c-U>SmartClose<cr>
+    " Migrated to lazy.nvim init.lua
 
 function MyMenuExec(...)
     let strCmd = join(a:000, '')
@@ -177,53 +153,8 @@ function MyMenuExec(...)
     exec strCmd
 endfunc
 
-function! SelectedReplace(mode)
-    let l:save_cursor = getcurpos()
-    let sel_str = hw#misc#GetWord(a:mode)
-
-    let nr = winnr()
-    if getwinvar(nr, '&syntax') == 'qf'
-        call setpos('.', l:save_cursor)
-        return "%s/\\<". sel_str. '\>/'. sel_str. '/gI'
-    else
-        delmarks un
-        normal [[mu%mn
-        call signature#sign#Refresh(1)
-        redraw
-        return "'u,'ns/\\<". sel_str. '\>/'. sel_str. '/gI'
-    endif
-endfunction
-
-
 " https://github.com/szw/vim-smartclose
-command! -bang -nargs=0 -range SmartClose :call s:smart_close(<bang>0)
-fun! s:is_auxiliary(buffer)
-    return !getbufvar(a:buffer, '&modifiable') || !getbufvar(a:buffer, '&buflisted') || (getbufvar(a:buffer, '&buftype') != '')
-endfun
-
-fun! s:smart_close(bang)
-    let current_buffer = bufnr('%')
-
-    if s:is_auxiliary(current_buffer) || a:bang
-        silent! exe 'q'
-    else
-        let auxiliary_buffer = 0
-
-        for b in tabpagebuflist()
-            if s:is_auxiliary(b) && (b > auxiliary_buffer)
-                let auxiliary_buffer = b
-            endif
-        endfor
-
-        if auxiliary_buffer
-            silent! exe 'noautocmd ' . bufwinnr(auxiliary_buffer) . 'wincmd w'
-            silent! exe 'noautocmd q'
-            silent! exe 'noautocmd ' . bufwinnr(current_buffer) . 'wincmd w'
-        else
-            silent! exe 'q'
-        endif
-    endif
-endfun
+" SmartClose migrated to lazy.nvim init.lua
 
 " vim:set ft=vim et sw=4:
 
