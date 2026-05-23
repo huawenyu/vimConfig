@@ -5,7 +5,7 @@ function M.setup()
   local compile_run_swap = 0
 
   local function compile_run(mode)
-    local command = ":FloatermNew --name=repl --wintype=split --position=bottom --autoclose=0 height=0.4 --width=0.6 --title=Repl-" .. vim.bo.filetype
+    local command = ":FloatermNew --name=repl --wintype=split --position=bottom --autoclose=0--title=Repl-" .. vim.bo.filetype
     local fname_org = vim.fn.expand("%")
     local fname, fname_bin, fpath_bin
 
@@ -127,7 +127,7 @@ function M.setup()
   end
 
   local function toggle_terminal(mode)
-    local command = ":FloatermNew --name=Shell --wintype=split --position=bottom --autoclose=0 height=0.4 --width=0.6 --title=Shell bash"
+    local command = ":FloatermNew --name=Shell --wintype=split --position=bottom --autoclose=0--title=Shell bash"
     vim.cmd("silent execute '" .. command .. "'")
   end
 
@@ -153,11 +153,11 @@ function M.setup()
 
   vim.keymap.set({ "n", "v" }, "<C-\\>", function() toggle_terminal("n") end, { desc = "(view) Terminal *" })
   vim.keymap.set("i", "<C-\\>", function()
-    vim.cmd("silent execute ':FloatermNew --name=Shell --wintype=split --position=bottom --autoclose=0 height=0.4 --width=0.6 --title=Shell bash'")
+    vim.cmd("silent execute ':FloatermNew --name=Shell --wintype=split --position=bottom --autoclose=0--title=Shell bash'")
   end, { desc = "(Tool) Terminal" })
 
   vim.api.nvim_create_user_command("Tldr", function(opts)
-    vim.cmd(string.format("FloatermNew --name=Help --wintype=split --position=bottom --autoclose=1 height=0.4 --width=0.6 --title=Tldr tldr -e %s", opts.args))
+    vim.cmd(string.format("FloatermNew --name=Help --wintype=split --position=bottom --autoclose=1--title=Tldr tldr -e %s", opts.args))
   end, { nargs = 1 })
 end
 

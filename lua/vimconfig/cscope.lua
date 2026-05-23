@@ -15,11 +15,16 @@ function M.setup()
   })
 
   local function find_git_root()
-    local handle = io.popen("git rev-parse --show-toplevel 2>/dev/null")
-    local result = handle:read("*a")
-    handle:close()
-    result = result:gsub("%s+", "")
-    return result ~= "" and result or nil
+    local dir = vim.fn.expand("%:p:h")
+    if dir == "" then dir = vim.fn.getcwd() end
+    dir = vim.uv.fs_realpath(dir) or dir
+    while dir and dir ~= "/" do
+      if vim.fn.isdirectory(dir .. "/.git") == 1 then
+        return dir
+      end
+      dir = vim.fn.fnamemodify(dir, ":h")
+    end
+    return nil
   end
 
   local function find_cscope_databases()
@@ -127,18 +132,71 @@ function M.setup()
     vim.notify("Found " .. #dbs .. " cscope databases:\n" .. table.concat(dbs, "\n"), vim.log.levels.INFO)
   end, vim.tbl_extend("force", map_opts, { desc = "Debug: Show found databases" }))
 
+  local function rg_fallback(cwd)
+    return {
+      prompt_title = "Find(rg)",
+      cwd = cwd,
+      find_command = function()
+        return { "rg", "--files", "--hidden",
+          "--glob", "!**/.git/*",
+          "--glob", "!.cscope.files",
+          "--glob", "!cscope*.out",
+          "--glob", "!tags",
+          "--glob", "!*.o",
+          "--glob", "!*.obj",
+          "--glob", "!*.a",
+          "--glob", "!*.so",
+          "--glob", "!*.dylib",
+          "--glob", "!*.exe",
+          "--glob", "!*.out",
+          "--glob", "!*.class",
+          "--glob", "!*.pyc",
+          "--glob", "!__pycache__",
+          "--glob", "!node_modules",
+          "--glob", "!*.swp",
+          "--glob", "!*.swo",
+          cwd,
+        }
+      end,
+    }
+  end
+
+  local function git_toplevel()
+    return find_git_root() or vim.uv.fs_realpath(vim.fn.getcwd()) or vim.fn.getcwd()
+  end
+
+  -- <leader>ff: cscope.files -> .cscope.files -> git ls-files(tracked) -> rg
+  local function leader_ff_opts()
+    local cwd = vim.fn.getcwd()
+    for _, name in ipairs({ "cscope.files", ".cscope.files" }) do
+      local f = cwd .. "/" .. name
+      if vim.fn.filereadable(f) == 1 then
+        return { prompt_title = "Find(" .. name .. ")", cwd = cwd, find_command = { "cat", f } }
+      end
+    end
+    local g = find_git_root()
+    if g then
+      return { prompt_title = "Find(git tracked)", cwd = g, find_command = { "git", "ls-files", "--cached" } }
+    end
+    return rg_fallback(git_toplevel())
+  end
+
+  -- ;ff: git ls-files(tracked+untracked) -> rg
+  local function semicolon_ff_opts()
+    local g = find_git_root()
+    if g then
+      return { prompt_title = "Find(git all)", cwd = g,
+        find_command = { "git", "ls-files", "--cached", "--others", "--exclude-standard" } }
+    end
+    return rg_fallback(git_toplevel())
+  end
+
   vim.keymap.set('n', '<leader>ff', function()
-    require('telescope.builtin').find_files({
-      prompt_title = "Find(rg) File List",
-      find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
-    })
-  end, vim.tbl_extend("force", map_opts, { desc = "Find file (Telescope)" }))
+    require('telescope.builtin').find_files(leader_ff_opts())
+  end, vim.tbl_extend("force", map_opts, { desc = "Find file (cscope/git/rg)" }))
   vim.keymap.set('n', ';ff', function()
-    require('telescope.builtin').find_files({
-      prompt_title = "Find(rg) File List",
-      find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
-    })
-  end, vim.tbl_extend("force", map_opts, { desc = "Find file (Telescope)" }))
+    require('telescope.builtin').find_files(semicolon_ff_opts())
+  end, vim.tbl_extend("force", map_opts, { desc = "Find file (git/rg)" }))
 
   load_databases()
 

@@ -2,6 +2,12 @@
 local M = {}
 
 function M.setup()
+  -- Load submodules (converted from vimscript)
+  require("vimconfig.local").setup()
+  require("vimconfig.autocmds").setup()
+  require("vimconfig.ftplugin").setup()
+  pcall(function() require("vimconfig.cscope").setup() end)
+
   -- Commands
   vim.api.nvim_create_user_command("R", function(opts)
     vim.cmd("NeomakeRun! " .. opts.args)
@@ -18,13 +24,26 @@ function M.setup()
   vim.api.nvim_create_user_command("LGrepAdd", function(opts)
     vim.cmd("call utilgrep#_Grep('lgrepadd" .. (opts.bang and "!" or "") .. "'," .. opts.args .. ")")
   end, { nargs = "*", bang = true, complete = "file" })
+  -- Reusable utility to run dangerous Vim commands safely
+  local function safe_cmd(cmd_str, fallback_msg)
+    local success, err = pcall(vim.cmd, cmd_str)
+    if not success then
+      if string.match(err, "E37") then
+        vim.notify("Warning: " .. (fallback_msg or "Unsaved changes! Save files or append ! to force close."), vim.log.levels.WARN)
+      else
+        vim.notify("Error executing command: " .. tostring(err), vim.log.levels.ERROR)
+      end
+    end
+    return success
+  end
+
   vim.api.nvim_create_user_command("SmartClose", function(opts)
     local function is_auxiliary(buffer)
       return not vim.bo[buffer].modifiable or not vim.bo[buffer].buflisted or vim.bo[buffer].buftype ~= ""
     end
     local current_buffer = vim.api.nvim_get_current_buf()
     if opts.bang or is_auxiliary(current_buffer) then
-      vim.cmd("q")
+      vim.cmd(opts.bang and "q!" or "q")
     else
       local auxiliary_buffer = 0
       for _, b in ipairs(vim.api.nvim_list_bufs()) do
@@ -34,10 +53,12 @@ function M.setup()
       end
       if auxiliary_buffer > 0 then
         vim.cmd(string.format("noautocmd %d wincmd w", vim.fn.bufwinnr(auxiliary_buffer)))
-        vim.cmd("noautocmd q")
-        vim.cmd(string.format("noautocmd %d wincmd w", vim.fn.bufwinnr(current_buffer)))
+        local closed = safe_cmd("noautocmd q", "Cannot close window. Unsaved changes present.")
+        if vim.fn.bufwinnr(current_buffer) ~= -1 then
+          vim.cmd(string.format("noautocmd %d wincmd w", vim.fn.bufwinnr(current_buffer)))
+        end
       else
-        vim.cmd("q")
+        safe_cmd("q", "Current buffer has unsaved changes! Save or use :SmartClose! to force close.")
       end
     end
   end, { bang = true, nargs = 0 })
@@ -127,9 +148,20 @@ function M.setup()
 
   -- vimConfig/conf_map.vim: Basic mappings
   if vim.g.vim_confi_option.enable_map_basic then
+    local function safe_quit_all()
+      local success, err = pcall(function() vim.cmd("qa") end)
+      if not success then
+        if string.match(err, "E37") then
+          vim.notify("Warning: Unsaved changes! Save files or use :qa! to force quit.", vim.log.levels.WARN)
+        else
+          vim.notify("Error: " .. tostring(err), vim.log.levels.ERROR)
+        end
+      end
+    end
+
     vim.keymap.set("n", "<C-c>", "<C-c>")
-    vim.keymap.set("n", "<leader>q", function() vim.cmd("qa") end, { silent = true, desc = "[misc] Exit all *" })
-    vim.keymap.set("x", "<leader>q", function() vim.cmd("qa") end, { silent = true })
+    vim.keymap.set("n", "<leader>q", safe_quit_all, { silent = true, desc = "[misc] Exit all *" })
+    vim.keymap.set("x", "<leader>q", safe_quit_all, { silent = true })
     vim.keymap.set("i", "<S-Tab>", "<C-v><Tab>")
 
     vim.keymap.set({ "n", "x" }, "j", "gj")
