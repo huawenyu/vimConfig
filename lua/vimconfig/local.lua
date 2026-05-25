@@ -42,9 +42,22 @@ function M.setup()
   opt.synmaxcol = 128
   vim.cmd("syntax sync minlines=256")
 
-  -- Tags
+  -- Tags: walk up from cwd to find .tags, prepend absolute path so it works
+  -- regardless of what directory Neovim is launched from.
+  local tags_base = "./tags,tags,.cache/.tags,./.tags,.tags;"
+  local dir = vim.fn.getcwd()
+  while dir and #dir > 1 do
+    local tags_file = dir .. "/.tags"
+    if vim.fn.filereadable(tags_file) == 1 then
+      tags_base = tags_file .. "," .. tags_base
+      break
+    end
+    local parent = vim.fn.fnamemodify(dir, ":h")
+    if parent == dir then break end
+    dir = parent
+  end
   opt.tagrelative = false
-  opt.tags = "./tags,tags,.cache/tags,./.tags,.tags;"
+  opt.tags = tags_base
 end
 
 return M
