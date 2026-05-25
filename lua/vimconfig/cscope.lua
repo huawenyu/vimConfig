@@ -180,7 +180,7 @@ function M.setup()
         })
         return { cached_db_dir .. "/cscope.out" }
       end
-      vim.notify("No cscope databases found", vim.log.levels.WARN)
+      -- vim.notify("No cscope databases found", vim.log.levels.WARN)
       return {}
     end
     -- Set pre_path to the cscope DB's own directory (the project root)
