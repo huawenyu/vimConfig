@@ -9,7 +9,7 @@ function M.setup()
   if not M._patched then
     M._patched = true
     local _vim_system = vim.system
-    vim.system = function(cmd, opts)
+    vim.system = function(cmd, opts, on_exit)
       if type(cmd) == "table" and cmd[1] == "cscope" then
         cmd = vim.deepcopy(cmd)
         local cwd = vim.fn.getcwd()
@@ -25,7 +25,7 @@ function M.setup()
           end
         end
       end
-      return _vim_system(cmd, opts)
+      return _vim_system(cmd, opts, on_exit)
     end
   end
 
