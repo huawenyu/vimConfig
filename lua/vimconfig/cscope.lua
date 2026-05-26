@@ -2,33 +2,6 @@
 local M = {}
 
 function M.setup()
-  -- Patch vim.system to rewrite cscope's -f and -P as absolute paths.
-  -- cscope_maps computes them relative to Neovim's CWD, which breaks
-  -- when CWD differs from the project root (e.g. CWD=/).
-  -- Absolute paths work regardless of cscope's CWD.
-  if not M._patched then
-    M._patched = true
-    local _vim_system = vim.system
-    vim.system = function(cmd, opts, on_exit)
-      if type(cmd) == "table" and cmd[1] == "cscope" then
-        cmd = vim.deepcopy(cmd)
-        local cwd = vim.fn.getcwd()
-        for i, arg in ipairs(cmd) do
-          if arg == "-f" and cmd[i+1] and not vim.fn.isabsolutepath(cmd[i+1]) then
-            cmd[i+1] = vim.fs.normalize(vim.fs.joinpath(cwd, cmd[i+1]))
-          elseif arg == "-P" and cmd[i+1] then
-            local db = require("cscope.db")
-            local conn = db.primary_conn()
-            if conn and conn.pre_path and conn.pre_path ~= "" then
-              cmd[i+1] = conn.pre_path
-            end
-          end
-        end
-      end
-      return _vim_system(cmd, opts, on_exit)
-    end
-  end
-
   local cscope_module = require("cscope_maps")
   cscope_module.setup({
     disable_maps = true,
