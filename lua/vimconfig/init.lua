@@ -52,9 +52,14 @@ function M.setup()
         end
       end
       if auxiliary_buffer > 0 then
-        vim.cmd(string.format("noautocmd %d wincmd w", vim.fn.bufwinnr(auxiliary_buffer)))
-        local closed = safe_cmd("noautocmd q", "Cannot close window. Unsaved changes present.")
-        if vim.fn.bufwinnr(current_buffer) ~= -1 then
+        local target_winnr = vim.fn.winnr()
+        local aux_winnr = vim.fn.bufwinnr(auxiliary_buffer)
+        -- Switch to auxiliary window first to avoid E37 (unsaved changes) on close
+        vim.cmd(string.format("noautocmd %d wincmd w", aux_winnr))
+        -- Close the original window by number, not the auxiliary
+        local closed = safe_cmd(string.format("noautocmd %d close", target_winnr),
+          "Cannot close window. Unsaved changes present.")
+        if not closed and vim.fn.bufwinnr(current_buffer) ~= -1 then
           vim.cmd(string.format("noautocmd %d wincmd w", vim.fn.bufwinnr(current_buffer)))
         end
       else

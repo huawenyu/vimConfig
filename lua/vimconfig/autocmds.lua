@@ -34,13 +34,33 @@ function M.setup()
     callback = function() vim.cmd("wincmd =") end,
   })
 
+  -- Track whether cmdline was entered from the qf window, so we don't
+  -- reopen it after :q/:close (which would trap the user in qf).
+  local cmdline_from_qf = false
+  vim.api.nvim_create_autocmd("CmdlineEnter", {
+    group = aug,
+    callback = function()
+      cmdline_from_qf = (vim.bo.buftype == "quickfix")
+    end,
+  })
   vim.api.nvim_create_autocmd("CmdlineLeave", {
     group = aug,
     callback = function()
       vim.opt.cmdheight = 1
+      if cmdline_from_qf then return end
       local qflist = vim.fn.getqflist()
       if #qflist > 0 then
-        pcall(vim.cmd, "silent! copen")
+        local qf_win = false
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+          if vim.bo[vim.api.nvim_win_get_buf(win)].buftype == "quickfix" then
+            qf_win = true
+            break
+          end
+        end
+        if not qf_win then
+          pcall(vim.cmd, "silent! copen")
+          vim.cmd("wincmd p")
+        end
       end
     end,
   })

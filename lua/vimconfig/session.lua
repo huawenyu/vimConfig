@@ -5,7 +5,7 @@ function M.setup()
   local auto_session = require("auto-session")
   auto_session.setup({
     log_level = "error",
-    root_dir = vim.fn.stdpath("data") .. "/sessions/",
+    root_dir = "/tmp/nvim-sessions",
     auto_restore_enabled = true,
     auto_save_enabled = true,
     auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
