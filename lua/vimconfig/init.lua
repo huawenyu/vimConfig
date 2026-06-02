@@ -197,8 +197,21 @@ function M.setup()
       pattern = { "c", "cpp" },
       callback = function()
         vim.keymap.set("n", "<leader>fa", function()
-          vim.cmd("call JumpToCorrespondingFile()")
-        end, { buffer = true, silent = true, desc = "[misc] Toggle source/header *" })
+          -- Toggle source/header: .c <-> .h via filename swap
+          local path = vim.api.nvim_buf_get_name(0)
+          local ext = path:match("(%.[^.]+)$")
+          if ext == ".c" or ext == ".cpp" then
+            local new_path = path:gsub("%.[^.]+$", ".h")
+            if vim.fn.filereadable(new_path) == 1 then
+              vim.cmd("edit " .. new_path)
+            end
+          elseif ext == ".h" then
+            local new_path = path:gsub("%.[^.]+$", ".c")
+            if vim.fn.filereadable(new_path) == 1 then
+              vim.cmd("edit " .. new_path)
+            end
+          end
+        end, { buffer = true, silent = true, desc = "[misc] Toggle source/header" })
       end,
     })
 
