@@ -204,7 +204,7 @@ function M.setup()
     vim.tbl_extend("force", map_opts, { desc = "Find callees (Telescope)" }))
   vim.keymap.set('n', '<leader>fw', ":Cscope find a <C-r><C-w><CR>",
     vim.tbl_extend("force", map_opts, { desc = "Find assignments (Telescope)" }))
-  vim.keymap.set('n', '<leader>fe', function()
+  vim.keymap.set('n', ';fe', function()
     vim.ui.input({ prompt = "Egrep pattern: " }, function(input)
       if input and input ~= "" then vim.cmd("Cscope find e " .. input) end
     end)
@@ -283,10 +283,10 @@ function M.setup()
 
   vim.keymap.set('n', '<leader>ff', function()
     require('telescope.builtin').find_files(leader_ff_opts())
-  end, vim.tbl_extend("force", map_opts, { desc = "Find file (cscope/git/rg)" }))
+  end, vim.tbl_extend("force", map_opts, { desc = "[find] Find file (cscope/git/rg)" }))
   vim.keymap.set('n', ';ff', function()
     require('telescope.builtin').find_files(semicolon_ff_opts())
-  end, vim.tbl_extend("force", map_opts, { desc = "Find file (git/rg)" }))
+  end, vim.tbl_extend("force", map_opts, { desc = "[find] Find file (git/rg)" }))
 
   load_databases()
 
