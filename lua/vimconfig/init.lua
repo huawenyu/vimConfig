@@ -268,7 +268,10 @@ function M.setup()
     local bufnr = vim.api.nvim_get_current_buf()
     local vtag = ""
     if has_tags() then
-      vtag = vim.fn["utils#GetSelected"]('')
+      local ok, result = pcall(vim.fn["utils#GetSelected"], '')
+      if ok and result and result ~= '' then
+        vtag = result
+      end
     end
     if vtag == "" then
       vim.cmd('silent! tab sb ' .. bufnr)
