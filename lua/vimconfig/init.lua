@@ -510,6 +510,51 @@ function M.setup()
 
   -- Maps 'gp' to visually select the last pasted/changed text block
   vim.keymap.set('n', 'gp', '`[v`]', { desc = "Select last pasted text" })
+
+
+  local note = require("vimconfig.note")
+
+  vim.api.nvim_create_user_command("Note", function(opts)
+    local arg = vim.trim(opts.args)
+
+    if arg == "" then
+      return
+    end
+
+    if vim.startswith(arg, "file:") then
+      note.show_file(arg:sub(6))
+      return
+    end
+
+    if vim.startswith(arg, "text:") then
+      note.show(arg:sub(6))
+      return
+    end
+
+    local expanded = vim.fn.expand(arg)
+
+    if vim.fn.filereadable(expanded) == 1 then
+      note.show_file(expanded)
+    else
+      note.show(arg)
+    end
+  end, {
+    nargs = "*",
+  })
+
+  vim.api.nvim_create_user_command("NoteHide", function()
+    note.hide()
+  end, {})
+
+  vim.api.nvim_create_user_command("NoteReload", function()
+    note.reload()
+  end, {})
+
+  vim.api.nvim_create_user_command("NoteEdit", function()
+    note.edit()
+  end, {})
+
+
 end
 
 return M
