@@ -337,33 +337,9 @@ function M.setup()
     local sym = vim.fn.expand("<cword>")
     if sym == "" then return end
 
-    local cur_win = vim.api.nvim_get_current_win()
-    local function is_code_win(win)
-      if not vim.api.nvim_win_is_valid(win) then return false end
-      local buf = vim.api.nvim_win_get_buf(win)
-      if vim.bo[buf].buftype ~= "" then return false end
-      return true
-    end
-
-    local code_win
-    local wins = vim.api.nvim_tabpage_list_wins(0)
-    if #wins == 1 then
-      vim.cmd("rightbelow vsplit")
-      code_win = vim.api.nvim_get_current_win()
-      vim.api.nvim_set_current_win(cur_win)
-    else
-      local right_winnr = vim.fn.winnr("l")
-      if right_winnr ~= vim.fn.winnr() then
-        local right_win = vim.fn.win_getid(right_winnr)
-        if is_code_win(right_win) then code_win = right_win end
-      end
-      if not code_win and is_code_win(cur_win) then code_win = cur_win end
-      if not code_win then
-        vim.cmd("rightbelow vsplit")
-        code_win = vim.api.nvim_get_current_win()
-        vim.api.nvim_set_current_win(cur_win)
-      end
-    end
+    local vb = require("vim-basic")
+    local result = vb.get_right_code_win()
+    local code_win = result.code_win
 
     local file = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(code_win))
     if file == "" then return end
