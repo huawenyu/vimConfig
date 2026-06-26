@@ -1,4 +1,4 @@
-# vim plugs config
+# vim plugins config
 
 My plugins config.
 
