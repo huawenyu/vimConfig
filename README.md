@@ -1,6 +1,6 @@
 # vim plugs config
 
-My vim/zsh/tmux plugs config/map/command, prefer lazy load.
+My plugins config.
 
 # Install (neovim only)
 
